@@ -28,10 +28,10 @@ Route::post('user/{id}', 'UserController@update');
 
 //Portfolio
 Route::get('portfolio','portfolioController@index');
-Route::get('portfolio/{id}','portfolioController@show');
+Route::get('portfolio/{portfolio}','portfolioController@show');
 Route::post('portfolio','portfolioController@store');
 Route::put('/portfolio/{portfolio}','portfolioController@update');
-Route::delete('/portfolio/{id}','portfolioController@delete');
+Route::delete('/portfolio/{portfolio}','portfolioController@delete');
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
