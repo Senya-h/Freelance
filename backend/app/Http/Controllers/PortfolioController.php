@@ -2,61 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Portfolio;
-use App\User;
-use App\Message;
-use App\Role;
-use App\Rating;
 use Illuminate\Http\Request;
+use App\Portfolio;
 
 class PortfolioController extends Controller
 {
-    public function create(Request $request) {
-        try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-        return Portfolio::create([
-            'description' => $request->input('description'),
-            'skills' => $request->input('skills'),
-            'services' => $request->input('services'),
-            'price_per_hour' => $request->input('price_per_hour'),
-            'status' => 0,
-            'user_id' => $request->input('user_id'),
-        ]);
+
+    public function index()
+    {
+        return Portfolio::all();
     }
-    /*User INFO*/
-    public function aboutUser(User $user, $id) {
-        $role_id = User::select('group_id')->where('users.id',$id)->get()[0]->group_id;
-        $usr = User::select('name', 'email', 'foto', 'location', 'role as group')->join('roles','roles.id','=','group_id')->where('users.id',$id)->get();
-        $portf = Portfolio::select('*')->where('user_id',$id)->get();
-        if ($role_id != 1) {
-            if(!count($portf)) {
-                $portf = ['error' => 'Empty Portfolio'];
-            }
-            $info = [
-                'info' => $usr,
-                'portfolio' => $portf,
-            ];
-        } else {
-            $info = [
-                'info' => $usr,
-            ];
-        }
-        try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-        return response()->json($info, 200);
+
+    public function show(Portfolio $portfolio)
+    {
+        return $portfolio;
     }
-    public function update($id, Request $request) {
-        try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-        return Portfolio::where('id',$id)->update($request->except(['_token']));
+
+    public function store(Request $request)
+    {
+        $portfolio = Portfolio::create($request->all());
+        return response()->json($portfolio, 201);
+    }
+
+    public function update(Request $request, Portfolio $portfolio)
+    {
+        $portfolio->update($request->all());
+        return response()->json($portfolio, 200);
+    }
+
+    public function delete(Request $request, Portfolio $portfolio)
+    {
+        $portfolio->delete();
+        return response()->json(null, 204);
     }
 }

@@ -22,13 +22,20 @@ Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
 
 //User
-Route::post('portfolio', 'PortfolioController@create');
-Route::post('update/portfolio/{id}', 'PortfolioController@update');
-Route::get('user/{id}', 'PortfolioController@aboutUser');
+Route::post('user', 'UserController@create');
+Route::get('user/{id}', 'UserController@aboutUser');
+Route::post('user/{id}', 'UserController@update');
+
+//Portfolio
+Route::get('portfolio','portfolioController@index');
+Route::get('portfolio/{id}','portfolioController@show');
+Route::post('portfolio','portfolioController@store');
+Route::put('/portfolio/{portfolio}','portfolioController@update');
+Route::delete('/portfolio/{id}','portfolioController@delete');
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
-Route::post('add/role', 'RoleController@create'); 
+Route::post('add/role', 'RoleController@create');
 Route::post('role/user/', 'RoleUserController@store');
 
 //Message
