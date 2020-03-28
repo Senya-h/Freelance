@@ -6,15 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
 use App\User;
+use App\Message;
+use App\Roel;
 
 class ApiController extends Controller
 {
-    /*Registracija NOT WORKING*/
     protected function register(Request $request){
 
-		if($request->input('role') != 'Freelancer' && $request->input('role') != 'Client') {
+		if($request->input('role') != 1 && $request->input('role') != 2) {
 			return response()->json(['error'=>'Grupė neteisinga!']);
 		} else {
 		$request->validate([
@@ -23,18 +25,21 @@ class ApiController extends Controller
             'password'=>'required|max:255',
             'location' => 'required|max:255',
             'role' => 'required|max:255'
-		]);	
+		]);
 
 		return User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'location' => $request->input('location'),
-            'role' => $request->input('role'),
-            'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
-            'password' => Hash::make($request->input('password')),
-        ]);
+            $user = New User,
+            $user->name = $request->name,
+            $user->email = $request->email,
+            $user->location = $request->location,
+            $user->role = $request->role,
+            $user->foto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
+			$user->password = Hash::make($request->password),
+			$user->save(),
+			$user->roles()->sync($request->role,false),
+		]);
 		}
-		
+
 	}
 	public function login(Request $request)
 	{
@@ -43,7 +48,7 @@ class ApiController extends Controller
 		if(!$token = auth()->attempt($creds)) {
 			return response()->json(['error' => 'Duomenys neteisingi']);
 		}
-		
+
 		return response()->json(['token' => $token]);
 	}
 	public function tokenRefresh()

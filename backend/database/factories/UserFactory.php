@@ -23,7 +23,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'foto' => $faker->imageUrl(),
-        'role'=>$faker-> randomElement(['Freelancer','Client']),
+        'role'=>$faker->biasedNumberBetween($min = 1, $max = 2, $function = 'sqrt'),
         'location' => $faker->city,
         'password' => Hash::make('admin123'), // password
         'created_at' => \Carbon\Carbon::now(),

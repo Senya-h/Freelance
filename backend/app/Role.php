@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Role extends Model
 {
@@ -11,14 +12,6 @@ class Role extends Model
     ];
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany('App\User','role_user','role_id','user_id');
     }
-
-    /*
-    $user = App\User::find(1);
-
-    foreach ($user->roles as $role) {
-        echo $role->pivot->created_at;
-    }
-    */
 }
