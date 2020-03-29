@@ -26,9 +26,9 @@ class PortfolioController extends Controller
             'user_id' => $request->input('user_id'),
         ]);
     }
-    /*User INFO*/
+    /*User INFO (PO ROLIU UPDATE NEBEVEIKIA.ATNAUJINSIU)  */
     public function aboutUser(User $user, $id) {
-        $role_id = User::select('group_id')->where('users.id',$id)->get()[0]->group_id;
+        $role_id = User::select('role')->where('users.id',$id)->get()[0]->role;
         $usr = User::select('name', 'email', 'foto', 'location', 'role as group')->join('roles','roles.id','=','group_id')->where('users.id',$id)->get();
         $portf = Portfolio::select('*')->where('user_id',$id)->get();
         if ($role_id != 1) {

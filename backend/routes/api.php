@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-/*Reg Not Working*/
+//Registration/Login
 Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
@@ -28,8 +28,8 @@ Route::get('user/{id}', 'PortfolioController@aboutUser');
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
-Route::post('add/role', 'RoleController@create'); 
-Route::post('role/user/', 'RoleUserController@store');
+Route::get('role/user{id}', 'RoleController@aboutRoleUser'); //Roliu user sarašas pagal user id
+Route::post('add/role', 'RoleController@create');
 
 //Message
 Route::get('message/{id}', 'MessageController@aboutMessage'); //Išsiųstos

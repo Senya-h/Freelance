@@ -17,6 +17,8 @@ class RolesTableSeeder extends Seeder
                 'role' => 'Client'
             ],[
                 'role' => 'Freelancer'
+            ],[
+                'role' => 'Admin'
             ]
         ]);
     }

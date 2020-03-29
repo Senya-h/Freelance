@@ -18,6 +18,11 @@ class RoleController extends Controller
         return response()->json(Role::select('*')->get(),200);
     }
 
+    public function aboutRoleUser()
+    {
+        return response()->json(Role::select('*')->where('usre_id',$id)->get(),200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
