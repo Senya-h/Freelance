@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 import Header from './components/Header/Header';
+import FreelancerProfile from './components/Profile/FreelancerProfile/FreelancerProfile';
 
 const RouteWithSubRoutes = route => {
     return (
@@ -25,6 +26,13 @@ export const RenderRoutes = ({routes}) => {
 
 const ROUTES = [
     { path: '/', key: 'ROOT', exact: true, component: () => <Header />},
+    {
+        path: '/profile',
+        key: 'PROFILE',
+        name: "My Profile",
+        classes: 'nav-item',
+        component: () => <FreelancerProfile />
+    },
     {
         path: '/',
         key: "APP",
