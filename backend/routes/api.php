@@ -28,11 +28,12 @@ Route::get('user/{id}', 'PortfolioController@aboutUser');
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
-Route::get('role/user{id}', 'RoleController@aboutRoleUser'); //Roliu user sarašas pagal user id
+Route::get('role/user&id={id}', 'RoleController@aboutRoleUser'); //Roliu user sarašas pagal user id
 Route::post('add/role', 'RoleController@create');
 
 //Message
-Route::get('message/{id}', 'MessageController@aboutMessage'); //Išsiųstos
+Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos
+Route::get('message/to/{id}', 'MessageController@toMsg'); //Gautos
 Route::post('message', 'MessageController@create');
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 
