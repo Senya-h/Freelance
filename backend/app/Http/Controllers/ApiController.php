@@ -17,6 +17,7 @@ class ApiController extends Controller
     protected function register(Request $request){
 
 		if($request->input('role') != 1 && $request->input('role') != 2) {
+			//jei grupė nėra nei 1(Client), nei 2(Freelancer) registracija nera patvirtinama
 			return response()->json(['error'=>'Grupė neteisinga!']);
 		} else {
 		$request->validate([
@@ -27,33 +28,34 @@ class ApiController extends Controller
             'role' => 'required|max:255'
 		]);
 
-		return User::create([
-            $user = New User,
-            $user->name = $request->name,
-            $user->email = $request->email,
-            $user->location = $request->location,
-            $user->role = $request->role,
-            $user->foto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
-			$user->password = Hash::make($request->password),
-			$user->save(),
-			$user->roles()->sync($request->role,false),
+		 $user = New User([
+			'name' => $request->name,
+			'email' => $request->email,
+			'location' => $request->location,
+			'role' => $request->role,
+			'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
+			'password' => Hash::make($request->password),
 		]);
+			$user->save();
+			$user->roles()->sync($request->role,false);
+			return response()->json($user);
 		}
 
 	}
 	public function login(Request $request)
 	{
-		$creds = $request->only(['email', 'password']);
-		$token = auth()->attempt($creds);
-		if(!$token = auth()->attempt($creds)) {
-			return response()->json(['error' => 'Duomenys neteisingi']);
+		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
+		$token = auth()->attempt($creds); 
+		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
+			return response()->json(['error' => 'Duomenys neteisingi']); 
 		}
 
-		return response()->json(['token' => $token]);
+		//jei duomenys teisingi, login tokeno duoda
+		return response()->json(['token' => $token]); 
 	}
 	public function tokenRefresh()
 	{
-		try {
+		try { //jeigu tokenas aktyvus, refreshina tokena a.k.a atjungia vartotoja
 			$token = auth()->refresh();
 			return response()->json(['new token' => $token]);
 		} catch(\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {

@@ -7,12 +7,13 @@ use App\User;
 use App\Message;
 use App\Role;
 use App\Rating;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class PortfolioController extends Controller
 {
     public function create(Request $request) {
-        try {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -26,25 +27,37 @@ class PortfolioController extends Controller
             'user_id' => $request->input('user_id'),
         ]);
     }
-    /*User INFO (PO ROLIU UPDATE NEBEVEIKIA.ATNAUJINSIU)  */
+    /*User INFO */
     public function aboutUser(User $user, $id) {
+        //role pagal kuria iesko kokiai grupei priklauso vartotojas
         $role_id = User::select('role')->where('users.id',$id)->get()[0]->role;
-        $usr = User::select('name', 'email', 'foto', 'location', 'role as group')->join('roles','roles.id','=','group_id')->where('users.id',$id)->get();
+        //pagrindine vartotojo informacija
+        $usr = User::select('name', 'email', 'foto', 'location')->where('users.id',$id)->get();
+        //portfolio
         $portf = Portfolio::select('*')->where('user_id',$id)->get();
-        if ($role_id != 1) {
-            if(!count($portf)) {
+        //role
+        $role = DB::table('role_user')->select('role')->join('roles','roles.id','=','role_user.role_id')->where('user_id',$id)->get();
+        if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
+            if(!count($portf)) { //jei nėra portfolio
                 $portf = ['error' => 'Empty Portfolio'];
             }
             $info = [
-                'info' => $usr,
-                'portfolio' => $portf,
+                'info' => [
+                    'name' => $usr[0]['name'], 
+                    'email' => $usr[0]['email'],
+                    'foto' => $usr[0]['foto'],
+                    'location' => $usr[0]['location'],
+                    'roles' => $role,
+            ],
+                'portfolio' => $portf[0],
             ];
-        } else {
+        } else { //jeigu useris nera freelanceris
             $info = [
                 'info' => $usr,
+                'roles' => $role,
             ];
         }
-        try {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => $e->getMessage()]);
@@ -52,7 +65,7 @@ class PortfolioController extends Controller
         return response()->json($info, 200);
     }
     public function update($id, Request $request) {
-        try {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => $e->getMessage()]);
