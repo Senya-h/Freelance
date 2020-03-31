@@ -71,13 +71,6 @@ const ROUTES = [
     {
         path: '/kill',
         key: "KILL",
-        name: "Blog",
-        classes: 'nav-item',
-        component: () => <h1>Killua</h1>
-    },
-    {
-        path: '/kill',
-        key: "KILL",
         name: "Contact",
         classes: 'nav-item',
         component: () => <h1>Killua</h1>

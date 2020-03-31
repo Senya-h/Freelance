@@ -1,15 +1,21 @@
 import React from 'react';
-import ROUTES, {RenderRoutes} from '../../routes';
 import Navbar from '../Navbar/Navbar';
 import Header from '../Header/Header';
 import './App.css';
+import {Switch, Route} from 'react-router-dom';
 
 function App() {
   
   return (
     <div className="App">
-        <Navbar routes={ROUTES}/>
-        <RenderRoutes routes={ROUTES} />
+        <Navbar />
+        <Route path='/' exact component={Header} />
+
+        <Switch>
+          <Route path='/' exact component={Header} />
+
+          <Route render={() => <h1>Not Found :)</h1>} />
+        </Switch>
     </div>
   );
 }
