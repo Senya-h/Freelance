@@ -27,6 +27,9 @@
                 &:hover {
                     color: #fdab44; 
                 }
+                &.active {
+                    color: rgba(255, 255, 255, 0.5); 
+                }
             }
             .dropdown-menu {
                 border: none;
@@ -35,8 +38,7 @@
                 -moz-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
                 box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41); 
             }
-        }
-        & > .nav-item {
+
             &.cta {
                 & > a {
                     color: #fff;
@@ -70,11 +72,7 @@
                     }
                 }
             }
-            &.active {
-                & > a {
-                    color: rgba(255, 255, 255, 0.5); 
-                }
-            }
+
         }
     }
 

@@ -3,7 +3,7 @@ import React from 'react';
 const Form = (props) => {
     console.log(props);
     return (
-        <div className={"tab-pane fade " + (props.show ? "show active": "")} id="v-pills-1"
+        <div className={"tab-pane fade show active"} id="v-pills-1"
         role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
             <form action="#" className="search-job">
                 <div className="row no-gutters">

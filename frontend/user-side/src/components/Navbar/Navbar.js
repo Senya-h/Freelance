@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {Navbar as NavBar} from 'react-bootstrap';
-import {NavLink} from 'react-router-dom';
+import {NavLink, Link} from 'react-router-dom';
 import classes from './Navbar.module.scss';
 import cx from 'classnames';
 
@@ -65,8 +65,8 @@ const Navbar = () => {
     return (
         <NavBar bg="dark" expand="lg" className={classes.FtcoNavbarLight} id="ftco-navbar" ref={navbar}>
             <div className="container-fluid px-md-4	">
-                <NavBar.Brand>Skillhunt</NavBar.Brand>
-                <NavBar.Toggle data-toggle="collapse" data-target="#ftco-nav"
+                <Link to='/' exact className={cx('navbar-brand', classes['navbar-brand'])}>Skillhunt</Link>
+                <NavBar.Toggle className={classes['navbar-toggler']} data-toggle="collapse" data-target="#ftco-nav"
                         aria-controls="ftco-nav">
                     <span className="oi oi-menu"></span> Menu
                 </NavBar.Toggle>
@@ -74,37 +74,37 @@ const Navbar = () => {
                 <NavBar.Collapse id="ftco-nav">
                     <ul className={cx("navbar-nav ml-auto", classes['navbar-nav'])}>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
                                 My Profile
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/' exact activeClassName={classes['active']}>
                                 Home
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/jobs' activeClassName={classes['active']}>
                                 Browse Jobs
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/candidates' activeClassName={classes['active']}>
                                 Candidates
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
                                 Contact
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/login'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/login' activeClassName={classes['active']}>
                                 Login
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/register'>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/register' activeClassName={classes['active']}>
                                 Register
                             </NavLink>
                         </li>
