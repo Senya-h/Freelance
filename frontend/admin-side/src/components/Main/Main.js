@@ -1,5 +1,5 @@
 import React from 'react';
-import './main.scss';
+import './Main.css';
 
 function Main(){
     return(
