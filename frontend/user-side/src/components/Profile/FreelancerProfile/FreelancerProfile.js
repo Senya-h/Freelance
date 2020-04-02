@@ -1,16 +1,20 @@
 import React from 'react';
+import Rating from '@material-ui/lab/Rating';
 import classes from './FreelanceProfile.module.scss';
 import Portfolio from './Portfolio/Portfolio';
 import axios from '../../../axios';
-import Wrapper from '../../Wrapper/Wrapper';
+import Wrapper from '../../../hoc/Wrapper/Wrapper';
+import cx from 'classnames';
+import SendMessage from './SendMessage/SendMessage';
 
 class Profile extends React.Component {
 
     state = {
+        id: 0,
         name: '',
         location: '',
         portfolio: [],
-        error: false
+        error: false,
     }
 
     componentDidMount() {
@@ -63,10 +67,24 @@ class Profile extends React.Component {
                     <div style={{paddingTop: '130px'}}>
                         <div className={classes.FreelancerProfile}>
                             <div className="row">
-                                <img className={classes.ProfileImage + " col-3"} src="https://vignette.wikia.nocookie.net/fairytail/images/c/c3/Erza%27s_picture.png/revision/latest?cb=20190929085837" alt="#" />
-                                <div className="">
-                                    <p>{this.state.name}</p>
-                                    <p>{this.state.location}</p>
+                                <img className={cx(classes.ProfileImage,"col-3")} src="https://vignette.wikia.nocookie.net/fairytail/images/c/c3/Erza%27s_picture.png/revision/latest?cb=20190929085837" alt="#" />
+                                <div>
+                                    <h2>{this.state.name}</h2>
+                                    <p>Front-End Developer</p>
+                                    <div>
+                                        <h3>Ranking</h3>
+                                        <Rating name='read-only' precision={0.25} value={4.5} readOnly />
+                                    </div>
+                                    <div>
+                                        <h4>Skills:</h4>
+                                        <ul style={{listStyle: 'none'}}>
+                                            <li>HTML5</li>
+                                            <li>CSS3</li>
+                                            <li>JS</li>
+                                            <li>React</li>
+                                        </ul>
+                                    </div>
+                                    <SendMessage recipient={this.state.name} id={this.state.id}/>
                                 </div>
                             </div>
                             <div>
