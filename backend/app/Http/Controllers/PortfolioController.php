@@ -43,7 +43,7 @@ class PortfolioController extends Controller
             }
             $info = [
                 'info' => [
-                    'name' => $usr[0]['name'], 
+                    'name' => $usr[0]['name'],
                     'email' => $usr[0]['email'],
                     'foto' => $usr[0]['foto'],
                     'location' => $usr[0]['location'],
@@ -57,11 +57,11 @@ class PortfolioController extends Controller
                 'roles' => $role,
             ];
         }
-        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
+//         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+//             $user = auth()->userOrFail();
+//         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+//             return response()->json(['error' => $e->getMessage()]);
+//         }
         return response()->json($info, 200);
     }
     public function update($id, Request $request) {
