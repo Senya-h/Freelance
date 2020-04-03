@@ -1,5 +1,5 @@
 import React from 'react';
-import Wrapper from '../../components/Wrapper/Wrapper';
+import Wrapper from '../../hoc/Wrapper/Wrapper';
 import Header from '../../components/Header/Header';
 
 const Main = () => {
