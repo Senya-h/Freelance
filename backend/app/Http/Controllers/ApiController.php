@@ -10,36 +10,41 @@ use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
 use App\User;
 use App\Message;
-use App\Roel;
+use App\Role;
 
 class ApiController extends Controller
 {
     protected function register(Request $request){
-
-		if($request->input('role') != 1 && $request->input('role') != 2) {
-			//jei grupė nėra nei 1(Client), nei 2(Freelancer) registracija nera patvirtinama
+		
+		if($request->input('role') != 2 && $request->input('role') != 3) {
+			//jei grupė nėra nei 2(Client), nei 3(Freelancer) registracija nera patvirtinama
 			return response()->json(['error'=>'Grupė neteisinga!']);
 		} else {
-		$request->validate([
-			'email'=>'required|max:255',
-			'name'=>'required|max:255',
-            'password'=>'required|max:255',
-            'location' => 'required|max:255',
-            'role' => 'required|max:255'
-		]);
+			$validation = Validator::make($request->all(),[
+				'name' => ['required', 'string', 'max:255'],
+				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+				'password' => ['required', 'string', 'min:8'],
+			]);
+		
+			if($validation->fails()){
+				return response()->json(["error"=>$validation->errors()]);
+			} else {
+				$user = New User([
+				'name' => $request->name,
+				'email' => $request->email,
+				'location' => $request->location,
+				'role' => $request->role,
+				'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
+				'password' => Hash::make($request->password),
+			]);
+				$user->save();
+				$user->roles()->sync($request->role,false);
 
-		 $user = New User([
-			'name' => $request->name,
-			'email' => $request->email,
-			'location' => $request->location,
-			'role' => $request->role,
-			'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
-			'password' => Hash::make($request->password),
-		]);
-			$user->save();
-			$user->roles()->sync($request->role,false);
-			return response()->json($user);
+				return response()->json($user, 201);
+			}
+			
 		}
+
 
 	}
 	public function login(Request $request)
@@ -50,7 +55,7 @@ class ApiController extends Controller
 			return response()->json(['error' => 'Duomenys neteisingi']); 
 		}
 
-		//jei duomenys teisingi, login tokeno duoda
+		//jei duomenys teisingi, login tokena duoda
 		return response()->json(['token' => $token]); 
 	}
 	public function tokenRefresh()

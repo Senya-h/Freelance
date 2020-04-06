@@ -38,7 +38,7 @@ class PortfolioController extends Controller
         //role
         $role = DB::table('role_user')->select('role')->join('roles','roles.id','=','role_user.role_id')->where('user_id',$id)->get();
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
-            if(!count($portf)) { //jei nėra portfolio
+            if(count($portf) == 0) { //jei nėra portfolio
                 $portf = ['error' => 'Empty Portfolio'];
             }
             $info = [
@@ -49,7 +49,7 @@ class PortfolioController extends Controller
                     'location' => $usr[0]['location'],
                     'roles' => $role,
             ],
-                'portfolio' => $portf[0],
+                'portfolio' => $portf,
             ];
         } else { //jeigu useris nera freelanceris
             $info = [
