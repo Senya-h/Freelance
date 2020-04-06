@@ -1,16 +1,20 @@
 # Freelance BackEnd
 
 ## Seeders
-Users: admin, klientas, freelancer1, freelancer2
-Admin email: info@freelance.lt
-Admin pasw: admin123
+Seederius paleist iš eilės
+
+Sukuria 3 roles: 
+    1) Admin
+    2) Client
+    3) Freelancer
+```bash
+php artisan db:seed --class=RoleTableSeeder
+```
+Sukuria Admin. Email: info@freelance.lt, Password: admin123
 ```bash
 php artisan db:seed --class=UsersTableSeeder
 ```
-Portfolio seeder(creates 1 portfolio for freelancer1)
-```bash
-php artisan db:seed --class=PortfoliosTableSeeder
-```
+
 ## API
 Register:
 ```bash
@@ -25,15 +29,19 @@ Refresh Token:
 /api/new_token
 ```
 ---
-Post Portfolio:
-```bash
-/api/portfolio
-```
-Update Portfolio:
-```bash
-/api/update/portfolio/:id
-```
 User Info:
 ```bash
 /api/user/:id
+```
+Prideda paslaugą:
+```bash
+/api/service&id=:user_id
+```
+Atnaujiną paslaugą:
+```bash
+/api/update/service&id=:service_id
+```
+Trina paslaugą:
+```bash
+/api/delete/service&id=:service_id
 ```

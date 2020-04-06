@@ -15,16 +15,20 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});   
+
 //Registration/Login
 Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
 
 //User
-Route::post('portfolio', 'PortfolioController@create');
-Route::post('update/portfolio/{id}', 'PortfolioController@update');
-Route::get('user/{id}', 'PortfolioController@aboutUser');
+Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
+//Services
+Route::post('service&id={id}', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
+Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama 
+Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslauga gali būt redaguojama 
+
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
