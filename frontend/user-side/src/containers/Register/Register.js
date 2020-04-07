@@ -2,6 +2,7 @@ import React from 'react';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import CountrySelect from './CountrySelect/CountrySelect';
 import { useAuth } from '../../context/auth';
+import classes from './Register.module.scss';
 
 import {Link, Redirect} from 'react-router-dom';
 
@@ -20,16 +21,17 @@ import {Formik, Form, ErrorMessage} from 'formik';
 import axios from '../../axios';
 import * as Yup from 'yup';
 
+import { styled } from '@material-ui/core/styles';
 
 const Register = (props) => {
 
-    // // const { authTokens } = useAuth();
-    // // const referer = props.location.state === null? '/': props.location.state.referer;
+    const { authTokens } = useAuth();
+    const referer = props.location.state? props.location.state.referer: '/'; 
 
-    // //if is logged in
-    // if( authTokens ) {
-    //     return <Redirect to={referer} />
-    // }
+    //if is logged in, redirect to previous page
+    if( authTokens ) {
+        return <Redirect to={referer} />
+    }
     
     const initialValues = {
         name: '',
@@ -65,34 +67,47 @@ const Register = (props) => {
             })
     }
 
+    const FormGroupStyled = styled(FormGroup)(theme => ({
+        marginBottom: '20px',
+    }));
+
     return (
-        <Wrapper>
-            <div className='container position-relative' style={{paddingTop: '130px'}}>
+        <Wrapper variant='container' contentOffset='130px'>
+            <div style={{backgroundColor: '#eee'}}>
                 <Formik 
                     initialValues={initialValues} 
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                     >
                 {({ handleChange, values, setFieldValue, handleBlur }) => (
-                    <Form style={{backgroundColor: '#eee'}}>
+                    <Form style={{padding: '20px'}}>
                         <h2>Registracija</h2>
-                        <FormGroup> 
-                            <TextField label='Prisijungimo vardas' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
+                        <FormGroupStyled>
+                            <FormControl component="fieldset">
+                                <FormLabel component="legend">Tipas</FormLabel>
+                                <RadioGroup row aria-label="gender" name="role" value={values.role} onChange={handleChange}>
+                                    <FormControlLabel value="1" control={<Radio />} label="Klientas" />
+                                    <FormControlLabel value="2" control={<Radio />} label="Freelanceris" />
+                                </RadioGroup>
+                            </FormControl>
+                        </FormGroupStyled>
+                        <FormGroupStyled> 
+                            <TextField variant='outlined' label='Prisijungimo vardas' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
                             <ErrorMessage name='name' />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        </FormGroupStyled>
+                        <FormGroupStyled>
+                            <TextField variant='outlined' label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
                             <ErrorMessage name='email' />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField label='Slaptažodis' name='password' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
+                        </FormGroupStyled>
+                        <FormGroupStyled>
+                            <TextField variant='outlined' label='Slaptažodis' name='password' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
                             <ErrorMessage name='password' />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} />
+                        </FormGroupStyled>
+                        <FormGroupStyled>
+                            <TextField variant='outlined' label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} />
                             <ErrorMessage name='passwordConfirm' />
-                        </FormGroup>
-                        <FormGroup>
+                        </FormGroupStyled>
+                        <FormGroupStyled>
                             <CountrySelect change={(e, value) => {
                                 console.log(value);
                                 setFieldValue(
@@ -100,16 +115,7 @@ const Register = (props) => {
                                 value !== null ? value.label : initialValues.location
                                 );
                             }}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Tipas</FormLabel>
-                                <RadioGroup aria-label="gender" name="role" value={values.role} onChange={handleChange}>
-                                    <FormControlLabel value="1" control={<Radio />} label="Klientas" />
-                                    <FormControlLabel value="2" control={<Radio />} label="Freelanceris" />
-                                </RadioGroup>
-                            </FormControl>
-                        </FormGroup>
+                        </FormGroupStyled>
                         <Button type='submit' variant='contained' color='primary' >
                             Registruotis
                         </Button>

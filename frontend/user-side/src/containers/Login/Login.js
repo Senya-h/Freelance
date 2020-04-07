@@ -4,6 +4,7 @@ import Wrapper from '../../hoc/Wrapper/Wrapper';
 import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import {styled} from '@material-ui/core/styles';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 import {Link, Redirect} from 'react-router-dom';
@@ -14,7 +15,8 @@ import { useAuth } from '../../context/auth';
 
 const Login = (props) => {
     const { setAuthTokens, authTokens } = useAuth();
-    const referer = props.location.state === null? '/': props.location.state.referer;
+    console.log("PROPSAI", props);
+    const referer = props.location.state? props.location.state.referer: '/'; 
 
     //if is logged in, redirect to previous page
     if( authTokens ) {
@@ -41,26 +43,30 @@ const Login = (props) => {
             })
     };
 
+    const FormGroupStyled = styled(FormGroup)(theme => ({
+        marginBottom: '20px',
+    }));
+
 
     return (
-        <Wrapper>
-            <div className='container position-relative' style={{paddingTop: '130px'}}>
+        <Wrapper variant='container' contentOffset='130px'>
+            <div style={{backgroundColor: '#eee'}}>
                 <Formik
                     initialValues={initialValues} 
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                 >
                 {({ handleChange, values, handleBlur }) => (
-                    <Form style={{backgroundColor: '#eee'}}>
+                    <Form style={{padding: '20px'}}>
                         <h2>Prisijungimas</h2>
-                        <FormGroup>
-                            <TextField label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        <FormGroupStyled>
+                            <TextField label='El. paštas' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
                             <ErrorMessage name='email' />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField label='Slaptažodis' name='password' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
+                        </FormGroupStyled>
+                        <FormGroupStyled>
+                            <TextField label='Slaptažodis' name='password' color='primary' variant='outlined' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
                             <ErrorMessage name='password' />
-                        </FormGroup>
+                        </FormGroupStyled>
                         <Button type='submit' variant='contained' color='primary' >
                             Prisijungti
                         </Button>

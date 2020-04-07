@@ -14,7 +14,7 @@ import './assets/css/jquery.timepicker.css';
 import './assets/css/flaticon.css';
 import './assets/css/icomoon.css';
 
-import App from './components/App/App';
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
 

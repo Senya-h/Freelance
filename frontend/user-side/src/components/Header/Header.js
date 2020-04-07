@@ -4,6 +4,8 @@ import SearchBox from './SearchBox/SearchBox';
 import classes from './Header.module.scss';
 import cx from 'classnames';
 
+import Typography from '@material-ui/core/Typography';
+
 const Header = () => {
 
     return (
@@ -12,7 +14,7 @@ const Header = () => {
                 <div className="col-md-10 d-flex align-items-center"> {/*ftco-animate*/}
                     <div className={cx(classes.text, "text-center pt-5 mt-md-5")}>
                         <p className="mb-4">Find Job, Employment, and Career Opportunities</p>
-                        <h1 className="mb-5">The Easiest Way to Get Your New Job</h1>
+                        <Typography variant='h1' className="mb-5">The Easiest Way to Get Your New Job</Typography>
                         <Counters />
                         <SearchBox />
                     </div>

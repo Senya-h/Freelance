@@ -74,14 +74,13 @@ const Navbar = () => {
             <>
                 <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                     <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
-                        Mano
+                         Profilis
                     </NavLink>
                 </li>
                 <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                    {/* <NavLink className={cx('nav-link', classes['nav-link'])} to='/' exact activeClassName={classes['active']}>
+                    <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
                         Atsijungti
-                    </NavLink> */}
-                    <button onClick={logOut}>Atsijungti</button>
+                    </Link>
                 </li>
             </>
         )

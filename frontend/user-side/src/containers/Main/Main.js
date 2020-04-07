@@ -5,11 +5,8 @@ import Header from '../../components/Header/Header';
 const Main = () => {
     return (
         <>
-            <Wrapper>
-                <div className="container position-relative">
-                    <Header />
-                </div>
-                
+            <Wrapper variant='container'>
+                <Header />         
             </Wrapper>
         </>
     )
