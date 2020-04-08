@@ -20,7 +20,16 @@ import {Formik, Form, ErrorMessage} from 'formik';
 import axios from '../../axios';
 import * as Yup from 'yup';
 
-import { makeStyles, styled } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles( theme => ({
+    root: {
+        '& > *': {
+            marginBottom: theme.spacing(3)
+        },
+        padding: '20px'
+    }
+}))
 
 
 const Register = (props) => {
@@ -28,10 +37,14 @@ const Register = (props) => {
     const { authTokens } = useAuth();
     const referer = props.location.state? props.location.state.referer: '/'; 
 
+    const classes = useStyles();
+
     //if is logged in, redirect to previous page
     if( authTokens ) {
         return <Redirect to={referer} />
     }
+
+    
     
     const initialValues = {
         name: '',
@@ -69,14 +82,6 @@ const Register = (props) => {
             })
     }
 
-    const FormGroupStyled = styled(FormGroup)(theme => ({
-        marginBottom: '20px',
-    }));
-
-    const ErrorMessageStyled = styled(ErrorMessage)(() => ({
-        color: 'red'
-    }))
-
     return (
         <Wrapper variant='container' contentOffset='130px'>
             <div style={{backgroundColor: '#eee'}}>
@@ -86,9 +91,9 @@ const Register = (props) => {
                     validationSchema={validationSchema}
                     >
                 {({ handleChange, values, setFieldValue, handleBlur }) => (
-                    <Form style={{padding: '20px'}}>
+                    <Form className={classes.root}>
                         <h2>Registracija</h2>
-                        <FormGroupStyled>
+                        <FormGroup>
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Tipas</FormLabel>
                                 <RadioGroup row aria-label="gender" name="role" value={values.role} onChange={handleChange}>
@@ -96,33 +101,33 @@ const Register = (props) => {
                                     <FormControlLabel value="2" control={<Radio />} label="Freelanceris" />
                                 </RadioGroup>
                             </FormControl>
-                            <ErrorMessageStyled name='role' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroupStyled>
-                        <FormGroupStyled> 
+                            <ErrorMessage name='role' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
+                        <FormGroup> 
                             <TextField variant='outlined' label='Prisijungimo vardas' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
-                            <ErrorMessageStyled name='name' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroupStyled>
-                        <FormGroupStyled>
+                            <ErrorMessage name='name' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
+                        <FormGroup>
                             <TextField variant='outlined' label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
-                            <ErrorMessageStyled name='email' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroupStyled>
-                        <FormGroupStyled>
+                            <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
+                        <FormGroup>
                             <TextField variant='outlined' label='Slaptažodis' name='password' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
-                            <ErrorMessageStyled name='password' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroupStyled>
-                        <FormGroupStyled>
+                            <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
+                        <FormGroup>
                             <TextField variant='outlined' label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} />
-                            <ErrorMessageStyled name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroupStyled>
-                        <FormGroupStyled>
+                            <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
+                        <FormGroup>
                             <CountrySelect change={(e, value) => {
                                 setFieldValue(
                                 "location",
                                 value !== null ? value.label : initialValues.location
                                 );
                             }}/>
-                            <ErrorMessageStyled name='location' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroupStyled>
+                            <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
                         <Button type='submit' variant='contained' color='primary' >
                             Registruotis
                         </Button>
