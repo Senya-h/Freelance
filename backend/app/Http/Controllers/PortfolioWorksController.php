@@ -12,9 +12,9 @@ class PortfolioWorksController extends Controller
         $validatedData = $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'filePath' => 'mimes:jpeg,jpg,png,gif,mp4,pdf|required|max:100040',
+            'file' => 'mimes:jpeg,jpg,png,gif,mpg,doc,docx|required|max:51200',
         ]);
-        $path=$request->file('filePath')->store('public/portfolioWorks');
+        $path=$request->file('file')->store('public/portfolioWorks');
         $filename = str_replace('public/',"", $path);
         $work = PortfolioWorks::create([
             'title' => request('title'),

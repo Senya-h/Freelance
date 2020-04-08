@@ -66,5 +66,14 @@ class ApiController extends Controller
 			return response()->json(['error' => $e->getMessage()], 401);
 		}
 	}
+	public function checkEmail($email) {
+		$email = User::select('email')->where('email','=',$email)->get();
+		if (count($email) > 0) {
+			return response()->json(['message' => 'Emailas teisingas']);
+		}
+		else {
+			return response()->json(['error' => 'Toks email neegzistuoja'], 401);
+		}
+	}
 
 }

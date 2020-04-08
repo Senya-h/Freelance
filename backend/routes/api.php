@@ -17,6 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });   
 
+Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
 //Registration/Login
 Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
