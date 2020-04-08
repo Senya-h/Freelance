@@ -7,79 +7,22 @@ use Illuminate\Http\Request;
 
 class PortfolioWorksController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create($id, Request $request)
     {
-        //
-    }
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'filePath' => 'mimes:jpeg,jpg,png,gif,mp4,pdf|required|max:100040',
+        ]);
+        $path=$request->file('filePath')->store('public/portfolioWorks');
+        $filename = str_replace('public/',"", $path);
+        $work = PortfolioWorks::create([
+            'title' => request('title'),
+            'description' => request('description'),
+            'filePath' => $filename,
+            'user_id' => $id
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\PortfolioWorks  $portfolioWorks
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PortfolioWorks $portfolioWorks)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\PortfolioWorks  $portfolioWorks
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PortfolioWorks $portfolioWorks)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PortfolioWorks  $portfolioWorks
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PortfolioWorks $portfolioWorks)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PortfolioWorks  $portfolioWorks
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PortfolioWorks $portfolioWorks)
-    {
-        //
+        return response()->json($work);
     }
 }

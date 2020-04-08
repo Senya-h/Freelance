@@ -28,6 +28,8 @@ Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 Route::post('service&id={id}', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
 Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama 
 Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslauga gali būt redaguojama 
+//Portfolio Works
+Route::post('work&id={id}', 'PortfolioWorksController@create'); // id=userIdD   Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
 
 
 //Roles
@@ -47,3 +49,25 @@ Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
 Route::get('/ro', 'RoleUserController@index');
+//per postmana api/skill ir api/skill/1
+//Skill approvalphp
+//index parodo pagal id userius isveda user visus duomenys
+Route::get('skill/{id}', 'SkillController@index');
+
+
+//create sukuria i table user_skill pagal "user_id" ir "skill_id"
+Route::post('skill', 'SkillController@create');
+
+
+//update atnaujina pagal id cia atnaujinti riekia "approved" ir "comment"
+//approved 1 = patvirtinta 0 = nepatvirtinas skillas
+//comment yra patvirtinimuo comentaras
+Route::put('skill/{skill}', 'SkillController@update');
+
+
+
+//delete cia pagal id istrina is table user_skill irasa
+Route::post('skill/{id}', 'SkillController@delete');
+
+//addSkill i skill lentele ideda skilus
+Route::post('skill_add','SkillController@addSkill');

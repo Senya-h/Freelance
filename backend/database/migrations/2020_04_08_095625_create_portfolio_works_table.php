@@ -15,6 +15,10 @@ class CreatePortfolioWorksTable extends Migration
     {
         Schema::create('portfolio_works', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('description');
+            $table->string('filePath');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

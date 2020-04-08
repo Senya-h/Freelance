@@ -7,6 +7,7 @@ use App\Message;
 use App\Role;
 use App\Rating;
 use App\Service;
+use App\PortfolioWorks;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,8 @@ class PortfolioController extends Controller
         $role = DB::table('role_user')->select('role')->join('roles','roles.id','=','role_user.role_id')->where('user_id',$id)->get();
         //services
         $services = Service::select('service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$id)->get();
+        //darbai
+        $works = PortfolioWorks::select('title', 'description', 'filePath')->join('users','users.id','=','portfolio_works.user_id')->where('user_id',$id)->get();
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
@@ -32,7 +35,8 @@ class PortfolioController extends Controller
                     'roles' => $role,
             ],
                 'portfolio' => [
-                    'services' => $services //Paslaugos
+                    'services' => $services, //Paslaugos
+                    'works' => $works //Atlikti darbai
                 ]
             ];
         } else { //jeigu useris nera freelanceris
@@ -44,11 +48,6 @@ class PortfolioController extends Controller
                 'roles' => $role,
             ];
         }
-        /*try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {             
-            return response()->json(['error' => $e->getMessage()]);         
-        }*/
         return response()->json($info, 200);
     }
 }
