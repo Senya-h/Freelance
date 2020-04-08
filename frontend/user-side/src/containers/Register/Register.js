@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import CountrySelect from './CountrySelect/CountrySelect';
 import { useAuth } from '../../context/auth';
@@ -14,6 +14,10 @@ import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 
@@ -39,12 +43,16 @@ const Register = (props) => {
 
     const classes = useStyles();
 
+    const [showPassword, setShowPassword] = useState(false)
     //if is logged in, redirect to previous page
     if( authTokens ) {
         return <Redirect to={referer} />
     }
 
-    
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    }
+
     
     const initialValues = {
         name: '',
@@ -56,8 +64,9 @@ const Register = (props) => {
     };
 
     const validationSchema = Yup.object({
-        name: Yup.string().max(15, "Must be 15 characters or less").required('Privalomas laukelis'),
-        email: Yup.string().email("Neteisingas el. pašto adresas").required("Privalomas laukelis"),
+        name: Yup.string().max(255, "Vardas negali būti ilgesnis nei 255 simbolių ilgumo").required('Privalomas laukelis'),
+        email: Yup.string().email("Neteisingas el. pašto adresas").required("Privalomas laukelis")
+            .test('email', 'Šis el. paštas jau registruotas!', value => value !== 'stochri9@gmail.com'),
         password: Yup.string().min(8, "Slaptažodis privalo būti bent 8 simbolių ilgumo").required("Privalomas laukelis"),
         passwordConfirm: Yup.string().when("password", {
             is: val => (val && val.length > 0 ? true : false),
@@ -71,10 +80,17 @@ const Register = (props) => {
     });
 
     const handleSubmit = values => {   
-        axios.post('register', values)
+        axios.post('/register', values)
             .then(res => {
+                console.log(res);
                 if(res.status === 200) {
-                    props.history.push('/login');
+                    if(!res.data.error) {
+                        props.history.push('/login');
+                    } else {
+
+                    }
+                } else {
+
                 }
             })
             .catch(err => {
@@ -104,7 +120,7 @@ const Register = (props) => {
                             <ErrorMessage name='role' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup> 
-                            <TextField variant='outlined' label='Prisijungimo vardas' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
+                            <TextField variant='outlined' label='Vardas, Pavardė' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
                             <ErrorMessage name='name' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup>
@@ -112,11 +128,26 @@ const Register = (props) => {
                             <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup>
-                            <TextField variant='outlined' label='Slaptažodis' name='password' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
+                            <TextField variant='outlined' label='Slaptažodis' name='password' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
+                                endAdornment: <InputAdornment position='end'>
+                                    <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}                   
+                                    edge="end"
+                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                                </InputAdornment>}}/>
                             <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup>
-                            <TextField variant='outlined' label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type='password' onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} />
+                            <TextField variant='outlined' label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} InputProps={{
+                                endAdornment: <InputAdornment position='end'>
+                                    <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    
+                                    edge="end"
+                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                                </InputAdornment>}}/>
                             <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup>

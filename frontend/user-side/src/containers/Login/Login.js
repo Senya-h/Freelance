@@ -6,6 +6,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 import {Link, Redirect} from 'react-router-dom';
@@ -29,12 +33,17 @@ const Login = (props) => {
 
     //Shows if user login failed
     const [loginError, setLoginError ] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const classes = useStyles();
 
     //if is logged in, redirect to previous page
     if( authTokens ) {
         return <Redirect to={referer} />
+    }
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
     }
 
     const initialValues = {
@@ -49,12 +58,12 @@ const Login = (props) => {
     const handleSubmit = values => {            
         axios.post('/login', values)
             .then(res => {
-                if(res.data.error) {
-                    console.log("Prisijungti nepavyko");
-                    setLoginError(true);
-                } else {
+                if(res.status === 200 && !res.data.error) {
                     setAuthTokens(res.data);     
                     props.history.push(referer);
+                } else {
+                    console.log("Prisijungti nepavyko");
+                    setLoginError(true);
                 }       
             })
             .catch(err => {
@@ -79,7 +88,14 @@ const Login = (props) => {
                             <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>
                         </FormGroup>
                         <FormGroup>
-                            <TextField label='Slaptažodis' name='password' color='primary' variant='outlined' type='password' onChange={handleChange} onBlur={handleBlur} value={values.password}/>
+                            <TextField label='Slaptažodis' name='password' color='primary' variant='outlined' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
+                                endAdornment: <InputAdornment position='end'>
+                                    <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                                </InputAdornment>}}/>
                             <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>}/>
                         </FormGroup>
                         <Button type='submit' variant='contained' color='primary' >
