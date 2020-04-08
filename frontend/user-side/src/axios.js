@@ -1,14 +1,7 @@
 import axios from 'axios';
 
-
-// const instance = axios.create({
-//     baseURL: 'http://laravel.test/api'
-// });
-
-
-//Temporary API
 const instance = axios.create({
-    baseURL: 'http://jsonplaceholder.typicode.com'
+    baseURL: 'http://freelance.test/api'
 });
 
 export default instance;

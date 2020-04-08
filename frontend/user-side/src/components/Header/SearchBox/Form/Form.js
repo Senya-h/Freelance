@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Form = (props) => {
-    console.log(props);
     return (
         <div className={"tab-pane fade show active"} id="v-pills-1"
         role="tabpanel" aria-labelledby="v-pills-nextgen-tab">

@@ -13,7 +13,7 @@ use App\Role;
 class ApiController extends Controller
 {
     protected function register(Request $request){
-		
+
 		if($request->input('role') != 2 && $request->input('role') != 3) {
 			//jei grupė nėra nei 2(Client), nei 3(Freelancer) registracija nera patvirtinama
 			return response()->json(['error'=>'Grupė neteisinga!']);
@@ -23,7 +23,7 @@ class ApiController extends Controller
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'string', 'min:8'],
 			]);
-		
+
 			if($validation->fails()){
 				return response()->json(["error"=>$validation->errors()]);
 			} else {
@@ -40,7 +40,7 @@ class ApiController extends Controller
 
 				return response()->json($user, 201);
 			}
-			
+
 		}
 
 
@@ -48,13 +48,14 @@ class ApiController extends Controller
 	public function login(Request $request)
 	{
 		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
-		$token = auth()->attempt($creds); 
+		$token = auth()->attempt($creds);
+		$userId = User::select('id')->where('email','=',$request->input('email'))->get();
 		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
-			return response()->json(['error' => 'Duomenys neteisingi']); 
+			return response()->json(['error' => 'Duomenys neteisingi']);
 		}
 
 		//jei duomenys teisingi, login tokena duoda
-		return response()->json(['token' => $token]); 
+		return response()->json(['token' => $token, 'userID' => $userId]);
 	}
 	public function tokenRefresh()
 	{
