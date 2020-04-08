@@ -16,7 +16,9 @@ class ApiController extends Controller
 
 		if($request->input('role') != 2 && $request->input('role') != 3) {
 			//jei grupė nėra nei 2(Client), nei 3(Freelancer) registracija nera patvirtinama
-			return response()->json(['error'=>'Grupė neteisinga!']);
+			return response()->json(['error'=>[
+				'group' => ['Grupė neteisinga']
+			]]);
 		} else {
 			$validation = Validator::make($request->all(),[
 				'name' => ['required', 'string', 'max:255'],
@@ -64,6 +66,15 @@ class ApiController extends Controller
 			return response()->json(['new token' => $token]);
 		} catch(\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
 			return response()->json(['error' => $e->getMessage()], 401);
+		}
+	}
+	public function checkEmail($email) {
+		$email = User::select('email')->where('email','=',$email)->get();
+		if (count($email) > 0) {
+			return response()->json(200);
+		}
+		else {
+			return response()->json(['message' => 'Tinkamas email']);                 
 		}
 	}
 

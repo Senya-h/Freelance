@@ -45,3 +45,15 @@ Trina paslaugą:
 ```bash
 /api/delete/service&id=:service_id
 ```
+Prideda portfolio darbą:
+```bash
+/api/work&id=:user_id
+```
+Atnaujiną portfolio darbą:
+```bash
+/api/update/work&id=:work_id
+```
+Trina portfolio darbą:
+```bash
+/api/delete/work&id=:work_id
+```

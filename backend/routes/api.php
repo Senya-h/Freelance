@@ -15,8 +15,9 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});   
 
+Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
 //Registration/Login
 Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
@@ -26,9 +27,12 @@ Route::get('new_token', 'ApiController@tokenRefresh');
 Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 //Services
 Route::post('service&id={id}', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
-Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
-Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslauga gali būt redaguojama
-
+Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama 
+Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas 
+//Portfolio Works
+Route::post('work&id={id}', 'PortfolioWorksController@create'); // id=userIdD   Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
+Route::post('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama 
+Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas 
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
@@ -47,11 +51,10 @@ Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
 Route::get('/ro', 'RoleUserController@index');
-
 //per postmana api/skill ir api/skill/1
 //Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys
-Route::get('skill/{user_id}', 'SkillController@index');
+Route::get('skill/{id}', 'SkillController@index');
 
 
 //create sukuria i table user_skill pagal "user_id" ir "skill_id"
