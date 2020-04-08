@@ -1,8 +1,6 @@
 # Freelance BackEnd
 
 ## Seeders
-Seederius paleist iš eilės
-
 1) Sukuria 3 roles: 
     a) Admin
     b) Client
