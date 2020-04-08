@@ -33,6 +33,11 @@ class PortfolioWorksController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => $e->getMessage()]);
         }*/
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'filePath' => 'mimes:jpeg,jpg,png,gif,mpg,doc,docx|required',
+        )];
         if($request->hasFile('filePath')) {
             $file = PortfolioWorks::select('filePath')->where('id','=',$id)->get();
             File::delete('../storage/app/public/'.$file[0]['filePath']);
