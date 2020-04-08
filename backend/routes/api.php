@@ -28,10 +28,11 @@ Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 //Services
 Route::post('service&id={id}', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
 Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama 
-Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslauga gali būt redaguojama 
+Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas 
 //Portfolio Works
 Route::post('work&id={id}', 'PortfolioWorksController@create'); // id=userIdD   Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
-
+Route::post('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama 
+Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas 
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
