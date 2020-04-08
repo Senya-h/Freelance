@@ -6,24 +6,32 @@ use Illuminate\Http\Request;
 use App\Skill;
 use App\SkillApproval;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class SkillController extends Controller
 {
-    public function index($id)
+    public function index()
     {
-        $skill = User::find($id);
+        return DB::table("users")
+            ->join('user_skill','user_skill.user_id','users.id')
+            ->join('skill','skill.id','user_skill.skill_id')
+            ->get();
 
-        return $skill;
     }
     public function create(Request $request)
     {
+
+
         $skill = new SkillApproval;
         $skill->user_id = $request->user_id;
         $skill->skill_id = $request->skill_id;
         $skill->approved = 0;
         $skill->comment = '';
         $skill->save();
-        return $skill;
+        return DB::table("users")
+            ->join('user_skill','user_skill.user_id','users.id')
+            ->join('skill','skill.id','user_skill.skill_id')
+            ->get();
     }
 
     public function update(Request $request,SkillApproval $skill)
@@ -39,5 +47,12 @@ class SkillController extends Controller
     {
         $id->delete();
         return $id;
+    }
+    public function addSkill(Request $request)
+    {
+        $skill = new Skill;
+        $skill->skill_Pavadinimai = $request->skill_Pavadinimai;
+        $skill->save();
+        return $skill;
     }
 }
