@@ -55,7 +55,7 @@ const Login = (props) => {
             password: Yup.string().required("Privalomas laukelis")
     });
 
-    const handleSubmit = values => {            
+    const handleSubmit = (values, {setSubmitting}) => {            
         axios.post('/login', values)
             .then(res => {
                 if(res.status === 200 && !res.data.error) {
@@ -64,9 +64,11 @@ const Login = (props) => {
                 } else {
                     console.log("Prisijungti nepavyko");
                     setLoginError(true);
+                    setSubmitting(false);
                 }       
             })
             .catch(err => {
+                setSubmitting(false);
                 console.log(err);
             })
     };
@@ -79,7 +81,7 @@ const Login = (props) => {
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                 >
-                {({ handleChange, values, handleBlur }) => (
+                {({ handleChange, values, handleBlur, isSubmitting }) => (
                     <Form className={classes.root}>
                         <h2>Prisijungimas</h2>
                         {loginError? <Alert severity="error">Tokia paskyra neegzistuoja!</Alert>: null}
@@ -98,7 +100,7 @@ const Login = (props) => {
                                 </InputAdornment>}}/>
                             <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>}/>
                         </FormGroup>
-                        <Button type='submit' variant='contained' color='primary' >
+                        <Button type='submit' variant='contained' disabled={isSubmitting} color='primary' >
                             Prisijungti
                         </Button>
                     </Form>

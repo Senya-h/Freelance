@@ -65,8 +65,7 @@ const Register = (props) => {
 
     const validationSchema = Yup.object({
         name: Yup.string().max(255, "Vardas negali būti ilgesnis nei 255 simbolių ilgumo").required('Privalomas laukelis'),
-        email: Yup.string().email("Neteisingas el. pašto adresas").required("Privalomas laukelis")
-            .test('email', 'Šis el. paštas jau registruotas!', value => value !== 'stochri9@gmail.com'),
+        email: Yup.string().email("Neteisingas el. pašto adresas").required("Privalomas laukelis"),
         password: Yup.string().min(8, "Slaptažodis privalo būti bent 8 simbolių ilgumo").required("Privalomas laukelis"),
         passwordConfirm: Yup.string().when("password", {
             is: val => (val && val.length > 0 ? true : false),
@@ -79,21 +78,24 @@ const Register = (props) => {
         role: Yup.string().required("Privalomas laukelis")
     });
 
-    const handleSubmit = values => {   
+    const handleSubmit = (values, {setErrors, setSubmitting}) => {   
         axios.post('/register', values)
             .then(res => {
                 console.log(res);
+                //Response is good, but the given values were incorrent
                 if(res.status === 200) {
-                    if(!res.data.error) {
-                        props.history.push('/login');
-                    } else {
-
+                    setSubmitting(false);
+                    if(res.data.error) {
+                        if(res.data.error.email) {
+                            setErrors({email: "Šis el. paštas jau buvo užregistruotas!"})
+                        }
                     }
-                } else {
-
+                } else if(res.status === 201) {
+                    props.history.push('/login');
                 }
             })
             .catch(err => {
+                setSubmitting(false);
                 console.log(err);
             })
     }
@@ -106,7 +108,7 @@ const Register = (props) => {
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                     >
-                {({ handleChange, values, setFieldValue, handleBlur }) => (
+                {({ handleChange, values, setFieldValue, handleBlur, isSubmitting }) => (
                     <Form className={classes.root}>
                         <h2>Registracija</h2>
                         <FormGroup>
@@ -159,7 +161,7 @@ const Register = (props) => {
                             }}/>
                             <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
-                        <Button type='submit' variant='contained' color='primary' >
+                        <Button type='submit' disabled={isSubmitting} variant='contained' color='primary' >
                             Registruotis
                         </Button>
                     </Form>
