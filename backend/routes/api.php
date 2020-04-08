@@ -47,10 +47,11 @@ Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
 Route::get('/ro', 'RoleUserController@index');
+
 //per postmana api/skill ir api/skill/1
 //Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys
-Route::get('skill/{id}', 'SkillController@index');
+Route::get('skill/{user_id}', 'SkillController@index');
 
 
 //create sukuria i table user_skill pagal "user_id" ir "skill_id"

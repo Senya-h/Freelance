@@ -1,12 +1,10 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSkillTable extends Migration
+class UserSkill extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +13,12 @@ class CreateSkillTable extends Migration
      */
     public function up()
     {
-        Schema::create('skill', function (Blueprint $table) {
+        Schema::create('user_skill', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->integer('user_id');
+            $table->integer('skill_id');
+            $table->boolean('approved');
+            $table->text('comment');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateSkillTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('skill');
+        Schema::dropIfExists('user_skill');
     }
 }

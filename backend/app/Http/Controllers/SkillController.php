@@ -28,7 +28,7 @@ class SkillController extends Controller
         $skill->approved = 0;
         $skill->comment = '';
         $skill->save();
-        return DB::table("users")
+        DB::table("users")
             ->join('user_skill','user_skill.user_id','users.id')
             ->join('skill','skill.id','user_skill.skill_id')
             ->get();
@@ -40,19 +40,19 @@ class SkillController extends Controller
         $skill->approved = $request->approved;
         $skill->comment = $request->comment;
         $skill->save();
-        return $skill;
+
     }
 
     public function delete(SkillApproval $id)
     {
         $id->delete();
-        return $id;
+
     }
     public function addSkill(Request $request)
     {
         $skill = new Skill;
         $skill->skill_Pavadinimai = $request->skill_Pavadinimai;
         $skill->save();
-        return $skill;
+
     }
 }
