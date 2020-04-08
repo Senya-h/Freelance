@@ -71,10 +71,10 @@ class ApiController extends Controller
 	public function checkEmail($email) {
 		$email = User::select('email')->where('email','=',$email)->get();
 		if (count($email) > 0) {
-			return response()->json(['message' => 'Emailas teisingas']);
+			return response()->json(200);
 		}
 		else {
-			return response()->json(['error' => 'Toks email neegzistuoja'], 401);
+			return response()->json(['message' => 'Tinkamas email']);                 
 		}
 	}
 
