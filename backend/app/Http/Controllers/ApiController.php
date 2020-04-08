@@ -16,7 +16,9 @@ class ApiController extends Controller
 		
 		if($request->input('role') != 2 && $request->input('role') != 3) {
 			//jei grupė nėra nei 2(Client), nei 3(Freelancer) registracija nera patvirtinama
-			return response()->json(['error'=>'Grupė neteisinga!']);
+			return response()->json(['error'=>[
+				'group' => ['Grupė neteisinga']
+			]]);
 		} else {
 			$validation = Validator::make($request->all(),[
 				'name' => ['required', 'string', 'max:255'],
