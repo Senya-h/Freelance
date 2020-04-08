@@ -3,16 +3,14 @@
 ## Seeders
 Seederius paleist iš eilės
 
-Sukuria 3 roles: 
-    1) Admin
-    2) Client
-    3) Freelancer
+1) Sukuria 3 roles: 
+    a) Admin
+    b) Client
+    c) Freelancer
+2) Sukuria Admin. Email: info@freelance.lt, Password: admin123
+3) Sukuria skillsus
 ```bash
-php artisan db:seed --class=RoleTableSeeder
-```
-Sukuria Admin. Email: info@freelance.lt, Password: admin123
-```bash
-php artisan db:seed --class=UsersTableSeeder
+php artisan db:seed
 ```
 
 ## API
@@ -33,6 +31,7 @@ User Info:
 ```bash
 /api/user/:id
 ```
+---
 Prideda paslaugą:
 ```bash
 /api/service&id=:user_id
@@ -45,6 +44,7 @@ Trina paslaugą:
 ```bash
 /api/delete/service&id=:service_id
 ```
+---
 Prideda portfolio darbą:
 ```bash
 /api/work&id=:user_id
