@@ -20,10 +20,13 @@ class SkillController extends Controller
     }
     public function create(Request $request)
     {
-
-
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill = new SkillApproval;
-        $skill->user_id = $request->user_id;
+        $skill->user_id = auth()->user()->id;
         $skill->skill_id = $request->skill_id;
         $skill->approved = 0;
         $skill->comment = '';
@@ -53,6 +56,7 @@ class SkillController extends Controller
         $skill = new Skill;
         $skill->skill_Pavadinimai = $request->skill_Pavadinimai;
         $skill->save();
+        return $skill;
 
     }
 }
