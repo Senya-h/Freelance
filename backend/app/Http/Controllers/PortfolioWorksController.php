@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\PortfolioWorks;
 use Illuminate\Http\Request;
 use File;
+use Gate;
 
 class PortfolioWorksController extends Controller
 {
@@ -37,24 +38,37 @@ class PortfolioWorksController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti']);
         }
-        $validatedData = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'filePath' => 'mimes:jpeg,jpg,png,gif,mpg,doc,docx|required',
-        ]);
-        if($request->hasFile('filePath')) {
-            $file = PortfolioWorks::select('filePath')->where('id','=',$id)->get();
-            File::delete('../storage/app/public/'.$file[0]['filePath']);
-            $path=$request->file('filePath')->store('public/portfolioWorks');
-            $filename = str_replace('public/',"", $path);
-            PortfolioWorks::where('id',$id)->update(['filePath' => $filename]);
+        if (Gate::allows('authorization', $work)) {
+            $validatedData = $request->validate([
+                'title' => 'required',
+                'description' => 'required',
+                'filePath' => 'mimes:jpeg,jpg,png,gif,mpg,doc,docx|required',
+            ]);
+            if ($request->hasFile('filePath')) {
+                $file = PortfolioWorks::select('filePath')->where('id', '=', $id)->get();
+                File::delete('../storage/app/public/' . $file[0]['filePath']);
+                $path = $request->file('filePath')->store('public/portfolioWorks');
+                $filename = str_replace('public/', "", $path);
+                PortfolioWorks::where('id', $id)->update(['filePath' => $filename]);
+            }
+            PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
+        } else if (Gate::denies('authorization', $work)){
+            return response()->json(["error" => "Jūs neturite teisės"]);
         }
-        PortfolioWorks::where('id',$id)->update($request->except(['_token', 'filePath']));
 
         return response()->json(["message" => "Darbas sekmingai atnaujintas"]);
     }
     public function destroy(Request $request, PortfolioWorks $work) {
-        $work->delete();
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti']);
+        }
+        if (Gate::allows('authorization', $work)) {
+            $work->delete();
+        }else if (Gate::denies('authorization', $work)) {
+            return response()->json(["error" => "Jūs neturite teisės"]);
+        }
         return response()->json(["message" => "Darbas sekmingai ištrintas"]);
     }
 }

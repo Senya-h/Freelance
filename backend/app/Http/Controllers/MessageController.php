@@ -18,16 +18,25 @@ class MessageController extends Controller
 
     public function create(Request $request)
     {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti']);
+        }
         return Message::create([
-            'senders_id' => $request->input('senders_id'),
-            'receivers_id' => $request->input('senders_id'),
+            'senders_id' => auth()->user()->id,
+            'receivers_id' => $request->input('receivers_id'),
             'message' => $request->input('message'),
         ]);
     }
 
     public function destroy(Request $request, Message $message)
     {
-        $message->delete();
-        return response()->json(null, 204);
+        if (Gate::allows('authorization', $message)) {
+            $message->delete();
+        } else if (Gate::denies('authorization', $message)){
+            return response()->json(["error" => "Jūs neturite teisės"]);
+        }
+        return response()->json(["message" => "Žinutė atnaujinta"]);
     }
 }
