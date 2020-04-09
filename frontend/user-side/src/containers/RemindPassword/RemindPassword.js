@@ -27,6 +27,7 @@ const RemindPassword = () => {
     const classes = useStyles();
 
     const [emailSent, setEmailSent] = useState(false);
+    const [requestError, setRequestError] = useState(false);
     const initialValues = {
         email: ''
     };
@@ -40,13 +41,16 @@ const RemindPassword = () => {
             .then(res => {
                 console.log(res);
                 if(res.status === 200) {
-                    setEmailSent(true)
+                    setEmailSent(true);
+                    setRequestError(false);
                 } else {
-                    setSubmitting(false)
+                    setRequestError(true);
+                    setSubmitting(false);
                 }
             })
             .catch(err => {
-                setSubmitting(false)
+                setRequestError(true);
+                setSubmitting(false);
             })
     }
 
@@ -56,6 +60,7 @@ const RemindPassword = () => {
                 <h2>Slaptažodžio priminimas</h2>
                 <p>Įveskite savo paskyros el. paštą, į kurį bus išsiųsta instrukcija slaptažodžio pakeitimui</p>
                 {emailSent? <Alert severity="success">Instrukcija sėkmingai išsiųsta!</Alert>: null}
+                {requestError? <Alert severity="error">Įvyko klaida! Patikrinkite, ar teisingai suvedėte savo el. pašto adresą</Alert>: null}
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}

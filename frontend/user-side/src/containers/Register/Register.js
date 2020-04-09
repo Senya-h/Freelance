@@ -28,10 +28,11 @@ import { makeStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles( theme => ({
     root: {
-        '& > *': {
+        '& > *, & > form > *': {
             marginBottom: theme.spacing(3)
         },
-        padding: '20px'
+        padding: '20px',
+        backgroundColor: '#eee'
     }
 }))
 
@@ -78,9 +79,11 @@ const Register = (props) => {
         role: Yup.string().required("Privalomas laukelis")
     });
 
-    const handleSubmit = (values, {setErrors, setSubmitting}) => {   
+    const handleSubmit = (values, {setErrors, setSubmitting}) => {  
+        console.log("Submit") 
         axios.post('/register', values)
             .then(res => {
+                console.log(res);
                 //Response is good, but the given values were incorrent
                 if(res.status === 200) {
                     setSubmitting(false);
@@ -101,14 +104,14 @@ const Register = (props) => {
 
     return (
         <Wrapper variant='container' contentOffset='130px'>
-            <div style={{backgroundColor: '#eee'}}>
+            <div className={classes.root}>
                 <Formik 
                     initialValues={initialValues} 
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                     >
                 {({ handleChange, values, setFieldValue, handleBlur, isSubmitting }) => (
-                    <Form className={classes.root}>
+                    <Form >
                         <h2>Registracija</h2>
                         <FormGroup>
                             <FormControl component="fieldset">
@@ -155,7 +158,7 @@ const Register = (props) => {
                             <CountrySelect change={(e, value) => {
                                 setFieldValue(
                                 "location",
-                                value !== null ? value.label : initialValues.location
+                                value !== null ? value : initialValues.location
                                 );
                             }}/>
                             <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />

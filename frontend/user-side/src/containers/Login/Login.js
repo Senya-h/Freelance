@@ -20,10 +20,11 @@ import { useAuth } from '../../context/auth';
 
 const useStyles = makeStyles( theme => ({
     root: {
-        '& > *': {
+        '& > *, & > form > *': {
             marginBottom: theme.spacing(3)
         },
-        padding: '20px'
+        padding: '20px',
+        backgroundColor: '#eee'
     }
 }))
 
@@ -75,16 +76,16 @@ const Login = (props) => {
 
     return (
         <Wrapper variant='container' contentOffset='130px'>
-            <div style={{backgroundColor: '#eee'}}>
+            <div className={classes.root}>
+                <h2>Prisijungimas</h2>
                 <Formik
                     initialValues={initialValues} 
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                 >
                 {({ handleChange, values, handleBlur, isSubmitting }) => (
-                    <Form className={classes.root}>
-                        <h2>Prisijungimas</h2>
-                        {loginError? <Alert severity="error">Tokia paskyra neegzistuoja!</Alert>: null}
+                    <Form>
+                        {loginError? <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>: null}
                         <FormGroup>
                             <TextField label='El. paštas' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
                             <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>
