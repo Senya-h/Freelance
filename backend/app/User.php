@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\PasswordResetNotification;
 use App\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -30,6 +31,12 @@ class User extends Authenticatable implements JWTSubject
     public function roles()
     {
         return $this->belongsToMany('App\Role','role_user','user_id','role_id');
+    }
+
+    //Password Reset
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new PasswordResetNotification($token));
     }
 
     /* Role Authorization */
