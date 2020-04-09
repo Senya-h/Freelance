@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 
 /*
@@ -22,6 +24,9 @@ Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
 Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
+
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 //User
 Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
