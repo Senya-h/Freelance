@@ -21,12 +21,5 @@ class ResetPasswordController extends Controller
         return response(['error'=>trans($response)], 422);
     }
 
-    protected function credentials(Request $request)
-    {
-        return $request->only(
-            'email', 'password', 'passwordConfirmation', 'token'
-        );
-    }
-
 
 }
