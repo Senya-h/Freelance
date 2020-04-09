@@ -41,8 +41,11 @@ Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // i
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
-Route::get('role/user&id={id}', 'RoleController@aboutRoleUser'); //Roliu user sarašas pagal user id
-Route::post('add/role', 'RoleController@create');
+Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu user sarašas pagal user id
+Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
+
+//Admin
+Route::post('user/ban/delete', 'BanDeleteUserController@create');
 
 //Message
 Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos
@@ -55,7 +58,7 @@ Route::get('all/rating', 'RatingController@aboutRating');
 Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
-Route::get('/ro', 'RoleUserController@index');
+
 //per postmana api/skill ir api/skill/1
 //Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys

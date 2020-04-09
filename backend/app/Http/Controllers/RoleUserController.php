@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 
 class RoleUserController extends Controller
 {
-    public function index()
+    public function aboutRoleUser($id)
     {
-        return RoleUser::all();
+        return response()->json(RoleUser::select('*')->where('user_id',$id)->get(),200);
+    }
+
+    public function create(Request $request)
+    {
+        return Rating::create([
+            'user_id' => $request->input('user_id'),
+            'role_id' => $request->input('role_id'),
+        ]);
     }
 
     public function store($title, $id)
