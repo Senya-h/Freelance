@@ -35,6 +35,8 @@ class SkillController extends Controller
             ->join('user_skill','user_skill.user_id','users.id')
             ->join('skill','skill.id','user_skill.skill_id')
             ->get();
+
+        return response()->json(["message" => "Skill pridėtas"]);
     }
 
     public function update(Request $request,SkillApproval $skill)
