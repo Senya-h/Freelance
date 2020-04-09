@@ -115,8 +115,8 @@ const Register = (props) => {
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Tipas</FormLabel>
                                 <RadioGroup row aria-label="gender" name="role" value={values.role} onChange={handleChange}>
-                                    <FormControlLabel value="1" control={<Radio />} label="Klientas" />
-                                    <FormControlLabel value="2" control={<Radio />} label="Freelanceris" />
+                                    <FormControlLabel value="2" control={<Radio />} label="Klientas" />
+                                    <FormControlLabel value="3" control={<Radio />} label="Freelanceris" />
                                 </RadioGroup>
                             </FormControl>
                             <ErrorMessage name='role' render={msg => <div className='text-danger'>{msg}</div>} />

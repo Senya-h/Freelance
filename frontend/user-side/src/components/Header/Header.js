@@ -13,8 +13,8 @@ const Header = () => {
             <div className={cx("row d-md-flex no-gutters align-items-center justify-content-center", classes["slider-text"])} >
                 <div className="col-md-10 d-flex align-items-center"> {/*ftco-animate*/}
                     <div className={cx(classes.text, "text-center pt-5 mt-md-5")}>
-                        <p className="mb-4">Find Job, Employment, and Career Opportunities</p>
-                        <Typography variant='h1' className="mb-5">The Easiest Way to Get Your New Job</Typography>
+                        <p className="mb-4">Čia rasi darbo, įdarbinimo ir karjeros galimybių</p>
+                        <Typography variant='h1' className="mb-5">Lengviausias būdas rasti naują darbą</Typography>
                         <Counters />
                         <SearchBox />
                     </div>

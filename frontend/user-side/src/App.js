@@ -3,10 +3,13 @@ import Navbar from './components/Navbar/Navbar';
 import FreelancerProfile from './components/Profile/FreelancerProfile/FreelancerProfile';
 
 import {Switch, Route} from 'react-router-dom';
+
 import Main from './containers/Main/Main';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Register from  './containers/Register/Register';
 import Login from './containers/Login/Login';
+import RemindPassword from './containers/RemindPassword/RemindPassword';
+
 import PrivateRoute from './PrivateRoute';
 import {AuthContext} from './context/auth';
 
@@ -38,7 +41,7 @@ const App = () => {
             <Route path='/' exact component={Main} />
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
-            <Route path='/logout' component={Login} />
+            <Route path='/password-reminder' component={RemindPassword} />
             <PrivateRoute path='/profile' component={FreelancerProfile} />
 
             <Route component={PageNotFound} />

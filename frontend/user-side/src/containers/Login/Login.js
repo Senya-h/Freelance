@@ -99,6 +99,7 @@ const Login = (props) => {
                             >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
                                 </InputAdornment>}}/>
                             <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>}/>
+                            <Link to='/password-reminder'>Pamiršai slaptažodį?</Link>
                         </FormGroup>
                         <Button type='submit' variant='contained' disabled={isSubmitting} color='primary' >
                             Prisijungti
@@ -106,7 +107,8 @@ const Login = (props) => {
                     </Form>
                 )}
                 </Formik>
-                <Link to ='/register'>Neturi paskyros? Registruokis</Link>
+                <Link to='/register'>Neturi paskyros? Registruokis</Link>
+                
             </div>
         </Wrapper>
     )
