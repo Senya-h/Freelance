@@ -45,7 +45,7 @@ Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu use
 Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
 
 //Admin
-Route::post('user/ban/delete', 'BanDeleteUserController@create');
+Route::post('user&id={id}/ban/delete', 'AdminController@create');
 
 //Message
 Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos
