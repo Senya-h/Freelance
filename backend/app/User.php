@@ -30,7 +30,12 @@ class User extends Authenticatable implements JWTSubject
     }
     public function roles()
     {
-        return $this->belongsToMany('App\Role','role_user','user_id','role_id');
+        return $this->belongsToMany('App\Role','role_users','user_id','role_id');
+    }
+
+    public function bandeleteusers()
+    {
+        return $this->belongsTo('App\BanDeleteUsers');
     }
 
     //Password Reset

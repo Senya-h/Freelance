@@ -20,7 +20,7 @@ class PortfolioController extends Controller
         //pagrindine vartotojo informacija
         $usr = User::select('name', 'email', 'foto', 'location')->where('users.id',$id)->get();
         //role
-        $role = DB::table('role_user')->select('role')->join('roles','roles.id','=','role_user.role_id')->where('user_id',$id)->get();
+        $role = DB::table('role_users')->select('role')->join('roles','roles.id','=','role_users.role_id')->where('user_id',$id)->get();
         //services
         $services = Service::select('service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$id)->get();
         //darbai

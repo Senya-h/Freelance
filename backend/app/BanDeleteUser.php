@@ -3,15 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
 
-class Role extends Model
+class BanDeleteUser extends Model
 {
     protected $fillable = [
-        'role'
+        'user_id','baned','deleted'
     ];
+
     public function users()
     {
-        return $this->belongsToMany('App\User','role_users','role_id','user_id');
+        return $this->hasMany('App\User');
     }
 }
