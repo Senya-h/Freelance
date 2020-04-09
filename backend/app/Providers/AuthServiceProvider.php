@@ -24,5 +24,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        Gate::define('post', function ($user, $ad) {
+            return response()->json("V");
+        });
     }
 }

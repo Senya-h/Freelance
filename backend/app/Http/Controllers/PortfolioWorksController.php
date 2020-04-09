@@ -8,8 +8,13 @@ use File;
 
 class PortfolioWorksController extends Controller
 {
-    public function create($id, Request $request)
+    public function create(Request $request)
     {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti']);
+        }
         $validatedData = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -21,18 +26,17 @@ class PortfolioWorksController extends Controller
             'title' => request('title'),
             'description' => request('description'),
             'filePath' => $filename,
-            'user_id' => $id
+            'user_id' => auth()->user()->id
         ]);
 
         return response()->json($work);
     }
     public function update($id, Request $request, PortfolioWorks $portfolioworks) {
-        /* Užkomentuota kol FRONTEND neturi login
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }*/
+            return response()->json(['error' => 'Prašome prisijungti']);
+        }
         $validatedData = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -46,7 +50,7 @@ class PortfolioWorksController extends Controller
             PortfolioWorks::where('id',$id)->update(['filePath' => $filename]);
         }
         PortfolioWorks::where('id',$id)->update($request->except(['_token', 'filePath']));
-        
+
         return response()->json(["message" => "Darbas sekmingai atnaujintas"]);
     }
     public function destroy(Request $request, PortfolioWorks $work) {
