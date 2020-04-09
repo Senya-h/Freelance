@@ -12,17 +12,4 @@ class RoleController extends Controller
     {
         return response()->json(Role::select('*')->get(),200);
     }
-
-    public function aboutRoleUser()
-    {
-        return response()->json(Role::select('*')->where('usre_id',$id)->get(),200);
-    }
-
-    public function create(Request $request)
-    {
-        return Rating::create([
-            'user_id' => $request->input('user_id'),
-            'role_id' => $request->input('role_id'),
-        ]);
-    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 
 /*
@@ -15,7 +17,7 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});   
+});
 
 Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
 //Registration/Login
@@ -23,21 +25,27 @@ Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
 
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
 //User
 Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 //Services
-Route::post('service&id={id}', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
-Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama 
-Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas 
+Route::post('service', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
+Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
+Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas
 //Portfolio Works
-Route::post('work&id={id}', 'PortfolioWorksController@create'); // id=userIdD   Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
-Route::post('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama 
-Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas 
+Route::post('work', 'PortfolioWorksController@create'); // Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
+Route::post('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
+Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
-Route::get('role/user&id={id}', 'RoleController@aboutRoleUser'); //Roliu user sarašas pagal user id
-Route::post('add/role', 'RoleController@create');
+Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu user sarašas pagal user id
+Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
+
+//Admin
+Route::post('user&id={id}/ban/delete', 'AdminController@create');
 
 //Message
 Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos
@@ -50,7 +58,7 @@ Route::get('all/rating', 'RatingController@aboutRating');
 Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
-Route::get('/ro', 'RoleUserController@index');
+
 //per postmana api/skill ir api/skill/1
 //Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys

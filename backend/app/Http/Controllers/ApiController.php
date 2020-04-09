@@ -51,7 +51,7 @@ class ApiController extends Controller
 	{
 		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
 		$token = auth()->attempt($creds);
-		$userId = User::select('id')->where('email','=',$request->input('email'))->get();
+		$userId = auth()->user()->id;
 		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
 			return response()->json(['error' => 'Duomenys neteisingi']);
 		}
@@ -74,7 +74,7 @@ class ApiController extends Controller
 			return response()->json(200);
 		}
 		else {
-			return response()->json(['message' => 'Tinkamas email']);                 
+			return response()->json(['message' => 'Tinkamas email']);
 		}
 	}
 

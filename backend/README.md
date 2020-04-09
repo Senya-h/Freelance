@@ -1,8 +1,6 @@
 # Freelance BackEnd
 
 ## Seeders
-Seederius paleist iš eilės
-
 1) Sukuria 3 roles: 
     a) Admin
     b) Client
@@ -13,7 +11,7 @@ Seederius paleist iš eilės
 php artisan db:seed
 ```
 
-## API
+### Prisijungimas/Registracija
 Register:
 ```bash
 /api/register
@@ -27,14 +25,39 @@ Refresh Token:
 /api/new_token
 ```
 ---
+## Password reset setup
+Užpildyti duomenis užsiregistravus: https://mailtrap.io/
+
+/.env
+```bash
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=username
+MAIL_PASSWORD=password
+MAIL_FROM_ADDRESS=from@example.com
+MAIL_FROM_NAME=Example
+```
+#### `Password reset API`
+Įrašyti email:
+```bash
+/api/password/email
+```
+Įrašyti email, token(gautas emaile), password, password_confirmation
+```bash
+/api/password/reset
+```
+---
+## Vartotojo informacija
 User Info:
 ```bash
 /api/user/:id
 ```
 ---
-Prideda paslaugą:
+## Paslaugos
+Prideda paslaugą (Vartotojas gali pridėti daugiau nei vieną paslaugą:
 ```bash
-/api/service&id=:user_id
+/api/service
 ```
 Atnaujiną paslaugą:
 ```bash
@@ -45,9 +68,10 @@ Trina paslaugą:
 /api/delete/service&id=:service_id
 ```
 ---
-Prideda portfolio darbą:
+## Portfolio darbai
+Prideda portfolio darbą (Vartotojas gali pridėti daugiau nei vieną darbą):
 ```bash
-/api/work&id=:user_id
+/api/work
 ```
 Atnaujiną portfolio darbą:
 ```bash
