@@ -9,6 +9,7 @@ import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Register from  './containers/Register/Register';
 import Login from './containers/Login/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
+import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
 
 import PrivateRoute from './PrivateRoute';
 import {AuthContext} from './context/auth';
@@ -42,8 +43,9 @@ const App = () => {
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
             <Route path='/password-reminder' component={RemindPassword} />
+            <Route path='/password/reset/' component={ForgotChangePassword} />
             <PrivateRoute path='/profile' component={FreelancerProfile} />
-
+            
             <Route component={PageNotFound} />
           </Switch>
         </AuthContext.Provider>

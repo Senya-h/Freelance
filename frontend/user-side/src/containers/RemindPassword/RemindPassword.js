@@ -36,10 +36,10 @@ const RemindPassword = () => {
     });
 
     const handleSubmit = (values, {setSubmitting}) => {
-        setEmailSent(true)
-        axios.post("/password/")
+        axios.post("/password/email", values)
             .then(res => {
-                if(res === 200) {
+                console.log(res);
+                if(res.status === 200) {
                     setEmailSent(true)
                 } else {
                     setSubmitting(false)
@@ -54,8 +54,8 @@ const RemindPassword = () => {
         <Wrapper variant='container' contentOffset='130px'>
             <div className={classes.root}>
                 <h2>Slaptažodžio priminimas</h2>
-                <p>Įveskite savo paskyros el. paštą, į kurį bus išsiųstas jūsų slaptažodis</p>
-                {emailSent? <Alert severity="success">Slaptažodis sėkmingai išsiųstas!</Alert>: null}
+                <p>Įveskite savo paskyros el. paštą, į kurį bus išsiųsta instrukcija slaptažodžio pakeitimui</p>
+                {emailSent? <Alert severity="success">Instrukcija sėkmingai išsiųsta!</Alert>: null}
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}

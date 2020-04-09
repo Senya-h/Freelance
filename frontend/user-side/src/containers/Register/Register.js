@@ -81,7 +81,6 @@ const Register = (props) => {
     const handleSubmit = (values, {setErrors, setSubmitting}) => {   
         axios.post('/register', values)
             .then(res => {
-                console.log(res);
                 //Response is good, but the given values were incorrent
                 if(res.status === 200) {
                     setSubmitting(false);
