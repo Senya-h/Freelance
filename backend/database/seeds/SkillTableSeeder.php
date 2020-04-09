@@ -13,27 +13,27 @@ class SkillTableSeeder extends Seeder
     public function run()
     {
         Skill::create([
-            'name' => 'JAVA',
+            'skillName' => 'JAVA',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         Skill::create([
-            'name' => 'CSS',
+            'skillName' => 'CSS',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         Skill::create([
-            'name' => 'HTML',
+            'skillName' => 'HTML',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         Skill::create([
-            'name' => 'PHP',
+            'skillName' => 'PHP',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         Skill::create([
-            'name' => 'JS',
+            'skillName' => 'JS',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);

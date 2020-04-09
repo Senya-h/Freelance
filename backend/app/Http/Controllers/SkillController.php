@@ -54,7 +54,7 @@ class SkillController extends Controller
     public function addSkill(Request $request)
     {
         $skill = new Skill;
-        $skill->skill_Pavadinimai = $request->skill_Pavadinimai;
+        $skill->skillName = $request->skillName;
         $skill->save();
         return $skill;
 
