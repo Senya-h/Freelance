@@ -36,7 +36,7 @@ class PortfolioWorksController extends Controller
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti']);
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         if (Gate::allows('authorization', $work)) {
             $validatedData = $request->validate([
@@ -53,22 +53,22 @@ class PortfolioWorksController extends Controller
             }
             PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
         } else if (Gate::denies('authorization', $work)){
-            return response()->json(["error" => "Jūs neturite teisės"]);
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
 
-        return response()->json(["message" => "Darbas sekmingai atnaujintas"]);
+        return response()->json(["message" => "Darbas sekmingai atnaujintas"], 200);
     }
     public function destroy(Request $request, PortfolioWorks $work) {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti']);
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         if (Gate::allows('authorization', $work)) {
             $work->delete();
         }else if (Gate::denies('authorization', $work)) {
-            return response()->json(["error" => "Jūs neturite teisės"]);
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
-        return response()->json(["message" => "Darbas sekmingai ištrintas"]);
+        return response()->json(["message" => "Darbas sekmingai ištrintas"], 200);
     }
 }

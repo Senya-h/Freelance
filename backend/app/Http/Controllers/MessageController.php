@@ -21,7 +21,7 @@ class MessageController extends Controller
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti']);
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         return Message::create([
             'senders_id' => auth()->user()->id,
@@ -35,8 +35,8 @@ class MessageController extends Controller
         if (Gate::allows('authorization', $message)) {
             $message->delete();
         } else if (Gate::denies('authorization', $message)){
-            return response()->json(["error" => "Jūs neturite teisės"]);
+            return response()->json(["error" => "Jūs neturite teisės", 403]);
         }
-        return response()->json(["message" => "Žinutė atnaujinta"]);
+        return response()->json(["message" => "Žinutė atnaujinta"], 201);
     }
 }

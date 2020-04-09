@@ -30,7 +30,7 @@ class ServiceController extends Controller
             }
             Service::where('id', $id)->update($request->except(['_token']));
         } else if (Gate::denies('authorization', $service)){
-            return response()->json(["error" => "Jūs neturite teisės"]);
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
 
         return response()->json(["message" => "Paslauga sekmingai atnaujinta"]);
@@ -39,13 +39,13 @@ class ServiceController extends Controller
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti']);
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         if (Gate::allows('authorization', $service)) {
             $service->delete();
         } else if (Gate::denies('authorization', $service)){
-            return response()->json(["error" => "Jūs neturite teisės"]);
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
-        return response()->json(["message" => "Paslauga sekmingai ištrinta"]);
+        return response()->json(["message" => "Paslauga sekmingai ištrinta"], 200);
     }
 }
