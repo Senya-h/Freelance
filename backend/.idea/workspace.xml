@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f58eba89-a7b5-47fe-8a70-b8e11db82b49" name="Default Changelist" comment="" />
+    <list default="true" id="f58eba89-a7b5-47fe-8a70-b8e11db82b49" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SkillController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SkillController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/user-side/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/user-side/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/user-side/src/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/user-side/src/axios.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,7 +174,7 @@
       <workItem from="1585425187268" duration="272000" />
       <workItem from="1585426107482" duration="724000" />
       <workItem from="1586417537362" duration="6702000" />
-      <workItem from="1586427975975" duration="5715000" />
+      <workItem from="1586427975975" duration="10011000" />
     </task>
     <servers />
   </component>
