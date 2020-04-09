@@ -62,12 +62,13 @@ const RemindPassword = (props) => {
        
         axios.post("/password/reset", params)
             .then(res => {
-                console.log(res);
+                
                 if(res.status === 200) {
                     setPasswordChanged(true)
                 } else {
                     setSubmitting(false)
                 }
+                console.log(res);
             })
             .catch(err => {
                 console.log(err);
