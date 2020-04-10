@@ -30,14 +30,23 @@ const useStyles = makeStyles( theme => ({
 
 const Login = (props) => {
     const { setAuthTokens, authTokens } = useAuth();
-    const referer = props.location.state? props.location.state.referer: '/'; 
+    let referer = '/';
 
-    //Shows if user login failed
-    const [loginError, setLoginError ] = useState(false);
+    let alertMessage = null;
+
+    if(props.location.state) {
+        if(props.location.state.referer) {
+            referer = props.location.state.referer
+        }
+        if(props.location.state.registrationSuccesful) {
+            alertMessage = <Alert severity="success">Paskyra sėkmingai sukurta!</Alert>;
+        }
+    }
+    
     const [showPassword, setShowPassword] = useState(false);
 
     const classes = useStyles();
-
+    console.log("LOGINO", props);
     //if is logged in, redirect to previous page
     if( authTokens ) {
         return <Redirect to={referer} />
@@ -61,10 +70,9 @@ const Login = (props) => {
             .then(res => {
                 if(res.status === 200 && !res.data.error) {
                     setAuthTokens(res.data);     
-                    props.history.push(referer);
+                    props.history.push({referer});
                 } else {
-                    console.log("Prisijungti nepavyko");
-                    setLoginError(true);
+                    alertMessage = <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>;
                     setSubmitting(false);
                 }       
             })
@@ -85,7 +93,7 @@ const Login = (props) => {
                 >
                 {({ handleChange, values, handleBlur, isSubmitting }) => (
                     <Form>
-                        {loginError? <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>: null}
+                        {alertMessage}
                         <FormGroup>
                             <TextField label='El. paštas' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
                             <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>

@@ -93,7 +93,10 @@ const Register = (props) => {
                         }
                     }
                 } else if(res.status === 201) {
-                    props.history.push('/login');
+                    props.history.push({
+                        pathname: '/login',
+                        state: {registrationSuccesful: true}
+                    });
                 }
             })
             .catch(err => {
