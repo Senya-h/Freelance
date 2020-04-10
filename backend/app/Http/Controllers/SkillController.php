@@ -41,7 +41,11 @@ class SkillController extends Controller
 
     public function update(Request $request,SkillApproval $skill)
     {
-
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill->approved = $request->approved;
         $skill->comment = $request->comment;
         $skill->save();
@@ -50,11 +54,25 @@ class SkillController extends Controller
 
     public function delete(SkillApproval $id)
     {
-        $id->delete();
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if (Gate::allows('authorization', $id)) {
+            $id->delete();
+        } else if (Gate::denies('authorization', $id)) {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
 
     }
     public function addSkill(Request $request)
     {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill = new Skill;
         $skill->skillName = $request->skillName;
         $skill->save();

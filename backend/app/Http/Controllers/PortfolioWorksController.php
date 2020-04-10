@@ -66,7 +66,7 @@ class PortfolioWorksController extends Controller
         }
         if (Gate::allows('authorization', $work)) {
             $work->delete();
-        }else if (Gate::denies('authorization', $work)) {
+        } else if (Gate::denies('authorization', $work)) {
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
         return response()->json(["message" => "Darbas sekmingai ištrintas"], 200);
