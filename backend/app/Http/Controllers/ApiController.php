@@ -55,7 +55,7 @@ class ApiController extends Controller
 			return response()->json(['error' => 'Duomenys neteisingi']);
 		}
 
-        $userId = auth()->user()->id;
+        $userId = auth()->user()->id; //Autentikuoto vartotojo id
 		//jei duomenys teisingi, login tokena duoda
 		return response()->json(['token' => $token, 'userID' => $userId]);
 	}

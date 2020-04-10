@@ -26,7 +26,7 @@ class PortfolioController extends Controller
         //darbai
         $works = PortfolioWorks::select('title', 'description', 'filePath')->join('users','users.id','=','portfolio_works.user_id')->where('user_id',$id)->get();
         //skills
-        $skills = DB::table('user_skill')->select('skill.skillName', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$id)->get();
+        $skills = DB::table('user_skill')->select('skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$id)->get();
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
