@@ -20,11 +20,14 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 import {Formik, Form, ErrorMessage} from 'formik';
-
-import axios from '../../axios';
 import * as Yup from 'yup';
 
+import axios from '../../axios';
+
+
 import { makeStyles} from '@material-ui/core/styles';
+
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const useStyles = makeStyles( theme => ({
     root: {
@@ -61,7 +64,8 @@ const Register = (props) => {
         password: '',
         passwordConfirm: '',
         role: '',
-        location: ''
+        location: '',
+        recaptcha: ''
     };
 
     const validationSchema = Yup.object({
@@ -76,11 +80,14 @@ const Register = (props) => {
             )
         }).required("Privalomas laukelis"),
         location: Yup.string().required("Privalomas laukelis"),
-        role: Yup.string().required("Privalomas laukelis")
+        role: Yup.string().required("Privalomas laukelis"),
+        recaptcha: Yup.string().required("Privalomas laukelis")
     });
 
     const handleSubmit = (values, {setErrors, setSubmitting}) => {  
-        console.log("Submit") 
+        console.log(values);
+        
+        //TODO handle recaptcha response from the back-end
         axios.post('/register', values)
             .then(res => {
                 console.log(res);
@@ -114,7 +121,7 @@ const Register = (props) => {
                     validationSchema={validationSchema}
                     >
                 {({ handleChange, values, setFieldValue, handleBlur, isSubmitting }) => (
-                    <Form >
+                    <Form autoComplete='off' >
                         <h2>Registracija</h2>
                         <FormGroup>
                             <FormControl component="fieldset">
@@ -129,6 +136,15 @@ const Register = (props) => {
                         <FormGroup> 
                             <TextField variant='outlined' label='Vardas, Pavardė' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
                             <ErrorMessage name='name' render={msg => <div className='text-danger'>{msg}</div>} />
+                        </FormGroup>
+                        <FormGroup>
+                            <CountrySelect change={(e, value) => {
+                                setFieldValue(
+                                "location",
+                                value !== null ? value : initialValues.location
+                                );
+                            }}/>
+                            <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup>
                             <TextField variant='outlined' label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
@@ -158,13 +174,11 @@ const Register = (props) => {
                             <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <FormGroup>
-                            <CountrySelect change={(e, value) => {
-                                setFieldValue(
-                                "location",
-                                value !== null ? value : initialValues.location
-                                );
-                            }}/>
-                            <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
+                            <ReCAPTCHA 
+                                sitekey='6LfraOgUAAAAAIfS-8yAUT6QO-uhuol29LfgvKxL' 
+                                onChange={(response) => setFieldValue("recaptcha", response)}
+                                />
+                            <ErrorMessage name='recaptcha' render={msg => <div className='text-danger'>{msg}</div>} />
                         </FormGroup>
                         <Button type='submit' disabled={isSubmitting} variant='contained' color='primary' >
                             Registruotis
