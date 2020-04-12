@@ -20,10 +20,13 @@ class SkillController extends Controller
     }
     public function create(Request $request)
     {
-
-
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill = new SkillApproval;
-        $skill->user_id = $request->user_id;
+        $skill->user_id = auth()->user()->id;
         $skill->skill_id = $request->skill_id;
         $skill->approved = 0;
         $skill->comment = '';
@@ -32,11 +35,17 @@ class SkillController extends Controller
             ->join('user_skill','user_skill.user_id','users.id')
             ->join('skill','skill.id','user_skill.skill_id')
             ->get();
+
+        return response()->json(["message" => "Skill pridėtas"]);
     }
 
     public function update(Request $request,SkillApproval $skill)
     {
-
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill->approved = $request->approved;
         $skill->comment = $request->comment;
         $skill->save();
@@ -45,14 +54,29 @@ class SkillController extends Controller
 
     public function delete(SkillApproval $id)
     {
-        $id->delete();
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if (Gate::allows('authorization', $id)) {
+            $id->delete();
+        } else if (Gate::denies('authorization', $id)) {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
 
     }
     public function addSkill(Request $request)
     {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill = new Skill;
-        $skill->skill_Pavadinimai = $request->skill_Pavadinimai;
+        $skill->skillName = $request->skillName;
         $skill->save();
+        return $skill;
 
     }
 }

@@ -25,12 +25,12 @@ const Form = (props) => {
                                     </div>
                                     <select name="" id=""
                                             className="form-control">
-                                        <option value="">Category</option>
-                                        <option value="">Full Time</option>
-                                        <option value="">Part Time</option>
+                                        <option value="">Kategorija</option>
+                                        <option value="">Pilnas etatas</option>
+                                        <option value="">Ne pilnas etatas</option>
                                         <option value="">Freelance</option>
-                                        <option value="">Internship</option>
-                                        <option value="">Temporary</option>
+                                        <option value="">Praktika</option>
+                                        <option value="">Laikinas</option>
                                     </select>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@ const Form = (props) => {
                                 <div className="icon"><span
                                     className="icon-map-marker"></span></div>
                                 <input type="text" className="form-control"
-                                    placeholder="Location"/>
+                                    placeholder="Šalis"/>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ const Form = (props) => {
                         <div className="form-group">
                             <div className="form-field">
                                 <button type="submit"
-                                        className="form-control btn btn-primary">Search
+                                        className="form-control btn btn-primary">Ieškoti
                                 </button>
                             </div>
                         </div>

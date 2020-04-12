@@ -21,10 +21,14 @@ class RatingController extends Controller
             'profolio_id' => $request->input('profolio_id')
         ]);
     }
-    
+
     public function destroy(Request $request, Rating $rating)
         {
-            $rating->delete();
-            return response()->json(null, 204);
+            if (Gate::allows('authorization', $work)) {
+                $rating->delete();
+            } else if (Gate::denies('authorization', $work)){
+                return response()->json(["error" => "Jūs neturite teisės"]);
+            }
+            return response()->json(["message" => "Reitingas pašalintas"]);
         }
 }

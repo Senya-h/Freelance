@@ -57,7 +57,7 @@ User Info:
 ## Paslaugos
 Prideda paslaugą (Vartotojas gali pridėti daugiau nei vieną paslaugą:
 ```bash
-/api/service&id=:user_id
+/api/service
 ```
 Atnaujiną paslaugą:
 ```bash
@@ -71,7 +71,7 @@ Trina paslaugą:
 ## Portfolio darbai
 Prideda portfolio darbą (Vartotojas gali pridėti daugiau nei vieną darbą):
 ```bash
-/api/work&id=:user_id
+/api/work
 ```
 Atnaujiną portfolio darbą:
 ```bash

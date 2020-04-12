@@ -104,7 +104,7 @@ const Navbar = () => {
     return (
         <NavBar bg="dark" expand="lg" className={classes.FtcoNavbarLight} id="ftco-navbar" ref={navbar}>
             <div className="container-fluid px-md-4	">
-                <Link to='/' className={cx('navbar-brand', classes['navbar-brand'])}>Skillhunt</Link>
+                <Link to='/' className={cx('navbar-brand', classes['navbar-brand'])}>Workify</Link>
                 <NavBar.Toggle className={classes['navbar-toggler']} data-toggle="collapse" data-target="#ftco-nav"
                         aria-controls="ftco-nav">
                     <span className="oi oi-menu"></span> Menu
@@ -129,7 +129,7 @@ const Navbar = () => {
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
-                                Contact
+                                Kontaktai
                             </NavLink>
                         </li>
                         { loginArea }

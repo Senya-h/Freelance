@@ -26,21 +26,21 @@ const SearchBox = () => {
                             className={cx("mr-md-1", classes['nav-link'], activeTab === FIND_A_JOB? classes["active"]: "")}
                             role="tab"
                         >
-                            Find a Job
+                            Rask darbą
                         </button>
                         <button 
                             onClick={() => handleOpenTab(FIND_A_CANDIDATE)} 
                             className={cx(classes["nav-link"], activeTab === FIND_A_CANDIDATE? classes["active"]: "")}
                             role="tab" 
                         >
-                            Find a Candidate
+                            Rask kandidatą
                         </button>
                     </div>
                 </div>
                 <div className={cx("col-md-12", classes["tab-wrap"])}>
                     <div className={cx(classes["tab-content"], "p-4")}>
-                        {activeTab === FIND_A_JOB ? <Form placeholder="eg. Graphic, Web Developer"/> :
-                        <Form placeholder="eg. Adam Scott" /> }
+                        {activeTab === FIND_A_JOB ? <Form placeholder="pvz. Grafikos, Žiniatinklio programuotojas"/> :
+                        <Form placeholder="pvz. Adamas Skotas" /> }
                     </div>
                 </div>
             </div>
