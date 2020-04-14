@@ -57,6 +57,7 @@ const Register = (props) => {
         setShowPassword(!showPassword);
     }
 
+    const recaptchaRef = React.createRef();
     
     const initialValues = {
         name: '',
@@ -65,7 +66,7 @@ const Register = (props) => {
         passwordConfirm: '',
         role: '',
         location: '',
-        recaptcha: ''
+        recaptcha: null
     };
 
     const validationSchema = Yup.object({
@@ -81,13 +82,12 @@ const Register = (props) => {
         }).required("Privalomas laukelis"),
         location: Yup.string().required("Privalomas laukelis"),
         role: Yup.string().required("Privalomas laukelis"),
-        recaptcha: Yup.string().required("Privalomas laukelis")
+        recaptcha: Yup.string().nullable().required("Privalomas laukelis")
     });
 
     const handleSubmit = (values, {setErrors, setSubmitting}) => {  
         console.log(values);
         
-        //TODO handle recaptcha response from the back-end
         axios.post('/register', values)
             .then(res => {
                 console.log(res);
@@ -98,6 +98,7 @@ const Register = (props) => {
                         if(res.data.error.email) {
                             setErrors({email: "Šis el. paštas jau buvo užregistruotas!"})
                         }
+                        recaptchaRef.current.reset();
                     }
                 } else if(res.status === 201) {
                     props.history.push({
@@ -175,6 +176,7 @@ const Register = (props) => {
                         </FormGroup>
                         <FormGroup>
                             <ReCAPTCHA 
+                                ref={recaptchaRef}
                                 sitekey='6LfraOgUAAAAAIfS-8yAUT6QO-uhuol29LfgvKxL' 
                                 onChange={(response) => setFieldValue("recaptcha", response)}
                                 />

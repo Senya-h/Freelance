@@ -69,6 +69,7 @@ const Login = (props) => {
         axios.post('/login', values)
             .then(res => {
                 if(res.status === 200 && !res.data.error) {
+                    console.log(res);
                     setAuthTokens(res.data);     
                     props.history.push({referer});
                 } else {

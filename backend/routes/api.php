@@ -24,6 +24,7 @@ Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
 Route::post('register','ApiController@register');
 Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
+Route::post('verify_login/{id}', 'ApiController@verifyFirstLogin');
 
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');

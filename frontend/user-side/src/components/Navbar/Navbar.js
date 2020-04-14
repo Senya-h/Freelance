@@ -132,6 +132,11 @@ const Navbar = () => {
                                 Kontaktai
                             </NavLink>
                         </li>
+                        <li className={cx('nav-item', classes['nav-item'])}>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/first-update' activeClassName={classes['active']}>
+                                Redaguoti profilį
+                            </NavLink>
+                        </li>
                         { loginArea }
                     </ul>
                 </NavBar.Collapse>
