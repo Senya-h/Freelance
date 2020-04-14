@@ -38,7 +38,7 @@ class ApiController extends Controller
                         'email' => $request->email,
                         'location' => $request->location,
                         'role' => $request->role,
-                        'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
+                        'foto' => '',
                         'password' => Hash::make($request->password),
                     ]);
                     $user->save();
@@ -85,5 +85,8 @@ class ApiController extends Controller
 			return response()->json(['message' => 'Tinkamas email']);
 		}
 	}
+	public function verifyFirstLogin($id){
+        User::where('id', $id)->update(['didLogin' => 1]);
+    }
 
 }
