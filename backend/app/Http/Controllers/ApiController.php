@@ -26,7 +26,7 @@ class ApiController extends Controller
 				'password' => ['required', 'string', 'min:8'],
 			]);
             $secret = env('GOOGLE_RECAPTCHA_SECRET');
-            $captchaId = $request->input('g-recaptcha-response');
+            $captchaId = $request->input('recaptcha-response');
             $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
 
             if($responseCaptcha->success == true) {
