@@ -14,8 +14,17 @@ class CreateSkillUsersTable extends Migration
     public function up()
     {
         Schema::create('skill_users', function (Blueprint $table) {
-            $table->id();
+        
+            $table->unsignedBigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->unsignedBigInteger('skill_id')->unsigned();
+            $table->foreign('skill_id')->references('id')->on('skill');
+
+            $table->boolean('approved')->nullable();
+
             $table->timestamps();
+            $table->primary(['user_id','skill_id']);
         });
     }
 
@@ -24,6 +33,7 @@ class CreateSkillUsersTable extends Migration
      *
      * @return void
      */
+    
     public function down()
     {
         Schema::dropIfExists('skill_users');

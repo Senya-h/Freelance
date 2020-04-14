@@ -8,6 +8,8 @@ use App\BanDeleteUser;
 use App\AdminWorkApprove;
 use App\User;
 use App\RoleUser;
+use App\SkillUser;
+use App\Skill;
 use App\AdminServiceApprove;
 
 class AdminController extends Controller
@@ -74,5 +76,25 @@ class AdminController extends Controller
                 'approved' => $request->input('approved'),
             ]);
         }
+    }
+
+    // Skillu patvirtinimai 
+    public function aboutSkillUser($id)
+    {
+        if($request->user()->authorizeRoles('Admin')){
+            return response()->json(SkillUser::select('*')->where('user_id',$id)->get(),200);
+        }
+    }
+
+    public function SkillApproval(Request $request, $skill_id, $user_id)
+    {
+            $skill = Skill::where('id', $skill_id)->first();
+            $user = User::where('id', $user_id)->first();
+            $skill->skillusers()->sync($user);
+            $validatedData = $request->validate([
+                'approved' => 'required'
+            ]);
+            SkillUser::where('user_id', $user_id)->where('skill_id', $skill_id)->update(['approved' => $request->input('approved')]);
+            return response()->json(["message" => "Skilas sekmingai patvirtintas",200]);
     }
 }
