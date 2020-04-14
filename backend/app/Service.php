@@ -13,4 +13,9 @@ class Service extends Model
     protected $hidden = [
         'id',
     ];
+
+    public function adminserviceapprovals()
+    {
+        return $this->hasMany('App\AdminServiceApprove');
+    }
 }

@@ -35,7 +35,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function bandeleteusers()
     {
-        return $this->belongsTo('App\BanDeleteUsers');
+        return $this->belongsTo('App\BanDeleteUser');
     }
 
     //Password Reset

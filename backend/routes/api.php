@@ -32,11 +32,11 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 //Services
 Route::post('service', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
-Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
+Route::put('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
 Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas
 //Portfolio Works
 Route::post('work', 'PortfolioWorksController@create'); // Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
-Route::post('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
+Route::put('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
 Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas
 
 //Roles
@@ -47,6 +47,16 @@ Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store
 //Admin
 Route::post('user&id={id}/ban/delete', 'AdminController@create'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
 Route::delete('user&id={id}/remove', 'AdminController@destroy');  //Pasalinti ban/delete pagal user id
+//Admin work approvals
+Route::get('work&id={id}/list', 'AdminController@aboutWorkApproval');  //Patvirtintas darbas pagal darbo id
+Route::post('work&id={id}/approve', 'AdminController@workApproval');  //Freelancer darbu patvirtinimas
+//Admin service approvals
+Route::get('service&id={id}/list', 'AdminController@aboutServiceApproval');  //Patvirtinta paslauga pagal paslaugos id
+Route::post('service&id={id}/approve', 'AdminController@ServiceApproval');  //Paslaugos patvirtinimas
+//Admin skill approvals
+Route::get('skill&id={id}/admin/list', 'AdminController@aboutskillApproval');  //Patvirtinas skill pagal skill id
+Route::post('skill&id={id}/approve', 'AdminController@skillApproval');  //Freelancer darbu patvirtinimas
+
 
 //Message
 Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos

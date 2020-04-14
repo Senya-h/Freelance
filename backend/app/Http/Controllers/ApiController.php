@@ -42,10 +42,7 @@ class ApiController extends Controller
 
 				return response()->json($user, 201);
 			}
-
 		}
-
-
 	}
 	public function login(Request $request)
 	{
