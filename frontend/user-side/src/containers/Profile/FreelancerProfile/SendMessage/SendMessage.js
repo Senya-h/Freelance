@@ -31,24 +31,24 @@ const SendMessage = (props) => {
     return (
         <div>
             <Button onClick={handleOpen} variant='contained' color='primary' startIcon={<MessageIcon />}>
-                Send Message
+                Siųsti žinutę
             </Button>
             <Modal open={open} onClose={handleClose}>
                 <Fade in={open}>
                     <div style={{left: '50%', top: '50%', translate: 'transformX(-50%,-50%)'}} className={classes.Modal}>
-                        <h3>Send a message to {props.recipient}</h3>
+                        <h3>Adresatas: {props.recipient}</h3>
                         <IconButton onClick={handleClose} className={classes.CloseButton}>
                             <CloseIcon />
                         </IconButton>
                         <form onSubmit={handleSubmit}>
                             <FormGroup>
-                                <TextField id='standard-secondary' label='Subject' color='primary' />
+                                <TextField id='standard-secondary' label='Tema' color='primary' />
                             </FormGroup>
                             <FormGroup classes={{root: 'my-3'}}>
-                                <TextField variant='outlined' color='primary' label='Body' multiline rows={10}/>
+                                <TextField variant='outlined' color='primary' label='Turinys' multiline rows={10}/>
                             </FormGroup>
                             <FormGroup classes={{root: 'flex-row justify-content-end'}}>
-                                <Button type='submit' variant="contained" color="primary" endIcon={<SendIcon />}>Send</Button>
+                                <Button type='submit' variant="contained" color="primary" endIcon={<SendIcon />}>Siųsti</Button>
                             </FormGroup>
                         </form>
                     </div>

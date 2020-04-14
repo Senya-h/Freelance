@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Navbar from './components/Navbar/Navbar';
-import FreelancerProfile from './components/Profile/FreelancerProfile/FreelancerProfile';
+import FreelancerProfile from './containers/Profile/FreelancerProfile/FreelancerProfile';
 
 import {Switch, Route} from 'react-router-dom';
 
@@ -10,7 +10,7 @@ import Register from  './containers/Register/Register';
 import Login from './containers/Login/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
-
+import UpdateProfile from './containers/Profile/FreelancerProfile/UpdateProfile/UpdateProfile';
 import PrivateRoute from './PrivateRoute';
 import {AuthContext} from './context/auth';
 
@@ -36,19 +36,19 @@ const App = () => {
     <div className="App">
       {/*Used for standardizing default styles between browsers */}
       <CssBaseline /> 
-        <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
-          <Navbar />
-          <Switch>
-            <Route path='/' exact component={Main} />
-            <Route path='/register' component={Register} />
-            <Route path='/login' component={Login} />
-            <Route path='/password-reminder' component={RemindPassword} />
-            <Route path='/password/reset/' component={ForgotChangePassword} />
-            <PrivateRoute path='/profile' component={FreelancerProfile} />
-            
-            <Route component={PageNotFound} />
-          </Switch>
-        </AuthContext.Provider>
+      <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
+        <Navbar />
+        <Switch>
+          <Route path='/' exact component={Main} />
+          <Route path='/register' component={Register} />
+          <Route path='/login' component={Login} />
+          <Route path='/password-reminder' component={RemindPassword} />
+          <Route path='/password/reset/' component={ForgotChangePassword} />
+          <Route path='/profile' component={FreelancerProfile} />
+          <Route path='/first-update' component={UpdateProfile} />
+          <Route component={PageNotFound} />
+        </Switch>
+      </AuthContext.Provider>
     </div>
   );
 }
