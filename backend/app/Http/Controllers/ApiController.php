@@ -25,23 +25,32 @@ class ApiController extends Controller
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'string', 'min:8'],
 			]);
+            $secret = env('GOOGLE_RECAPTCHA_SECRET');
+            $captchaId = $request->input('recaptcha-response');
+            $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
 
-			if($validation->fails()){
-				return response()->json(["error"=>$validation->errors()]);
-			} else {
-				$user = New User([
-				'name' => $request->name,
-				'email' => $request->email,
-				'location' => $request->location,
-				'role' => $request->role,
-				'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
-				'password' => Hash::make($request->password),
-			]);
-				$user->save();
-				$user->roles()->sync($request->role,false);
 
-				return response()->json($user, 201);
-			}
+            if($responseCaptcha->success == true) {
+                if ($validation->fails()) {
+                    return response()->json(["error" => $validation->errors()]);
+                } else {
+                    $user = New User([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'location' => $request->location,
+                        'role' => $request->role,
+                        'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
+                        'password' => Hash::make($request->password),
+                    ]);
+                    $user->save();
+                    $user->roles()->sync($request->role, false);
+                    return response()->json($user, 201);
+                }
+            } else {
+                return response()->json(['error'=>[
+                    'recaptcha' => ['Recaptcha error']
+                ]]);
+            }
 		}
 	}
 	public function login(Request $request)

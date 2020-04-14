@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f58eba89-a7b5-47fe-8a70-b8e11db82b49" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PortfolioController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PortfolioController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PortfolioWorksController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PortfolioWorksController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SkillController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SkillController.php" afterDir="false" />
-    </list>
+    <list default="true" id="f58eba89-a7b5-47fe-8a70-b8e11db82b49" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +168,8 @@
       <workItem from="1585426107482" duration="724000" />
       <workItem from="1586417537362" duration="6702000" />
       <workItem from="1586427975975" duration="12352000" />
-      <workItem from="1586507581241" duration="873000" />
+      <workItem from="1586507581241" duration="1811000" />
+      <workItem from="1586845721666" duration="3182000" />
     </task>
     <servers />
   </component>
