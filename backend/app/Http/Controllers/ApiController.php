@@ -29,18 +29,28 @@ class ApiController extends Controller
 			if($validation->fails()){
 				return response()->json(["error"=>$validation->errors()]);
 			} else {
-				$user = New User([
-				'name' => $request->name,
-				'email' => $request->email,
-				'location' => $request->location,
-				'role' => $request->role,
-				'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
-				'password' => Hash::make($request->password),
-			]);
-				$user->save();
-				$user->roles()->sync($request->role,false);
+                $secret = env('GOOGLE_RECAPTCHA_SECRET');
+                $captchaId = $request->input('recaptcha');
 
-				return response()->json($user, 201);
+                $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
+
+                if($responseCaptcha->success == true) {
+                    $user = New User([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'location' => $request->location,
+                        'role' => $request->role,
+                        'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
+                        'password' => Hash::make($request->password),
+                    ]);
+                    $user->save();
+                    $user->roles()->sync($request->role, false);
+                    return response()->json($user, 201);
+                } else {
+                    return response()->json(['error'=>[
+                        'recaptcha' => ['Recaptcha error']
+                    ]]);
+                }
 			}
 
 		}
