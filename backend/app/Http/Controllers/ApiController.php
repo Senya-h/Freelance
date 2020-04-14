@@ -25,16 +25,14 @@ class ApiController extends Controller
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'string', 'min:8'],
 			]);
+            $secret = env('GOOGLE_RECAPTCHA_SECRET');
+            $captchaId = $request->input('g-recaptcha-response');
+            $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
 
-			if($validation->fails()){
-				return response()->json(["error"=>$validation->errors()]);
-			} else {
-                $secret = env('GOOGLE_RECAPTCHA_SECRET');
-                $captchaId = $request->input('recaptcha');
-
-                $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
-
-                if($responseCaptcha->success == true) {
+            if($responseCaptcha->success == true) {
+                if ($validation->fails()) {
+                    return response()->json(["error" => $validation->errors()]);
+                } else {
                     $user = New User([
                         'name' => $request->name,
                         'email' => $request->email,
@@ -46,12 +44,12 @@ class ApiController extends Controller
                     $user->save();
                     $user->roles()->sync($request->role, false);
                     return response()->json($user, 201);
-                } else {
-                    return response()->json(['error'=>[
-                        'recaptcha' => ['Recaptcha error']
-                    ]]);
                 }
-			}
+            } else {
+                return response()->json(['error'=>[
+                    'recaptcha' => ['Recaptcha error']
+                ]]);
+            }
 
 		}
 
