@@ -18,15 +18,15 @@ class PortfolioController extends Controller
         //role pagal kuria iesko kokiai grupei priklauso vartotojas
         $role_id = User::select('role')->where('users.id',$id)->get()[0]->role;
         //pagrindine vartotojo informacija
-        $usr = User::select('name', 'email', 'foto', 'location')->where('users.id',$id)->get();
+        $usr = User::select('id','name', 'email', 'foto', 'location')->where('users.id',$id)->get();
         //role
         $role = DB::table('role_users')->select('role')->join('roles','roles.id','=','role_users.role_id')->where('user_id',$id)->get();
         //services
-        $services = Service::select('service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$id)->get();
+        $services = Service::select('services.id','service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$id)->get();
         //darbai
-        $works = PortfolioWorks::select('title', 'description', 'filePath')->join('users','users.id','=','portfolio_works.user_id')->where('user_id',$id)->get();
+        $works = PortfolioWorks::select('portfolio_works.id','title', 'description', 'filePath')->join('users','users.id','=','portfolio_works.user_id')->where('user_id',$id)->get();
         //skills
-        $skills = DB::table('user_skill')->select('skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$id)->get();
+        $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$id)->get();
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
