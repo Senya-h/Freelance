@@ -8,10 +8,10 @@ function Main(){
                 <div className="main-content">
                     <div className="container-fluid">
 
+                    </div>
                 </div>
             </div>
         </div>
-     </div>
     )
 }
 

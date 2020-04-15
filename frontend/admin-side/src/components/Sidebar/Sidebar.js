@@ -1,5 +1,7 @@
 import React from 'react';
 import './Sidebar.css';
+import {NavLink} from "react-bootstrap";
+
 
 function Sidebar(){
     return(
@@ -8,12 +10,12 @@ function Sidebar(){
                 <div className="sidebar-scroll">
                     <nav>
                         <ul className="nav">
-                            <li><a href="/home" className="nav-link active"><i className="fa fa-home"></i>
-                                <span>Pagrindinis</span></a></li>
-                            <li><a href="/kategorijos" className="nav-link"><i className="fa fa-code"></i>
-                                <span>Sukurti kategoriją</span></a></li>
-                            <li><a href="/skelbimai" className="nav-link"><i className="fa fa-chart-bars"></i>
-                                <span>Skelbimai</span></a></li>
+                            <li><NavLink to="/" className="nav-link"><i className="fa fa-home"></i>
+                                <span>Pagrindinis</span></NavLink></li>
+                            <li><NavLink to="/kategorijos" className="nav-link"><i className="fa fa-code"></i>
+                                <span>Sukurti kategoriją</span></NavLink></li>
+                            <li><NavLink to="/skelbimai" className="nav-link"><i className="fa fa-chart-bars"></i>
+                                <span>Skelbimai</span></NavLink></li>
                         </ul>
                     </nav>
                 </div>
