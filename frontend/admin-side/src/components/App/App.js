@@ -16,21 +16,14 @@ function App() {
       <Router>
     <div className="App">
         <div id="wrapper">
-      <Main/>
       <Sidebar/>
+            <Switch>
+                <Route path="/" exact component={Main}/>
+                <Route path="/kategorijos" exact component={Category}/>
+                <Route path="/skelbimai" exact component={Ads}/>
+            </Switch>
         </div>
     </div>
-          <Switch>
-              <Route path="/">
-                  <Main />
-              </Route>
-              <Route path="/kategorijos">
-                  <Category />
-              </Route>
-              <Route path="/skelbimai">
-                  <Ads />
-              </Route>
-          </Switch>
       </Router>
 
   );

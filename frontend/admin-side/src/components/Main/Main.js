@@ -7,7 +7,7 @@ function Main(){
             <div className="main">
                 <div className="main-content">
                     <div className="container-fluid">
-
+                        <h1>Pagrindinis</h1>
                     </div>
                 </div>
             </div>
