@@ -1,18 +1,18 @@
 import React from 'react';
-import './Category.css';
+import './Users.css';
 
-function Category(){
+function Users(){
     return(
-        <div className="Category">
+        <div className="Users">
             <div className="main">
                 <div className="main-content">
                     <div className="container-fluid">
-                        <h1>Kategorijos</h1>
+                        <h1>Vartotojai</h1>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Category;
+export default Users;

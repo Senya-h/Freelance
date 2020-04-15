@@ -1,18 +1,18 @@
 import React from 'react';
-import './Ads.css';
+import './Skills.css';
 
-function Ads(){
+function Skills(){
     return(
-        <div className="Ads">
+        <div className="Category">
             <div className="main">
                 <div className="main-content">
                     <div className="container-fluid">
-                        <h1>Skelbimai</h1>
+                        <h1>Įgūdžiai</h1>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Ads;
+export default Skills;

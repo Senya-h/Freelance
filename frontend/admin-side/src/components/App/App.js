@@ -2,8 +2,10 @@ import React from 'react';
 import './App.css';
 import Main from "../Main/Main";
 import Sidebar from "../Sidebar/Sidebar";
-import Category from "../Category/Category";
-import Ads from "../Ads/Ads";
+import Skills from "../Skills/Skills";
+import Services from "../Services/Services";
+import Portfolio from "../Portfolio/Portfolio";
+import Users from "../Users/Users";
 import{
     BrowserRouter as Router,
     Route,
@@ -19,8 +21,10 @@ function App() {
       <Sidebar/>
             <Switch>
                 <Route path="/" exact component={Main}/>
-                <Route path="/kategorijos" exact component={Category}/>
-                <Route path="/skelbimai" exact component={Ads}/>
+                <Route path="/igudziai" exact component={Skills}/>
+                <Route path="/paslaugos" exact component={Services}/>
+                <Route path="/portfolio" exact component={Portfolio}/>
+                <Route path="/vartotojai" exact component={Users}/>
             </Switch>
         </div>
     </div>
