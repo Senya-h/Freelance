@@ -68,11 +68,11 @@ class SkillController extends Controller
     }
     public function addSkill(Request $request)
     {
-        try {
+        /*try {
             $user = auth()->userOrFail();
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
-        }
+        }*/
         $skill = new Skill;
         $skill->skillName = $request->skillName;
         $skill->save();
