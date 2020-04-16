@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Skill;
 use App\SkillApproval;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 use Illuminate\Support\Facades\DB;
 
@@ -73,10 +74,16 @@ class SkillController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }*/
-        $skill = new Skill;
-        $skill->skillName = $request->skillName;
-        $skill->save();
-        return $skill;
-
+        $validation = Validator::make($request->all(),[
+            'skillName' => ['required', 'string', 'max:255', 'unique:skill'],
+        ]);
+        if ($validation->fails()) {
+            return response()->json(["error" => $validation->errors()]);
+        } else {
+            $skill = new Skill;
+            $skill->skillName = $request->skillName;
+            $skill->save();
+            return response()->json(["SkillName"=>$skill->skillName]);
+        }
     }
 }

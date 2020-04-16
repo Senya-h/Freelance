@@ -19,7 +19,9 @@ class Skills extends Component{
     handleSubmit(event){
         axios.post("/skill_add", {
             skillName: this.state.skillName
-        })
+        }).then(res => {
+            console.log(res.data);
+          })
         .catch(function (error) {
               console.log(error.response);
          });
