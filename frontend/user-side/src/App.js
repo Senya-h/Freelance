@@ -11,12 +11,11 @@ import Login from './containers/Login/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
 import UpdateProfile from './containers/Profile/FreelancerProfile/UpdateProfile/UpdateProfile';
+import Footer from './components/Footer/Footer';
 import PrivateRoute from './PrivateRoute';
 import {AuthContext} from './context/auth';
 
 import Cookies from 'js-cookie';
-
-import {CssBaseline} from '@material-ui/core';
 
 const App = () => {  
   const existingTokens = Cookies.get('access_token');
@@ -33,9 +32,7 @@ const App = () => {
   }
 
   return (
-    <div className="App">
-      {/*Used for standardizing default styles between browsers */}
-      <CssBaseline /> 
+    <div className="App">      
       <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
         <Navbar />
         <Switch>
@@ -48,6 +45,7 @@ const App = () => {
           <Route path='/first-update' component={UpdateProfile} />
           <Route component={PageNotFound} />
         </Switch>
+        <Footer />
       </AuthContext.Provider>
     </div>
   );

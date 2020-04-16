@@ -17,9 +17,15 @@ import './assets/css/icomoon.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
+import {CssBaseline} from '@material-ui/core';
+import {ThemeProvider} from '@material-ui/core/styles';
+import theme from './theme';
 
 ReactDOM.render(<BrowserRouter>
-                    <App />
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline /> 
+                        <App />
+                    </ThemeProvider>
                 </BrowserRouter>,
                 document.getElementById('root'));
 

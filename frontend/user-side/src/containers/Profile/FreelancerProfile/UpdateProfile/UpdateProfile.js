@@ -22,12 +22,18 @@ const useStyles = makeStyles(theme => ({
         },
         padding: '20px',
         backgroundColor: '#eee'
+    },
+    profileImage: {
+        width: '225px',
+        height: '225px',
+        objectFit: 'cover',
+        borderRadius: '50%',
     }
 }))
 
 const UpdateProfile = () => {
     const classes = useStyles();
-    const [profileImage, setProfileImage] = useState(DEFAULT_IMAGE);
+
     const [skills, setSkills] = useState([]);
 
     const initialValues = {
@@ -38,16 +44,13 @@ const UpdateProfile = () => {
     };
 
     const validationSchema = yupObject({
-        profileImage: yupString().required('Privalomas laukelis')
+        // profileImage: yupString().required('Privalomas laukelis')
     })
 
     const handleSubmit = (values, {hasSubmitted}) => {
-
+        console.log("Update Profile: ", values);
     };
 
-    const readURL = (event) => {
-        setProfileImage(URL.createObjectURL(event.target.files[0]))
-    }
 
     const keyPress = (event) => {
         //if enter key was pressed
@@ -71,60 +74,43 @@ const UpdateProfile = () => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({isSubmitting}) => (
+                    {({handleChange, handleBlur, values, setFieldValue, isSubmitting}) => (
                     <Form>
-                        <img src={profileImage} alt='Profilio nuotrauka' style={{width: '250px'}}/>
-                        <Button variant='contained' component='label'>
-                            Įkelti profilio nuotrauką
-                            <input type='file' style={{display: 'none'}} onChange={readURL} />
-                        </Button>
-
-                        <h4>Siūlomos paslaugos</h4>
-                        <Grid container spacing={3}>
-                            <Grid item xs='4'>
-                                <FormControlLabel
-                                    control={<Checkbox name='gilad' />}
-                                    label="Testas"
-                                />
+                        <Grid container justify='space-between' alignItems='center'>
+                            <Grid item xs={3}>
+                                <Button variant='contained' component='label'>
+                                    Įkelti profilio nuotrauką
+                                    <input 
+                                        type='file' 
+                                        style={{display: 'none'}} 
+                                        onChange={e => {
+                                            setFieldValue('profileImage', URL.createObjectURL(e.target.files[0]))
+                                        }} 
+                                    />
+                                </Button>
                             </Grid>
-                            <Grid item xs='4'>
-                                <FormControlLabel
-                                    control={<Checkbox name='gilad' />}
-                                    label="Testas"
-                                />
-                            </Grid>
-                            <Grid item xs='4'>
-                                <FormControlLabel
-                                    control={<Checkbox name='gilad' />}
-                                    label="Testas"
-                                />
-                            </Grid>
-                            <Grid item xs='4'>
-                                <FormControlLabel
-                                    control={<Checkbox name='gilad' />}
-                                    label="Testas"
-                                />
-                            </Grid>
-                            <Grid item xs='4'>
-                                <FormControlLabel
-                                    control={<Checkbox />}
-                                    label="Testas"
-                                />
+                            <Grid item xs={3}>
+                                <img className={classes.profileImage} src={values.profileImage} alt='Profilio nuotrauka' />
                             </Grid>
                         </Grid>
-                        <h4>Gebėjimai</h4>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <TextField variant='outlined' label='Gebėjimas' name='skill' color='primary' onKeyDown={keyPress}/>
+
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <h4>Siūlomos paslaugos</h4>
+                                <TextField variant='outlined' label='Paslauga' name='skill' color='primary'/>
                             </Grid>
-                            <ul style={{listStyle: 'none'}}>
-                                {skills.map((skill, index) => (
-                                    <li key={index}>{skill} <span onClick={() => handleSkillRemove(index)}>X</span></li>
-                                ))}
-                            </ul>
+                            <Grid item xs={12}>
+                                <h4>Gebėjimai</h4>
+                                <TextField variant='outlined' label='Gebėjimas' name='skill' color='primary' onKeyDown={keyPress}/>
+                                <ul style={{listStyle: 'none'}}>
+                                    {skills.map((skill, index) => (
+                                        <li key={index}>{skill} <span onClick={() => handleSkillRemove(index)}>X</span></li>
+                                    ))}
+                                </ul>
+                            </Grid>
                         </Grid>
                         <TextField multiline label='Apie mane' variant='outlined' rows={5} fullWidth/>
-                        <Button variant='outlined' color='primary'>Patvirtinti</Button>
+                        <Button type='submit' variant='outlined' color='primary'>Patvirtinti</Button>
                     </Form>
                     )}
                 </Formik>
