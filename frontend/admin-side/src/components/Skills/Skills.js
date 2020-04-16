@@ -1,22 +1,30 @@
 import React, {Component} from 'react';
 import './Skills.css';
-import axios from 'axios';
+import axios from '../../axios';
 
 class Skills extends Component{
     constructor() {
         super()
         this.state = {
             skillName: []
-        };
+        }
+        this.handleChangeskillName = this.handleChangeskillName.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    componentDidMount(){
-        axios.get("http://skelbimai.test/api/skill_add")
-            .then(res => res.json())
-            .then(data =>{
-                this.setState({
-                    skillName:data
-                })
-            })
+
+    handleChangeskillName(event){
+        this.setState({skillName: event.target.value})
+    }
+
+    handleSubmit(event){
+        this.setState({skillName: event.target.value})
+        event.preventDefault();
+    }
+
+    componentDidMount() {
+        axios.post("/skill_add", {body: JSON.stringify({skillName: 'React POST Request Example'})}
+        )
+        .then(res => res.json())
     }
     render(){
         return(
@@ -27,16 +35,10 @@ class Skills extends Component{
                             <h1>Įgūdžių pridėjimas</h1>
                             <form>
                                 <div className="form-group">
-                                    <label htmlFor="exampleInput">Vardas</label>
-                                    <input type="text" className="form-control" id="exampleInput"
-                                           aria-describedby="emailHelp" placeholder="Enter email"></input>
+                                    <input type="text" value={this.state.SkillName} onChange={this.handleChangeskillName} className="form-control" id="exampleInput"
+                                           placeholder="Įveskite pavadinimą"></input>
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="exampleInput">Pavardė</label>
-                                    <input type="text" className="form-control" id="exampleInput"
-                                           placeholder="Password"></input>
-                                </div>
-                                <button type="submit" className="btn btn-primary">Pateikti</button>
+                                <button type="submit" value="Submit"  className="btn btn-primary">Pateikti</button>
                             </form>
                         </div>
                     </div>
