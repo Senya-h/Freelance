@@ -17,10 +17,12 @@ class Skills extends Component{
     }
 
     handleSubmit(event){
-        axios.post("/skill_add", {body: JSON.stringify({skillName: this.state.skillName})}
-        )
-        .then(res => res.json())
-        this.setState({skillName: event.target.value})
+        axios.post("/skill_add", {
+            skillName: this.state.skillName
+        })
+        .catch(function (error) {
+              console.log(error.response);
+         });
         event.preventDefault();
 
     }
