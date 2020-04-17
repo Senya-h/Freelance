@@ -6,10 +6,10 @@ class Skills extends Component{
     constructor() {
         super()
         this.state = {
-            skillName: []
+            skillName: ""
         }
-        this.handleChangeskillName = this.handleChangeskillName.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeskillName = this.handleChangeskillName.bind(this);
     }
 
     handleChangeskillName(event){
@@ -17,14 +17,16 @@ class Skills extends Component{
     }
 
     handleSubmit(event){
-        this.setState({skillName: event.target.value})
+        axios.post("/skill_add", {
+            skillName: this.state.skillName
+        }).then(res => {
+            console.log(res.data);
+          })
+        .catch(function (error) {
+              console.log(error.response);
+         });
         event.preventDefault();
-    }
 
-    componentDidMount() {
-        axios.post("/skill_add", {body: JSON.stringify({skillName: 'React POST Request Example'})}
-        )
-        .then(res => res.json())
     }
     render(){
         return(
@@ -33,12 +35,12 @@ class Skills extends Component{
                     <div className="main-content">
                         <div className="container-fluid">
                             <h1>Įgūdžių pridėjimas</h1>
-                            <form>
+                            <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
-                                    <input type="text" value={this.state.SkillName} onChange={this.handleChangeskillName} className="form-control" id="exampleInput"
+                                    <input type="text" value={this.state.skillName} onChange={this.handleChangeskillName} className="form-control" id="exampleInput"
                                            placeholder="Įveskite pavadinimą"></input>
                                 </div>
-                                <button type="submit" value="Submit"  className="btn btn-primary">Pateikti</button>
+                                <button type="submit" value="Submit"  className="btn btn-success">Pateikti</button>
                             </form>
                         </div>
                     </div>
