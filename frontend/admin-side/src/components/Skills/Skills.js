@@ -6,6 +6,7 @@ class Skills extends Component{
     constructor() {
         super()
         this.state = {
+            skills: [],
             skillName: "",
             error: ""
         }
@@ -44,7 +45,24 @@ class Skills extends Component{
         event.preventDefault();
 
     }
+    componentDidMount(){
+        axios.get(`/skills`)
+            .then(data => {
+                this.setState({
+                    skills: data.data
+                })
+            })
+    }
+
     render(){
+    const skillsList = this.state.skills.map(skill => ( 
+        <tr key={skill.id}>
+        <th scope="row">{skill.id}</th>
+        <td>{skill.skillName}</td>
+        <td>x</td>
+        </tr>
+        ));
+        console.log(this.state.skills)
         return(
             <main>
                 <div className="main">
@@ -59,6 +77,20 @@ class Skills extends Component{
                                 </div>
                                 <button type="submit" value="Submit"  className="btn btn-success">Pateikti</button>
                             </form>
+                            <hr/>
+                            <h3>Visi Įgūdžiai:</h3>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Įgūdis</th>
+                                    <th scope="col">Šalinti</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {skillsList}
+                                </tbody>
+                                </table>
                         </div>
                     </div>
                 </div>
