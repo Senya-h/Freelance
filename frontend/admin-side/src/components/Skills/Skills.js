@@ -6,7 +6,8 @@ class Skills extends Component{
     constructor() {
         super()
         this.state = {
-            skillName: ""
+            skillName: "",
+            error: ""
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
@@ -23,13 +24,22 @@ class Skills extends Component{
             axios.post("/skill_add", {
                 skillName: this.state.skillName
             }).then(res => {
-                console.log(res.data);
+                this.setState({error: res.data})
+                console.log(this.state.error)
+                if(this.state.error['error']) {
+                    if(this.state.error['error']['skillName'] == "The skill name may not be greater than 255 characters.") {
+                        document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdžio pavadinimas per ilgas. Daugiausiai gali būt 255 simboliai!</div>"
+                    } else if(this.state.error['error']['skillName'] == "The skill name has already been taken.") {
+                        document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Toks igūdis jau pridėtas</div>"
+                    }
+                } else {
+                    document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Įgūdis pridėtas</div>"
+                }
             })
                 .catch(function (error) {
-                    console.log(error.response);
+                    console.log(error.response+"LOL");
                 });
-            document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Įgūdis pridėtas</div>"
-            console.log(document.getElementById('exampleInput').value)
+            
         }
         event.preventDefault();
 
