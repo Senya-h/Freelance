@@ -17,14 +17,20 @@ class Skills extends Component{
     }
 
     handleSubmit(event){
-        axios.post("/skill_add", {
-            skillName: this.state.skillName
-        }).then(res => {
-            console.log(res.data);
-          })
-        .catch(function (error) {
-              console.log(error.response);
-         });
+        if(document.getElementById('exampleInput').value == ""){
+            document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neįvestas joks tekstas</div>"
+        }else{
+            axios.post("/skill_add", {
+                skillName: this.state.skillName
+            }).then(res => {
+                console.log(res.data);
+            })
+                .catch(function (error) {
+                    console.log(error.response);
+                });
+            document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Įgūdis pridėtas</div>"
+            console.log(document.getElementById('exampleInput').value)
+        }
         event.preventDefault();
 
     }
@@ -35,6 +41,7 @@ class Skills extends Component{
                     <div className="main-content">
                         <div className="container-fluid">
                             <h1>Įgūdžių pridėjimas</h1>
+                            <div className="error"></div>
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <input type="text" value={this.state.skillName} onChange={this.handleChangeskillName} className="form-control" id="exampleInput"
