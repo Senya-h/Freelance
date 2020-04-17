@@ -40,6 +40,9 @@ Route::post('work', 'PortfolioWorksController@create'); // Portfolio darbų prid
 Route::put('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
 Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas
 
+//Formato pridėjimas į DB
+Route::post('format', 'PortfolioWorksController@addFormat');
+
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
 Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu user sarašas pagal user id
