@@ -41,7 +41,8 @@ Route::put('update/work&id={id}', 'PortfolioWorksController@update'); // id=work
 Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas
 
 //Formato pridėjimas į DB
-Route::post('format', 'PortfolioWorksController@addFormat');
+Route::get('format-list', 'AdminController@formatList');
+Route::post('format', 'AdminController@addFormat');
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas

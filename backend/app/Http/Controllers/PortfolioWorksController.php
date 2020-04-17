@@ -11,19 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class PortfolioWorksController extends Controller
 {
-    public function addFormat(Request $request) {
-        $validation = Validator::make($request->all(),[
-            'format' => ['required', 'string', 'max:255', 'unique:file_formats'],
-        ]);
-        if ($validation->fails()) {
-            return response()->json(["error" => $validation->errors()]);
-        } else {
-            DB::table('file_formats')->insert([
-                'format' => strtolower(request('format')),
-            ]);
-            return response()->json(["message" => request('format')." formatas pridėtas"]);
-        }
-    }
     public function create(Request $request)
     {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
@@ -32,10 +19,14 @@ class PortfolioWorksController extends Controller
             return response()->json(['error' => 'Prašome prisijungti']);
         }
         $formats = DB::table('file_formats')->select('format')->get();
+        $string = "";
+        foreach ($formats as $str){
+            $string .=  $str->format.',';
+        }
         $validation = Validator::make($request->all(),[
             'title' => 'required',
             'description' => 'required',
-            'file' => 'mimes:jpg,png,gif,docx,mpeg,mpg|required',
+            'file' => 'mimes:'.$string.'|required',
         ]);
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);

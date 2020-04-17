@@ -11,6 +11,8 @@ use App\RoleUser;
 use App\SkillUser;
 use App\Skill;
 use App\AdminServiceApprove;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -78,7 +80,7 @@ class AdminController extends Controller
         }
     }
 
-    // Skillu patvirtinimai 
+    // Skillu patvirtinimai
     public function aboutSkillUser($id)
     {
         if($request->user()->authorizeRoles('Admin')){
@@ -96,5 +98,26 @@ class AdminController extends Controller
             ]);
             SkillUser::where('user_id', $user_id)->where('skill_id', $skill_id)->update(['approved' => $request->input('approved')]);
             return response()->json(["message" => "Skilas sekmingai patvirtintas",200]);
+    }
+
+    //Formato pridėjimas(Admin gali pridėt formatą portfolio darbam)
+
+    public function formatList() {
+        $formats = DB::table('file_formats')->select('*')->get();
+        return response()->json($formats, 201);
+    }
+
+    public function addFormat(Request $request) {
+        $validation = Validator::make($request->all(),[
+            'format' => ['required', 'string', 'max:255', 'unique:file_formats'],
+        ]);
+        if ($validation->fails()) {
+            return response()->json(["error" => $validation->errors()]);
+        } else {
+            DB::table('file_formats')->insert([
+                'format' => strtolower(request('format')),
+            ]);
+            return response()->json(["message" => request('format')." formatas pridėtas"]);
+        }
     }
 }
