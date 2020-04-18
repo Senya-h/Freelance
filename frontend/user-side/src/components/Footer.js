@@ -7,7 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MailIcon from '@material-ui/icons/Mail';
 import IconButton from '@material-ui/core/IconButton';
-import {makeStyles} from '@material-ui/core/'
+import {makeStyles} from '@material-ui/core/styles'
+
 
 const useStyles = makeStyles(theme => ({
     footer: {
@@ -38,9 +39,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+
+
 const Footer = () => {
     const classes = useStyles();
-
     return (
         <footer className={classes.footer}>
             <Grid container spacing={5}>
@@ -60,7 +62,7 @@ const Footer = () => {
                                 required
                             />
                         </Box>
-                        <Button type='submit' color="primary" variant='outlined' >
+                        <Button type='submit' color='secondary' variant='outlined' >
                             Siųsti žinutę
                         </Button>
                     </Box>
@@ -85,6 +87,7 @@ const Footer = () => {
                             <Typography variant="h6" className="text-white">
                                 info@freelance.lt
                             </Typography>
+                            
                         </Box>          
                     </Box>
                 </Grid>

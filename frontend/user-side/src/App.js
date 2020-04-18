@@ -10,9 +10,9 @@ import Register from  './containers/Register/Register';
 import Login from './containers/Login/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
-import UpdateProfile from './containers/Profile/FreelancerProfile/UpdateProfile/UpdateProfile';
-import Footer from './components/Footer/Footer';
-import PrivateRoute from './PrivateRoute';
+import Footer from './components/Footer';
+// import PrivateRoute from './PrivateRoute';
+import Wrapper from './hoc/Wrapper/Wrapper';
 import {AuthContext} from './context/auth';
 
 import Cookies from 'js-cookie';
@@ -34,18 +34,19 @@ const App = () => {
   return (
     <div className="App">      
       <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
-        <Navbar />
-        <Switch>
-          <Route path='/' exact component={Main} />
-          <Route path='/register' component={Register} />
-          <Route path='/login' component={Login} />
-          <Route path='/password-reminder' component={RemindPassword} />
-          <Route path='/password/reset/' component={ForgotChangePassword} />
-          <Route path='/profile' component={FreelancerProfile} />
-          <Route path='/first-update' component={UpdateProfile} />
-          <Route component={PageNotFound} />
-        </Switch>
-        <Footer />
+        <Wrapper>
+            <Navbar />
+            <Switch>
+                <Route path='/' exact component={Main} />
+                <Route path='/register' component={Register} />
+                <Route path='/login' component={Login} />
+                <Route path='/password-reminder' component={RemindPassword} />
+                <Route path='/password/reset/' component={ForgotChangePassword} />
+                <Route path='/profile' component={FreelancerProfile} />
+                <Route component={PageNotFound} />
+            </Switch>
+            <Footer />
+        </Wrapper>
       </AuthContext.Provider>
     </div>
   );

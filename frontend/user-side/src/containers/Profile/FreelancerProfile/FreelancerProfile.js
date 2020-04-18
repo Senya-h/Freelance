@@ -1,13 +1,41 @@
 import React, {useState, useEffect} from 'react';
 import Rating from '@material-ui/lab/Rating';
-import classes from './FreelanceProfile.module.scss';
-import Portfolio from './Portfolio/Portfolio';
 import axios from '../../../axios';
 import Wrapper from '../../../hoc/Wrapper/Wrapper';
 import cx from 'classnames';
 import SendMessage from './SendMessage/SendMessage';
-
+import IconButton from '@material-ui/core/IconButton';
+import {makeStyles} from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Portfolio from './Portfolio/Portfolio';
+import ServiceModalButton from './ServiceModalButton';
+import SkillModalButton from './SkillModalButton';
+import PortfolioModalButton from './PortfolioModalButton';
+import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
+import Footer from '../../../components/Footer';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        padding: '20px',
+        backgroundColor: '#eee',
+    },
+    profileImage: {
+        width: '250px',
+        height: '250px',
+        '& > img': {
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+            objectFit: 'cover'
+        },
+    },
+    imageAddIcon: {
+        position: 'relative',
+        top: '-80px',
+        left: '250px',
+    }
+}))
 
 const Profile = () => {
     let { authTokens } = useAuth();
@@ -15,56 +43,98 @@ const Profile = () => {
 
     const [userInfo, setUserInfo] = useState({
         name: '',
+        email: '',
+        photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
         location: '',
-    })
+        role: ''
+    });
 
-    const [services, setServices] = useState({});
-    const [skills, setSkills] = useState({})
+    const [services, setServices] = useState([]);
+    const [skills, setSkills] = useState([]);
+    const [works, setWorks] = useState([]);
+
+    const [allSkills, setAllSkills] = useState([]);
+
+    const classes = useStyles();
 
     useEffect(() => {
         axios.get('/user/' + authTokens.userID)
             .then(res => {
+                console.log("Userio duomenys: ", res);
                 const info = res.data.info;
                 const portfolio = res.data.portfolio;
-                setUserInfo({name: info.name, location: info.location,})
+                setUserInfo({...userInfo, name: info.name, location: info.location,});
+
+                setWorks(portfolio.works);
+                setSkills(portfolio.skills);
+                setServices(portfolio.services);
+                
+            })
+
+        axios.get('/skills')
+            .then(res => {
+                console.log("Skills: ", res);
+                setAllSkills(res.data);
             })
     }, [])
 
     return (
-        <Wrapper variant='container-fluid' contentOffset='130px'>
-            <div className={classes.FreelancerProfile}>
-                <div className="row">
-                    <img className={cx(classes.ProfileImage,"col-3")} src="https://vignette.wikia.nocookie.net/fairytail/images/c/c3/Erza%27s_picture.png/revision/latest?cb=20190929085837" alt="#" />
-                    <div>
-                        <h2>{userInfo.name}</h2>
-                        <p>Front-End Developer</p>
-                        <div>
-                            <h3>Ranking</h3>
-                            <Rating name='read-only' precision={0.25} value={4.5} readOnly />
-                        </div>
-                        <div>
-                            <h4>Gebėjimai:</h4>
-                            <ul style={{listStyle: 'none'}}>
-                                <li>HTML5</li>
-                                <li>CSS3</li>
-                                <li>JS</li>
-                                <li>ReactJS</li>
-                            </ul>
-                        </div>
-                        <SendMessage recipient={userInfo.name} id={0}/>
-                    </div>
+        <div className={classes.root}>
+            <div className="row">
+                <div className={cx(classes.profileImage, 'col-3')}>
+                    <img src={userInfo.photo} alt="#" />
+                    <IconButton className={classes.imageAddIcon} component='label'>                            
+                        <AddCircleIcon fontSize='large' color="primary"/>
+                        <input 
+                            type='file' 
+                            style={{display: 'none'}} 
+                            onChange={e => {
+                                // setFieldValue('profileImage', URL.createObjectURL(e.target.files[0]))
+                            }} 
+                        />
+                    </IconButton>
                 </div>
-                <div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sapien lacus, aliquam sed ornare non, tincidunt vel lacus. Morbi fermentum tortor vel odio ornare, vel placerat mi vestibulum. Etiam fringilla eros at libero finibus, a convallis ipsum auctor. Cras mauris sapien, ultrices quis sem accumsan, vulputate lobortis urna. Nulla ornare, diam eget interdum iaculis, felis odio cursus arcu, non eleifend ligula ligula id turpis. Cras semper rhoncus augue, nec placerat ipsum efficitur at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed at tellus nisl. Etiam vel ante quis nunc mollis sagittis ut sit amet lectus. Suspendisse vestibulum nibh nec quam tristique consectetur. Mauris id imperdiet lacus. </p>
-                    <div className="row">
-                        <h2>Portfolio</h2>
-                        {/* {this.state.portfolio.map(portf => (
-                            <Portfolio key={portf.id} title={portf.title} imageUrl={portf.imageUrl} />
-                        ))} */}
+                <div className="col-9">
+                    <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
+                    <div>
+                        <h4>
+                            Siūlomos paslaugos:
+                            <ServiceModalButton token={authTokens.token}/>             
+                        </h4>
+                        <ul style={{listStyle: 'none'}}>
+                            {services.map((service, index) => (
+                                <li key={index}>{service.service} {service.price_per_hour}</li>
+                            ))}
+                        </ul>
                     </div>
+                    <div>
+                        <h4
+                            >Gebėjimai:
+                            <SkillModalButton skills={allSkills}/>
+                        </h4>
+                        <ul style={{listStyle: 'none'}}>
+                            {skills.map(skill => (
+                                <li key={skill.id}>SERVISAS</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <SendMessage recipient={userInfo.name} id={0}/>
                 </div>
             </div>
-        </Wrapper>
+            <Grid container >
+                <Grid item xs={12}>
+                    <h2>
+                        Portfolio
+                        <PortfolioModalButton token={authTokens.token} works={works} setWorks={setWorks} />
+                    </h2>
+                </Grid>
+                {works.map(work => (
+                    <Grid key={work.id} item xs={12} md={6} lg={4}>
+                        <Portfolio title={work.title} imageUrl={work.filePath} />
+                    </Grid>
+                ))}
+            </Grid>
+        </div>
     )
 }
 

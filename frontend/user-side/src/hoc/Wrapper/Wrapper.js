@@ -9,21 +9,17 @@ const Wrapper = (props) => {
     };
 
     return (
-        <>
-            <div className={cx(classes["hero-wrap"], "img")} style={heroStyle}>
-                <div className={classes.overlay}></div>
-                <div className={cx('position-relative','h-100', props.variant)}>
-                    <div style={{paddingTop: props.contentOffset, height: '100%'}}>
-                        {props.children}
-                    </div>
-                </div>
+        <div className={cx(classes["hero-wrap"], "img")} style={heroStyle}>
+            <div className={classes.overlay}></div>
+            <div className='position-absolute h-100'>
+                {props.children}
             </div>
-        </>
+        </div>
     )
 };
 
 Wrapper.defaultProps = {
-    contentOffset: 0,
+    contentOffset: '120px',
     variant: 'container'
 }
 

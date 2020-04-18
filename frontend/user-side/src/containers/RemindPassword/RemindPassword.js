@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 
-import Wrapper from '../../hoc/Wrapper/Wrapper';
-
 import {Formik, Form, ErrorMessage} from 'formik';
 
 import TextField from '@material-ui/core/TextField';
@@ -55,31 +53,29 @@ const RemindPassword = () => {
     }
 
     return (
-        <Wrapper variant='container' contentOffset='130px'>
-            <div className={classes.root}>
-                <h2>Slaptažodžio priminimas</h2>
-                <p>Įveskite savo paskyros el. paštą, į kurį bus išsiųsta instrukcija slaptažodžio pakeitimui</p>
-                {emailSent? <Alert severity="success">Instrukcija sėkmingai išsiųsta!</Alert>: null}
-                {requestError? <Alert severity="error">Įvyko klaida! Patikrinkite, ar teisingai suvedėte savo el. pašto adresą</Alert>: null}
-                <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                { ( {handleChange, values, handleBlur, isSubmitting}) => (
-                    <Form >
-                        <FormGroup>
-                            <TextField name='email' label='El. paštas' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
-                            <ErrorMessage name='email' render={msg => <div className="text-danger">{msg}</div>} />
-                        </FormGroup>
-                        <Button type='submit' variant='contained' disabled={isSubmitting} color='primary'>
-                            Patvirtinti
-                        </Button>
-                    </Form>
-                )}    
-                </Formik>
-            </div>
-        </Wrapper>
+        <div className={classes.root}>
+            <h2>Slaptažodžio priminimas</h2>
+            <p>Įveskite savo paskyros el. paštą, į kurį bus išsiųsta instrukcija slaptažodžio pakeitimui</p>
+            {emailSent? <Alert severity="success">Instrukcija sėkmingai išsiųsta!</Alert>: null}
+            {requestError? <Alert severity="error">Įvyko klaida! Patikrinkite, ar teisingai suvedėte savo el. pašto adresą</Alert>: null}
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+            { ( {handleChange, values, handleBlur, isSubmitting}) => (
+                <Form >
+                    <FormGroup>
+                        <TextField name='email' label='El. paštas' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        <ErrorMessage name='email' render={msg => <div className="text-danger">{msg}</div>} />
+                    </FormGroup>
+                    <Button type='submit' variant='contained' disabled={isSubmitting} color='primary'>
+                        Patvirtinti
+                    </Button>
+                </Form>
+            )}    
+            </Formik>
+        </div>
     )
 };
 
