@@ -40,6 +40,10 @@ Route::post('work', 'PortfolioWorksController@create'); // Portfolio darbų prid
 Route::put('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
 Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas
 
+//Formato pridėjimas į DB
+Route::get('format-list', 'AdminController@formatList');
+Route::post('format', 'AdminController@addFormat');
+
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
 Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu user sarašas pagal user id
@@ -74,6 +78,9 @@ Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 //Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys
 Route::get('skill/{id}', 'SkillController@index');
+Route::get('skills', 'SkillController@skillsList'); // Skillu listas
+Route::get('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
+
 
 
 //create sukuria i table user_skill pagal "user_id" ir "skill_id"
@@ -84,6 +91,7 @@ Route::post('skill', 'SkillController@create');
 //approved 1 = patvirtinta 0 = nepatvirtinas skillas
 //comment yra patvirtinimuo comentaras
 Route::put('skill/{skill}', 'SkillController@update');
+
 
 
 

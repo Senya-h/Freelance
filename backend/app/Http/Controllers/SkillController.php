@@ -86,4 +86,12 @@ class SkillController extends Controller
             return response()->json(["SkillName"=>$skill->skillName]);
         }
     }
+    public function skillsList() {
+        $skills = Skill::all();
+        return response()->json($skills,200);
+    }
+    public function skillDelete(Skill $skill) {
+        $skill->delete();
+        return response()->json(["message"=>"Ištrinta"],200);
+    }
 }

@@ -6,6 +6,8 @@ use App\PortfolioWorks;
 use Illuminate\Http\Request;
 use File;
 use Gate;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class PortfolioWorksController extends Controller
 {
@@ -16,21 +18,29 @@ class PortfolioWorksController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti']);
         }
-        $validatedData = $request->validate([
+        $formats = DB::table('file_formats')->select('format')->get();
+        $string = "";
+        foreach ($formats as $str){
+            $string .=  $str->format.',';
+        }
+        $validation = Validator::make($request->all(),[
             'title' => 'required',
             'description' => 'required',
-            'file' => 'mimes:jpeg,jpg,png,gif,mpg,doc,docx|required',
+            'file' => 'mimes:'.$string.'|required',
         ]);
-        $path=$request->file('file')->store('public/portfolioWorks');
-        $filename = str_replace('public/',"", $path);
-        $work = PortfolioWorks::create([
-            'title' => request('title'),
-            'description' => request('description'),
-            'filePath' => $filename,
-            'user_id' => auth()->user()->id
-        ]);
-
-        return response()->json($work);
+        if ($validation->fails()) {
+            return response()->json(["error" => $validation->errors()]);
+        } else {
+            $path = $request->file('file')->store('public/portfolioWorks');
+            $filename = str_replace('public/', "", $path);
+            $work = PortfolioWorks::create([
+                'title' => request('title'),
+                'description' => request('description'),
+                'filePath' => $filename,
+                'user_id' => auth()->user()->id
+            ]);
+            return response()->json($work);
+        }
     }
     public function update($id, Request $request, PortfolioWorks $portfolioworks) {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
