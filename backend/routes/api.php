@@ -31,6 +31,7 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 //User
 Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
+Route::post('photo-upload', 'ApiController@userPhotoUpload');
 //Services
 Route::post('service', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
 Route::put('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
