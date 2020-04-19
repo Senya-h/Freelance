@@ -99,8 +99,8 @@ class ApiController extends Controller
             if ($validation->fails()) {
                 return response()->json(["error" => $validation->errors()]);
             } else {
-                $file = User::select('foto')->where('id', '=', auth()->user()->id)->get();
-                File::delete('../storage/app/public/' . $file[0]['foto']);
+                $file = User::select('foto')->where('id', '=', auth()->user()->id)->get(); //Randa sena filePath
+                File::delete('../storage/app/public/' . $file[0]['foto']); //Keliant naują foto seną ištrina
                 $path = $request->file('file')->store('public/userimg');
                 $filename = str_replace('public/', "", $path);
                 User::where('id', auth()->user()->id)->update(['foto' => $filename]);

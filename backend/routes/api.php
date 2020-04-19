@@ -78,7 +78,7 @@ Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 //per postmana api/skill ir api/skill/1
 //Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys
-Route::get('skill/{id}', 'SkillController@index');
+Route::get('skills/{id}', 'SkillController@index');
 Route::get('skills', 'SkillController@skillsList'); // Skillu listas
 Route::get('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
 

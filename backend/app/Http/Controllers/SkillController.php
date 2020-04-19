@@ -26,16 +26,17 @@ class SkillController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $skill = new SkillApproval;
-        $skill->user_id = auth()->user()->id;
-        $skill->skill_id = $request->skill_id;
-        $skill->approved = 0;
-        $skill->comment = '';
-        $skill->save();
-        DB::table("users")
-            ->join('user_skill','user_skill.user_id','users.id')
-            ->join('skill','skill.id','user_skill.skill_id')
-            ->get();
+        $skillArr = $request->all();
+        for ($i = 0; $i < count($skillArr); $i++){
+            $index = $i+1;
+            $skill = new SkillApproval;
+            $skill->user_id = auth()->user()->id;
+            $skill->skill_id = $skillArr[$index];
+            $skill->approved = 0;
+            $skill->comment = '';
+            $skill->save();
+        }
+
 
         return response()->json(["message" => "Skill pridėtas"]);
     }

@@ -48,11 +48,16 @@ class PortfolioWorksController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
+        $formats = DB::table('file_formats')->select('format')->get();
+        $string = "";
+        foreach ($formats as $str){
+            $string .=  $str->format.',';
+        }
         if (Gate::allows('authorization', $work)) {
             $validatedData = $request->validate([
                 'title' => 'required',
                 'description' => 'required',
-                'filePath' => 'mimes:jpeg,jpg,png,gif,mpg,doc,docx|required',
+                'filePath' => 'mimes:'.$string.'|required',
             ]);
             if ($request->hasFile('filePath')) {
                 $file = PortfolioWorks::select('filePath')->where('id', '=', $id)->get();
