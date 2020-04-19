@@ -80,7 +80,7 @@ Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 //index parodo pagal id userius isveda user visus duomenys
 Route::get('skills/{id}', 'SkillController@index');
 Route::get('skills', 'SkillController@skillsList'); // Skillu listas
-Route::get('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
+Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
 
 
 
