@@ -1,5 +1,4 @@
 import React from 'react';
-import Wrapper from '../../hoc/Wrapper/Wrapper';
 import classes from './PageNotFound.module.scss';
 
 const PageNotFound = () => {
