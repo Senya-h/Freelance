@@ -26,34 +26,47 @@ const SkillModalButton = (props) => {
     }
 
     const formik = useFormik({
+        initialValues: {
+            skills_id: []
+        },
         onSubmit: values => {
-            console.log("Siunciami skillai: ", values);
+            console.log("Siunciami skillai: ", values.skills_id);
             //Submitting user's skills to the server
-            axios.post('/abaweta', values).then(res => {
+            axios.post('/skill', values.skills_id, {
+                headers: {
+                    'Authorization': 'Bearer ' + props.token
+                }
+            }).then(res => {
+                if(!res.error && res.status === 200) {
+                    const newSkills = props.allSkills.map(skill => {
+                        return values.skills_id.filter(skill_id => skill_id === skill.id)
+                    })
+                    console.log("Nauji skillsai: ", newSkills);
+                    props.setSkills([...newSkills])
+                }
                 console.log(res);
             })
         }
     })
-
-    
 
     return (
         <>
             <IconButton component='label' onClick={handleOpen}>                            
                 <AddCircleIcon fontSize='large' color="primary"/>
             </IconButton> 
-            <Dialog open={open} onClose={handleClose}>                          
+
+            <Dialog open={open} onClose={handleClose} fullWidth>                          
                 <DialogTitle>Tavo gebėjimai</DialogTitle>
                 <form onSubmit={formik.handleSubmit}>
                     <DialogContent>
                         <FormGroup>
-                            {props.skills ? props.skills.map(skill => (               
+                            {props.allSkills.map(skill => (               
                                 <FormControlLabel
                                 key={skill.id} 
-                                control={<Checkbox color="primary" name="skill_id"/>}
+                                control={<Checkbox color="primary" name="[skills_id]" onChange={formik.handleChange} value={skill.id}/>}
                                 label={skill.skillName}
                                 />
-                            )): null}
+                            ))}
 
                         </FormGroup>
                     </DialogContent>
