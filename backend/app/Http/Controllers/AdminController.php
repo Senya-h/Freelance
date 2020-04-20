@@ -88,6 +88,7 @@ class AdminController extends Controller
 
     public function SkillApproval(Request $request, $skill_id, $user_id)
     {
+        if($request->user()->authorizeRoles('Admin')){
             $skill = Skill::where('id', $skill_id)->first();
             $user = User::where('id', $user_id)->first();
             $skill->skillusers()->sync($user);
@@ -96,5 +97,6 @@ class AdminController extends Controller
             ]);
             SkillUser::where('user_id', $user_id)->where('skill_id', $skill_id)->update(['approved' => $request->input('approved')]);
             return response()->json(["message" => "Skilas sekmingai patvirtintas",200]);
+        }
     }
 }

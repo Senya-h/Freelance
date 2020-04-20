@@ -56,7 +56,7 @@ Route::get('service&id={id}/list', 'AdminController@aboutServiceApproval');  //P
 Route::post('service&id={id}/approve', 'AdminController@ServiceApproval');  //Paslaugos patvirtinimas
 //Admin skill approvals
 Route::get('skill&id={id}/admin/list', 'AdminController@aboutskillApproval');  //Patvirtinas skill pagal skill id
-Route::post('skill&id={skill_id}/user&id={user_id}','AdminController@skillApproval');  //Freelancer darbu patvirtinimas
+Route::post('skill&id={skill_id}/user&id={user_id}','AdminController@skillApproval');  //Skill patvirtinimas
 
 //Message
 Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos
