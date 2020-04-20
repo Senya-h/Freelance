@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 
-import Wrapper from '../../hoc/Wrapper/Wrapper';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 
@@ -80,53 +79,51 @@ const RemindPassword = (props) => {
             })
     }
     return (
-        <Wrapper variant='container' contentOffset='130px'>
-            <div className={classes.root}>
-                <h2>Slaptažodžio pakeitimas</h2>
-                {passwordChanged? <Alert severity="success">Slaptažodis sėkmingai pakeistas! <Link to='/login'>Grįžti į prisijungimo puslapį</Link></Alert>: null}
-                {requestError? <Alert severity="error">Įvyko klaida! Patikrinkite, ar teisingai suvedėte savo el. pašto adresą</Alert>: null}
-                <Formik
-                    initialValues={initialValues}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                { ( {handleChange, values, handleBlur, isSubmitting}) => (
-                    <Form >
-                        <FormGroup>
-                            <TextField label='Pakartokite savo el. pašto adresą' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
-                            <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField variant='outlined' label='Naujas slaptažodis' name='password' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
-                                endAdornment: <InputAdornment position='end'>
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}                   
-                                    edge="end"
-                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
-                                </InputAdornment>}}/>
-                            <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField variant='outlined' label='Pakartokite slaptažodį' name='passwordConfirm' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} InputProps={{
-                                endAdornment: <InputAdornment position='end'>
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}           
-                                    edge="end"
-                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
-                                </InputAdornment>}}/>
-                            <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
+        <div className={classes.root}>
+            <h2>Slaptažodžio pakeitimas</h2>
+            {passwordChanged? <Alert severity="success">Slaptažodis sėkmingai pakeistas! <Link to='/login'>Grįžti į prisijungimo puslapį</Link></Alert>: null}
+            {requestError? <Alert severity="error">Įvyko klaida! Patikrinkite, ar teisingai suvedėte savo el. pašto adresą</Alert>: null}
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+            { ( {handleChange, values, handleBlur, isSubmitting}) => (
+                <Form >
+                    <FormGroup>
+                        <TextField label='Pakartokite savo el. pašto adresą' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField variant='outlined' label='Naujas slaptažodis' name='password' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
+                            endAdornment: <InputAdornment position='end'>
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}                   
+                                edge="end"
+                        >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                            </InputAdornment>}}/>
+                        <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField variant='outlined' label='Pakartokite slaptažodį' name='passwordConfirm' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} InputProps={{
+                            endAdornment: <InputAdornment position='end'>
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}           
+                                edge="end"
+                        >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                            </InputAdornment>}}/>
+                        <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
 
-                        <Button type='submit' variant='contained' disabled={isSubmitting} color='primary'>
-                            Patvirtinti
-                        </Button>
-                    </Form>
-                )}    
-                </Formik>
-            </div>
-        </Wrapper>
+                    <Button type='submit' variant='contained' disabled={isSubmitting} color='primary'>
+                        Patvirtinti
+                    </Button>
+                </Form>
+            )}    
+            </Formik>
+        </div>
     )
 };
 

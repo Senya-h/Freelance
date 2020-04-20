@@ -1,13 +1,13 @@
 import React from 'react';
-import './Main.css';
+import './Users.css';
 
-function Main(){
+function Users(){
     return(
-        <div className="Main">
+        <div className="Users">
             <div className="main">
                 <div className="main-content">
                     <div className="container-fluid">
-                        <h1>Pagrindinis</h1>
+                        <h1>Vartotojai</h1>
                     </div>
                 </div>
             </div>
@@ -15,4 +15,4 @@ function Main(){
     )
 }
 
-export default Main;
+export default Users;

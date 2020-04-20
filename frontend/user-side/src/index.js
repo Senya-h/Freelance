@@ -3,23 +3,25 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import './index.css';
-import './assets/css/open-iconic-bootstrap.min.css';
 import './assets/css/animate.css';
-import './assets/css/owl.theme.default.min.css';
 import './assets/css/magnific-popup.css';
 import './assets/css/aos.css';
 import './assets/css/ionicons.min.css';
-import './assets/css/bootstrap-datepicker.css';
-import './assets/css/jquery.timepicker.css';
 import './assets/css/flaticon.css';
 import './assets/css/icomoon.css';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
+import {CssBaseline} from '@material-ui/core';
+import {ThemeProvider} from '@material-ui/core/styles';
+import theme from './theme';
 
 ReactDOM.render(<BrowserRouter>
-                    <App />
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline /> 
+                        <App />
+                    </ThemeProvider>
                 </BrowserRouter>,
                 document.getElementById('root'));
 

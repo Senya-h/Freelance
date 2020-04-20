@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Message;
 use App\Role;
+use File;
 
 class ApiController extends Controller
 {
@@ -85,6 +86,26 @@ class ApiController extends Controller
 	}
 	public function verifyFirstLogin($id){
         User::where('id', $id)->update(['didLogin' => 1]);
+    }
+    public function userPhotoUpload(Request $request) {
+            try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+                $user = auth()->userOrFail();
+            } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+                return response()->json(['error' => 'Prašome prisijungti']);
+            }
+            $validation = Validator::make($request->all(),[
+                'file' => 'mimes:png,jpg,jpeg|required',
+            ]);
+            if ($validation->fails()) {
+                return response()->json(["error" => $validation->errors()]);
+            } else {
+                $file = User::select('foto')->where('id', '=', auth()->user()->id)->get(); //Randa sena filePath
+                File::delete('../storage/app/public/' . $file[0]['foto']); //Keliant naują foto seną ištrina
+                $path = $request->file('file')->store('public/userimg');
+                $filename = str_replace('public/', "", $path);
+                User::where('id', auth()->user()->id)->update(['foto' => $filename]);
+                return response()->json(["message" => 'Nuotrauka sėkmingai įkelta'],200);
+            }
     }
 
 }

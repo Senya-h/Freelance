@@ -114,83 +114,81 @@ const Register = (props) => {
     }
 
     return (
-        <Wrapper variant='container' contentOffset='130px'>
-            <div className={classes.root}>
-                <Formik 
-                    initialValues={initialValues} 
-                    onSubmit={handleSubmit}
-                    validationSchema={validationSchema}
-                    >
-                {({ handleChange, values, setFieldValue, handleBlur, isSubmitting }) => (
-                    <Form autoComplete='off' >
-                        <h2>Registracija</h2>
-                        <FormGroup>
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Tipas</FormLabel>
-                                <RadioGroup row aria-label="gender" name="role" value={values.role} onChange={handleChange}>
-                                    <FormControlLabel value="2" control={<Radio />} label="Klientas" />
-                                    <FormControlLabel value="3" control={<Radio />} label="Freelanceris" />
-                                </RadioGroup>
-                            </FormControl>
-                            <ErrorMessage name='role' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup> 
-                            <TextField variant='outlined' label='Vardas, Pavardė' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
-                            <ErrorMessage name='name' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup>
-                            <CountrySelect change={(e, value) => {
-                                setFieldValue(
-                                "location",
-                                value !== null ? value : initialValues.location
-                                );
-                            }}/>
-                            <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField variant='outlined' label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
-                            <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField variant='outlined' label='Slaptažodis' name='password' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
-                                endAdornment: <InputAdornment position='end'>
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}                   
-                                    edge="end"
-                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
-                                </InputAdornment>}}/>
-                            <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField variant='outlined' label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} InputProps={{
-                                endAdornment: <InputAdornment position='end'>
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    
-                                    edge="end"
-                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
-                                </InputAdornment>}}/>
-                            <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <FormGroup>
-                            <ReCAPTCHA 
-                                ref={recaptchaRef}
-                                sitekey='6LfraOgUAAAAAIfS-8yAUT6QO-uhuol29LfgvKxL' 
-                                onChange={(response) => setFieldValue("recaptcha", response)}
-                                />
-                            <ErrorMessage name='recaptcha' render={msg => <div className='text-danger'>{msg}</div>} />
-                        </FormGroup>
-                        <Button type='submit' disabled={isSubmitting} variant='contained' color='primary' >
-                            Registruotis
-                        </Button>
-                    </Form>
-                )}
-                </Formik>
-                <Link to='/login'>Jau turi paskyrą? Prisijunk</Link>
-            </div>
-        </Wrapper>
+        <div className={classes.root}>
+            <Formik 
+                initialValues={initialValues} 
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+                >
+            {({ handleChange, values, setFieldValue, handleBlur, isSubmitting }) => (
+                <Form autoComplete='off' >
+                    <h2>Registracija</h2>
+                    <FormGroup>
+                        <FormControl component="fieldset">
+                            <FormLabel component="legend">Tipas</FormLabel>
+                            <RadioGroup row aria-label="gender" name="role" value={values.role} onChange={handleChange}>
+                                <FormControlLabel value="2" control={<Radio color='primary' />} label="Klientas" />
+                                <FormControlLabel value="3" control={<Radio color='primary' />} label="Freelanceris" />
+                            </RadioGroup>
+                        </FormControl>
+                        <ErrorMessage name='role' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup> 
+                        <TextField variant='outlined' label='Vardas, Pavardė' name='name' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.name} />
+                        <ErrorMessage name='name' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup>
+                        <CountrySelect change={(e, value) => {
+                            setFieldValue(
+                            "location",
+                            value !== null ? value : initialValues.location
+                            );
+                        }}/>
+                        <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField variant='outlined' label='El. paštas' name='email' color='primary' onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField variant='outlined' label='Slaptažodis' name='password' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
+                            endAdornment: <InputAdornment position='end'>
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}                   
+                                edge="end"
+                        >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                            </InputAdornment>}}/>
+                        <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField variant='outlined' label='Slaptažodžio patvirtinimas' name='passwordConfirm' color='primary' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.passwordConfirm} InputProps={{
+                            endAdornment: <InputAdornment position='end'>
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                
+                                edge="end"
+                        >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                            </InputAdornment>}}/>
+                        <ErrorMessage name='passwordConfirm' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <FormGroup>
+                        <ReCAPTCHA 
+                            ref={recaptchaRef}
+                            sitekey='6LfraOgUAAAAAIfS-8yAUT6QO-uhuol29LfgvKxL' 
+                            onChange={(response) => setFieldValue("recaptcha", response)}
+                            />
+                        <ErrorMessage name='recaptcha' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </FormGroup>
+                    <Button type='submit' disabled={isSubmitting} variant='contained' color='primary' >
+                        Registruotis
+                    </Button>
+                </Form>
+            )}
+            </Formik>
+            <Link to='/login'>Jau turi paskyrą? Prisijunk</Link>
+        </div>
     )
 };
 

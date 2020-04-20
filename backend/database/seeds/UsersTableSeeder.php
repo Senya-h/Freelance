@@ -19,6 +19,8 @@ class UsersTableSeeder extends Seeder
             'role' => 1,
             'foto' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png',
             'password' => Hash::make('admin123'),
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now()
         ]);
             $user->save();
             $user->roles()->sync(1,false);

@@ -84,43 +84,41 @@ const Login = (props) => {
     };
 
     return (
-        <Wrapper variant='container' contentOffset='130px'>
-            <div className={classes.root}>
-                <h2>Prisijungimas</h2>
-                <Formik
-                    initialValues={initialValues} 
-                    onSubmit={handleSubmit}
-                    validationSchema={validationSchema}
-                >
-                {({ handleChange, values, handleBlur, isSubmitting }) => (
-                    <Form>
-                        {alertMessage}
-                        <FormGroup>
-                            <TextField label='El. paštas' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
-                            <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <TextField label='Slaptažodis' name='password' color='primary' variant='outlined' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
-                                endAdornment: <InputAdornment position='end'>
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    edge="end"
-                            >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
-                                </InputAdornment>}}/>
-                            <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>}/>
-                            <Link to='/password-reminder'>Pamiršai slaptažodį?</Link>
-                        </FormGroup>
-                        <Button type='submit' variant='contained' disabled={isSubmitting} color='primary' >
-                            Prisijungti
-                        </Button>
-                    </Form>
-                )}
-                </Formik>
-                <Link to='/register'>Neturi paskyros? Registruokis</Link>
-                
-            </div>
-        </Wrapper>
+        <div className={classes.root}>
+            <h2>Prisijungimas</h2>
+            <Formik
+                initialValues={initialValues} 
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+            >
+            {({ handleChange, values, handleBlur, isSubmitting }) => (
+                <Form>
+                    {alertMessage}
+                    <FormGroup>
+                        <TextField label='El. paštas' name='email' color='primary' variant='outlined' onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        <ErrorMessage name='email' render={msg => <div className='text-danger'>{msg}</div>}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField label='Slaptažodis' name='password' color='primary' variant='outlined' type={showPassword? 'text': 'password'} onChange={handleChange} onBlur={handleBlur} value={values.password} InputProps={{
+                            endAdornment: <InputAdornment position='end'>
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                edge="end"
+                        >{showPassword ? <Visibility />: <VisibilityOff />}</IconButton>
+                            </InputAdornment>}}/>
+                        <ErrorMessage name='password' render={msg => <div className='text-danger'>{msg}</div>}/>
+                        <Link to='/password-reminder'>Pamiršai slaptažodį?</Link>
+                    </FormGroup>
+                    <Button type='submit' variant='contained' disabled={isSubmitting} color='primary' >
+                        Prisijungti
+                    </Button>
+                </Form>
+            )}
+            </Formik>
+            <Link to='/register'>Neturi paskyros? Registruokis</Link>
+            
+        </div>
     )
 };
 

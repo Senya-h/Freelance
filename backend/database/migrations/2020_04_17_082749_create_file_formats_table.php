@@ -1,12 +1,10 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSkillTable extends Migration
+class CreateFileFormatsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +13,9 @@ class CreateSkillTable extends Migration
      */
     public function up()
     {
-        Schema::create('skill', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('skillName')->unique();
+        Schema::create('file_formats', function (Blueprint $table) {
+            $table->id();
+            $table->string('format');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateSkillTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('skill');
+        Schema::dropIfExists('file_formats');
     }
 }
