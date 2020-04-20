@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Rating from '@material-ui/lab/Rating';
 import axios from '../../../axios';
-import Wrapper from '../../../hoc/Wrapper/Wrapper';
 import cx from 'classnames';
 import SendMessage from './SendMessage/SendMessage';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,7 +12,6 @@ import SkillModalButton from './SkillModalButton';
 import PortfolioModalButton from './PortfolioModalButton';
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
-import Footer from '../../../components/Footer';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,10 +35,9 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Profile = () => {
+const FreelancerProfile = () => {
     let { authTokens } = useAuth();
-    authTokens = JSON.parse(authTokens);
-
+    
     const [userInfo, setUserInfo] = useState({
         name: '',
         email: '',
@@ -138,4 +135,4 @@ const Profile = () => {
     )
 }
 
-export default Profile;
+export default FreelancerProfile;

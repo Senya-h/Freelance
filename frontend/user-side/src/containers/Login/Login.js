@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Wrapper from '../../hoc/Wrapper/Wrapper';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
@@ -24,14 +23,16 @@ const useStyles = makeStyles( theme => ({
             marginBottom: theme.spacing(3)
         },
         padding: '20px',
-        backgroundColor: '#eee'
+        backgroundColor: '#eee',
+        width: '700px',
+        margin: '0 auto',
     }
 }))
 
 const Login = (props) => {
     const { setAuthTokens, authTokens } = useAuth();
-    let referer = '/';
 
+    let referer = '/';
     let alertMessage = null;
 
     if(props.location.state) {
@@ -46,7 +47,7 @@ const Login = (props) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const classes = useStyles();
-    console.log("LOGINO", props);
+
     //if is logged in, redirect to previous page
     if( authTokens ) {
         return <Redirect to={referer} />
@@ -71,7 +72,7 @@ const Login = (props) => {
                 if(res.status === 200 && !res.data.error) {
                     console.log(res);
                     setAuthTokens(res.data);     
-                    props.history.push({referer});
+                    props.history.replace({referer});
                 } else {
                     alertMessage = <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>;
                     setSubmitting(false);

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Wrapper from '../../hoc/Wrapper/Wrapper';
 import CountrySelect from './CountrySelect/CountrySelect';
 import { useAuth } from '../../context/auth';
 
@@ -35,7 +34,9 @@ const useStyles = makeStyles( theme => ({
             marginBottom: theme.spacing(3)
         },
         padding: '20px',
-        backgroundColor: '#eee'
+        backgroundColor: '#eee',
+        width: '750px',
+        margin: '0 auto'
     }
 }))
 

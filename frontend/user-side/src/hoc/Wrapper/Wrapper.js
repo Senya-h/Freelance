@@ -11,7 +11,7 @@ const Wrapper = (props) => {
     return (
         <div className={cx(classes["hero-wrap"], "img")} style={heroStyle}>
             <div className={classes.overlay}></div>
-            <div className='position-absolute h-100'>
+            <div className='position-absolute h-100' style={{height: '800px'}}>
                 {props.children}
             </div>
         </div>
