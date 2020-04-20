@@ -104,7 +104,7 @@ class ApiController extends Controller
                 $path = $request->file('file')->store('public/userimg');
                 $filename = str_replace('public/', "", $path);
                 User::where('id', auth()->user()->id)->update(['foto' => $filename]);
-                return response()->json(["message" => 'Nuotrauka sėkmingai įkelta'],200);
+                return response()->json(["file" => $filename],200);
             }
     }
 
