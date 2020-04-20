@@ -18,7 +18,9 @@ import {AuthContext} from './context/auth';
 import Cookies from 'js-cookie';
 
 const App = () => {  
-  const existingTokens = Cookies.get('access_token');
+  const authCookie = Cookies.get('access_token');
+
+  const existingTokens = authCookie? JSON.parse(authCookie): undefined;
   const [authTokens, setAuthTokens] = useState(existingTokens);
 
   const setTokens = (data) => {

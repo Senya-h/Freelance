@@ -72,7 +72,7 @@ const Login = (props) => {
                 if(res.status === 200 && !res.data.error) {
                     console.log(res);
                     setAuthTokens(res.data);     
-                    props.history.replace({referer});
+                    props.history.push({referer});
                 } else {
                     alertMessage = <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>;
                     setSubmitting(false);
