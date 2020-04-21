@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Rating from '@material-ui/lab/Rating';
-import axios from '../../../axios';
+import axios, {baseURL} from '../../../axios';
 import SendMessage from './SendMessage/SendMessage';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -216,7 +216,7 @@ const FreelancerProfile = () => {
                 </Grid>
                 <Grid className={classes.photoArea} item xs={12} md={4}>
                     <div className={classes.profileImage}>
-                        <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: 'http://localhost/storage/' + userInfo.photo} alt="#" />
+                        <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
                         <PhotoModalButton 
                             className={classes.imageAddIcon}
                             userInfo={userInfo} 

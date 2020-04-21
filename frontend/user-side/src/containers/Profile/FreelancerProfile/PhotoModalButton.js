@@ -9,7 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 import {useFormik} from 'formik';
-import axios from '../../../axios';
+import axios, {baseURL} from '../../../axios';
 import {object as yupObject, string as yupString} from 'yup';
 
 const PhotoModalButton = (props) => {
@@ -66,7 +66,7 @@ const PhotoModalButton = (props) => {
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
                 <DialogContent>
                     <FormGroup>
-                        <img style={{width: '300px'}} src={formik.values.localFile? formik.values.localFile: 'http://localhost/storage/' + props.userInfo.photo} alt="portfolio" />
+                        <img style={{width: '300px'}} src={formik.values.localFile? formik.values.localFile: `${baseURL}/storage/${props.userInfo.photo}`} alt="portfolio" />
                         {formik.errors.formFile ? (
                         <div className='text-danger'>{formik.errors.formFile}</div>
                         ) : null}
