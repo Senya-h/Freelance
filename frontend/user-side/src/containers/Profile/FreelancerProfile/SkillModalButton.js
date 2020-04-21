@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import EditIcon from '@material-ui/icons/Edit'
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -38,11 +38,17 @@ const SkillModalButton = (props) => {
                 }
             }).then(res => {
                 if(!res.error && res.status === 200) {
-                    const newSkills = props.allSkills.map(skill => {
-                        return values.skills_id.filter(skill_id => skill_id === skill.id)
+                    const newSkills = [];
+                    props.allSkills.forEach(skill => {
+                        values.skills_id.forEach(newSkillId => {
+                            if(skill.id == newSkillId) {
+                                newSkills.push({id: skill.id, skill: skill.skillName, approved: 0, comment: ""});
+                            }
+                        })
                     })
                     console.log("Nauji skillsai: ", newSkills);
-                    props.setSkills([...newSkills])
+                    props.setSkills([...newSkills]);
+                    handleClose();
                 }
                 console.log(res);
             })
@@ -52,7 +58,7 @@ const SkillModalButton = (props) => {
     return (
         <>
             <IconButton component='label' onClick={handleOpen}>                            
-                <AddCircleIcon fontSize='large' color="primary"/>
+                <EditIcon color='primary' />
             </IconButton> 
 
             <Dialog open={open} onClose={handleClose} fullWidth>                          

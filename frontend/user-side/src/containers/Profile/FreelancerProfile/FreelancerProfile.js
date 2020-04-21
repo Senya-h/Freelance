@@ -65,20 +65,12 @@ const useStyles = makeStyles(theme => ({
         boxShadow: '19px 25px 21px -14px rgba(0,0,0,0.63)',
         position: 'relative'
     },
-    removeIcon: {
-        colorPrimary: {
-            color: 'red',
-            backgroundColor: 'red'
-        }
+    portfolio: {
+        position: 'relative'
     },
-    red: {
-        color: 'red'
-    },
-    green: {
-        color: '#24fc03'
-    },
-    loader: {
-
+    skill: {
+        borderBottom: '1px solid black',
+        fontSize: '19px'
     }
 }));
 
@@ -185,12 +177,12 @@ const FreelancerProfile = () => {
     return (
         <div className={classes.root}>
             {isLoading?
-            <div style={{textAlign: 'center'}}>
+            <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Loader 
                     type="Bars"
                     color="#00BFFF"
-                    height={100}
-                    width={100}
+                    height={200}
+                    width={200}
                 />
             </div>:(<>
             <Grid container spacing={5}>
@@ -222,12 +214,12 @@ const FreelancerProfile = () => {
                     <div>
                         <h4
                             >Gebėjimai:
-                            <SkillModalButton token={authTokens.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />
+                            <SkillModalButton token={authTokens.token} allSkills={allSkills} setSkills={setSkills} />
                         </h4>
                         <ul style={{listStyle: 'none'}}>
-                            {/* {skills.map(skill => (
-                                <li key={skill.id}>SERVISAS</li>
-                            ))} */}
+                            {skills.map(skill => (
+                                <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
+                            ))}
                         </ul>
                     </div>
                     
@@ -243,7 +235,7 @@ const FreelancerProfile = () => {
                     </div>
                 </Grid>
             </Grid>
-            <Grid container >
+            <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <h2>
                         Portfolio
@@ -251,8 +243,14 @@ const FreelancerProfile = () => {
                     </h2>
                 </Grid>
                 {works.map(work => (
-                    <Grid key={work.id} item xs={12} md={6} lg={4}>
-                        <Portfolio title={work.title} imageUrl={work.filePath} />
+                    <Grid className={classes.portfolio} key={work.id} item xs={12} md={6} lg={4}>
+                        <Portfolio title={work.title} imageUrl={work.filePath}  />
+                        <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
+                            <RemoveCircleIcon fontSize="large" classes={{colorPrimary: classes.red}} color='primary' />
+                        </IconButton>
+                        <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
+                            <EditIcon fontSize="large" color='primary' />
+                        </IconButton>
                     </Grid>
                 ))}
             </Grid>
