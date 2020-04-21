@@ -10,6 +10,7 @@ import Register from  './containers/Register/Register';
 import Login from './containers/Login/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
+import BrowseJobs from './containers/BrowseJobs';
 import Footer from './components/Footer';
 // import PrivateRoute from './PrivateRoute';
 import Wrapper from './hoc/Wrapper/Wrapper';
@@ -34,23 +35,28 @@ const App = () => {
   }
 
   return (
-    <div className="App">      
-      <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
+    <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
+      <div style={{height: '100%'}}>
+        <Navbar />
+
         <Wrapper>
-            <Navbar />
-            <Switch>
-                <Route path='/' exact component={Main} />
-                <Route path='/register' component={Register} />
-                <Route path='/login' component={Login} />
-                <Route path='/password-reminder' component={RemindPassword} />
-                <Route path='/password/reset/' component={ForgotChangePassword} />
-                <Route path='/profile' component={FreelancerProfile} />
-                <Route component={PageNotFound} />
-            </Switch>
-            <Footer />
+            <div style={{height: '100%', paddingTop: '80px'}}>
+              <Switch>
+                  <Route path='/' exact component={Main} />
+                  <Route path='/register' component={Register} />
+                  <Route path='/login' component={Login} />
+                  <Route path='/password-reminder' component={RemindPassword} />
+                  <Route path='/password/reset/' component={ForgotChangePassword} />
+                  <Route path='/profile' component={FreelancerProfile} />
+                  <Route path='/jobs' component={BrowseJobs} />
+                  <Route component={PageNotFound} />
+              </Switch>
+            </div>
         </Wrapper>
-      </AuthContext.Provider>
-    </div>
+
+        <Footer />
+      </div>
+    </AuthContext.Provider>
   );
 }
 

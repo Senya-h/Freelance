@@ -1,6 +1,9 @@
 .FtcoNavbarLight {
     background: transparent !important;
-
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
     z-index: 3;
 
     .navbar-brand {
