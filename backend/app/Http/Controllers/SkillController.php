@@ -28,10 +28,9 @@ class SkillController extends Controller
         }
         $skillArr = $request->all();
         for ($i = 0; $i < count($skillArr); $i++){
-            $index = $i+1;
             $skill = new SkillApproval;
             $skill->user_id = auth()->user()->id;
-            $skill->skill_id = $skillArr[$index];
+            $skill->skill_id = $skillArr[$i];
             $skill->approved = 0;
             $skill->comment = '';
             $skill->save();

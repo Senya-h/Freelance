@@ -6,6 +6,9 @@ import cx from 'classnames';
 const Wrapper = (props) => {
     const heroStyle = {
         backgroundImage: `url(${bgImg})`,
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
     };
 
     return (
