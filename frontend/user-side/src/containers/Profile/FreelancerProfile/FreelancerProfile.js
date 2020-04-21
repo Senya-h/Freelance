@@ -8,7 +8,6 @@ import SendMessage from './SendMessage/SendMessage';
 
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import EditIcon from '@material-ui/icons/Edit'
@@ -214,7 +213,7 @@ const FreelancerProfile = () => {
                     <div>
                         <h4
                             >Gebėjimai:
-                            <SkillModalButton token={authTokens.token} allSkills={allSkills} setSkills={setSkills} />
+                            <SkillModalButton token={authTokens.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />
                         </h4>
                         <ul style={{listStyle: 'none'}}>
                             {skills.map(skill => (

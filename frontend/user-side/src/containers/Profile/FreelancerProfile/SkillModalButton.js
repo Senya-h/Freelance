@@ -24,6 +24,9 @@ const SkillModalButton = (props) => {
     const handleClose = () => {
         setOpen(false);
     }
+    let checkedSkills = props.skills.map(skill => {
+        return skill.id;
+    })
 
     const formik = useFormik({
         initialValues: {
@@ -41,7 +44,7 @@ const SkillModalButton = (props) => {
                     const newSkills = [];
                     props.allSkills.forEach(skill => {
                         values.skills_id.forEach(newSkillId => {
-                            if(skill.id == newSkillId) {
+                            if(skill.id === newSkillId) {
                                 newSkills.push({id: skill.id, skill: skill.skillName, approved: 0, comment: ""});
                             }
                         })
@@ -69,7 +72,7 @@ const SkillModalButton = (props) => {
                             {props.allSkills.map(skill => (               
                                 <FormControlLabel
                                 key={skill.id} 
-                                control={<Checkbox color="primary" name="[skills_id]" onChange={formik.handleChange} value={skill.id}/>}
+                                control={<Checkbox checked={checkedSkills.includes(skill.id)} color="primary" name="[skills_id]" onChange={formik.handleChange} value={skill.id}/>}
                                 label={skill.skillName}
                                 />
                             ))}
