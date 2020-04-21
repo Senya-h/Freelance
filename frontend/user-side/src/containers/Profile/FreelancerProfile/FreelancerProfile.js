@@ -1,4 +1,7 @@
 import React, {useState, useEffect} from 'react';
+
+import Loader from 'react-loader-spinner';
+
 import Rating from '@material-ui/lab/Rating';
 import axios, {baseURL} from '../../../axios';
 import SendMessage from './SendMessage/SendMessage';
@@ -19,11 +22,13 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 const useStyles = makeStyles(theme => ({
     root: {
         padding: '30px',
         backgroundColor: '#eee',
+        
     },
     profileImage: {
         width: '300px',
@@ -71,6 +76,9 @@ const useStyles = makeStyles(theme => ({
     },
     green: {
         color: '#24fc03'
+    },
+    loader: {
+
     }
 }));
 
@@ -106,6 +114,7 @@ const FreelancerProfile = () => {
     const [works, setWorks] = useState([]);
 
     const [allSkills, setAllSkills] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     const [deleteModalInfo, setDeleteModalInfo] = useState({
         open: false,
@@ -130,7 +139,7 @@ const FreelancerProfile = () => {
                 setWorks(portfolio.works);
                 setSkills(portfolio.skills);
                 setServices(portfolio.services);
-                
+                setLoading(false);
             })
 
         axios.get('/skills')
@@ -175,6 +184,15 @@ const FreelancerProfile = () => {
 
     return (
         <div className={classes.root}>
+            {isLoading?
+            <div style={{textAlign: 'center'}}>
+                <Loader 
+                    type="Bars"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                />
+            </div>:(<>
             <Grid container spacing={5}>
                 <Grid className={classes.userInfoArea} item xs={12} sm={8}>              
                     <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
@@ -239,6 +257,7 @@ const FreelancerProfile = () => {
                 ))}
             </Grid>
             <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
+            </>)}
         </div>
     )
 }

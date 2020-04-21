@@ -3,6 +3,7 @@ import Navbar from './components/Navbar/Navbar';
 import FreelancerProfile from './containers/Profile/FreelancerProfile/FreelancerProfile';
 
 import {Switch, Route} from 'react-router-dom';
+import {makeStyles} from '@material-ui/core/styles';
 
 import Main from './containers/Main/Main';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
@@ -17,6 +18,16 @@ import Wrapper from './hoc/Wrapper/Wrapper';
 import {AuthContext} from './context/auth';
 
 import Cookies from 'js-cookie';
+
+const useStyles = makeStyles(theme => ({
+  innerWrapper: {
+    paddingTop: '0px',
+    height: '100%',
+    [theme.breakpoints.up('md')]: {
+      paddingTop: '80px'
+    }
+  }
+}))
 
 const App = () => {  
   const authCookie = Cookies.get('access_token');
@@ -34,13 +45,14 @@ const App = () => {
     setAuthTokens(undefined);
   }
 
+  const classes = useStyles();
+
   return (
     <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
       <div style={{height: '100%'}}>
         <Navbar />
-
         <Wrapper>
-            <div style={{height: '100%', paddingTop: '80px'}}>
+            <div className={classes.innerWrapper}>
               <Switch>
                   <Route path='/' exact component={Main} />
                   <Route path='/register' component={Register} />
