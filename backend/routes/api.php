@@ -75,26 +75,18 @@ Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
 
-//per postmana api/skill ir api/skill/1
-//Skill approvalphp
 //index parodo pagal id userius isveda user visus duomenys
 Route::get('skills/{id}', 'SkillController@index');
 Route::get('skills', 'SkillController@skillsList'); // Skillu listas
 Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
 
-
-
 //create sukuria i table user_skill pagal "user_id" ir "skill_id"
 Route::post('skill', 'SkillController@create');
-
 
 //update atnaujina pagal id cia atnaujinti riekia "approved" ir "comment"
 //approved 1 = patvirtinta 0 = nepatvirtinas skillas
 //comment yra patvirtinimuo comentaras
 Route::put('skill/{skill}', 'SkillController@update');
-
-
-
 
 //delete cia pagal id istrina is table user_skill irasa
 Route::post('skill/{id}', 'SkillController@delete');

@@ -1,4 +1,14 @@
-# Freelance BackEnd
+# Workify
+
+## JWT Token Setup
+1)
+```bash
+composer require tymon/jwt-auth "1.0.*" 
+```
+2)
+```bash
+php artisan jwt:secret
+```
 
 ## Seeders
 1) Sukuria 3 roles: 
