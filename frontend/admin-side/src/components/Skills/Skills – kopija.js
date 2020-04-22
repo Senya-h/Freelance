@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './Skills.css';
 import axios from '../../axios';
-import DeleteModal from '../DeleteModal';
-import {Button} from 'react-bootstrap';
+import Modal from 'react-modal';
 
 class Skills extends Component{
     constructor() {
@@ -11,12 +10,11 @@ class Skills extends Component{
             skills: [],
             skillName: "",
             error: "",
-            modalShow:false,
-            skillID: "",
-            modalSkillName: ""
+            modalIsOpen: false,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
+        this.setModal = this.setModal.bind(this);
     }
 
     handleChangeskillName(event){
@@ -28,7 +26,7 @@ class Skills extends Component{
             .then(data => {
                 console.log(data.data)
                 this.setState({
-                    skills: data.data,
+                    skills: data.data
                 })
                 
             })
@@ -59,49 +57,43 @@ class Skills extends Component{
         }
 
     }
-
     
-    modalOpen = (id, name) => {
-        this.setState({
-            modalShow:true,
-            skillID:id,
-            modalSkillName: name
-    })
+    setModal = (bool) =>{
+        this.setState({modalIsOpen: bool})
     }
-    modalClose = () => {
-        this.setState({
-            modelShow:false
+
+    delete = (id) => {
+        axios.delete(`/skill/delete/${id}`)
+        .then(data => {
+            document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdis ištrintas</div>"
+            this.componentDidMount()
         })
     }
 
     render(){
-    
-    
-    //<td><button type="button" onClick={() => this.delete(skill.id)} className="btn btn-primary">Ištrinti</button></td>
+        Modal.setAppElement('#root')
     const skillsList = this.state.skills.map(skill => ( 
         <tr key={skill.id}>
         <th scope="row">{skill.id}</th>
         <td>{skill.skillName}</td>
-        <td><Button variant="danger" onClick={() => this.modalOpen(skill.id, skill.skillName)}>
-            Pašalinti
-        </Button></td>
+        <td><button type="button" onClick={() => this.delete(skill.id)} className="btn btn-primary">Ištrinti</button></td>
         </tr>
         
         ));
         return(
             <main>
                 
-                <DeleteModal
-                    show={this.state.modalShow}
-                    onHide={this.modalClose}
-                    skillID={this.state.skillID}
-                    skillName={this.state.modalSkillName}
-                />
                 <div className="main">
                     <div className="main-content">
                         <div className="container-fluid">
                             <h1>Įgūdžių pridėjimas</h1>
                             <div className="error"></div>
+                            <button className="btn btn-danger" onClick={()=>this.setModal(true)}>x</button>
+                            <Modal className="modal" isOpen={this.state.modalIsOpen}>
+                                <h1>TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest</h1>
+                                <h1>TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest</h1>
+                                <h1>TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest</h1>
+                            </Modal>
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.skillName} onChange={this.handleChangeskillName} className="form-control" id="exampleInput"
@@ -110,7 +102,6 @@ class Skills extends Component{
                                 <button type="submit" value="Submit"  className="btn btn-success">Pateikti</button>
                             </form>
                             <hr/>
-                            
                             <h3>Visi Įgūdžiai:</h3>
                             <table className="table">
                                 <thead>
@@ -129,7 +120,6 @@ class Skills extends Component{
                 </div>
             </main>
         )
-        
     }
 }
 export default Skills;
