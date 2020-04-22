@@ -42,7 +42,7 @@ const SkillModalButton = (props) => {
                 }
             }).then(res => {
                 if(!res.error && res.status === 200) {
-                    // handleClose();
+                    handleClose();
                     const newSkills = [];
                     props.allSkills.forEach(skill => {
                         values.skills_id.forEach(newSkillId => {
