@@ -14,16 +14,12 @@ const Wrapper = (props) => {
     return (
         <div className={cx(classes["hero-wrap"], "img")} style={heroStyle}>
             <div className={classes.overlay}></div>
-            <div className='position-absolute h-100'>
+            <div className='position-relative h-100'>
                 {props.children}
             </div>
         </div>
     )
 };
 
-Wrapper.defaultProps = {
-    contentOffset: '120px',
-    variant: 'container'
-}
 
 export default Wrapper;

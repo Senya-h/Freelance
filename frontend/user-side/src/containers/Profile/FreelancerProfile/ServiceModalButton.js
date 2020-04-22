@@ -8,12 +8,22 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FormGroup from '@material-ui/core/FormGroup';
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField';
+import {makeStyles} from '@material-ui/core/styles';
+
 import { useFormik} from 'formik';
 import {object as yupObject, string as yupString, number as yupNumber} from 'yup';
 import axios from '../../../axios';
 
-const ServceModalButton = (props) => {
+const useStyles = makeStyles(theme => ({
+    root: {
+        '& > *': {
+            marginBottom: theme.spacing(3)
+        }
+    }
+}))
 
+const ServceModalButton = (props) => {
+    const classes = useStyles();
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -66,7 +76,7 @@ const ServceModalButton = (props) => {
         <Dialog open={open} onClose={handleClose} fullWidth>                          
             <DialogTitle>Pridėti paslaugą</DialogTitle>
             <form onSubmit={formik.handleSubmit}>
-                <DialogContent>
+                <DialogContent className={classes.root}>
                     <FormGroup>
                         <TextField
                             autoFocus
@@ -81,8 +91,7 @@ const ServceModalButton = (props) => {
                         ) : null}
                     </FormGroup>
                     <FormGroup>
-                        <TextField  
-                            margin="normal"
+                        <TextField
                             label="Aprašymas"
                             variant='outlined'
                             multiline

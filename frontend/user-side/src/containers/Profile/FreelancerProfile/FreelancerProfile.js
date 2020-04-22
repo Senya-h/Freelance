@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
+
+import Loader from 'react-loader-spinner';
+
 import Rating from '@material-ui/lab/Rating';
-import axios from '../../../axios';
+import axios, {baseURL} from '../../../axios';
 import SendMessage from './SendMessage/SendMessage';
 
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import EditIcon from '@material-ui/icons/Edit'
@@ -19,11 +21,13 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 const useStyles = makeStyles(theme => ({
     root: {
         padding: '30px',
         backgroundColor: '#eee',
+        
     },
     profileImage: {
         width: '300px',
@@ -60,17 +64,12 @@ const useStyles = makeStyles(theme => ({
         boxShadow: '19px 25px 21px -14px rgba(0,0,0,0.63)',
         position: 'relative'
     },
-    removeIcon: {
-        colorPrimary: {
-            color: 'red',
-            backgroundColor: 'red'
-        }
+    portfolio: {
+        position: 'relative'
     },
-    red: {
-        color: 'red'
-    },
-    green: {
-        color: '#24fc03'
+    skill: {
+        borderBottom: '1px solid black',
+        fontSize: '19px'
     }
 }));
 
@@ -106,6 +105,7 @@ const FreelancerProfile = () => {
     const [works, setWorks] = useState([]);
 
     const [allSkills, setAllSkills] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     const [deleteModalInfo, setDeleteModalInfo] = useState({
         open: false,
@@ -130,7 +130,7 @@ const FreelancerProfile = () => {
                 setWorks(portfolio.works);
                 setSkills(portfolio.skills);
                 setServices(portfolio.services);
-                
+                setLoading(false);
             })
 
         axios.get('/skills')
@@ -175,6 +175,15 @@ const FreelancerProfile = () => {
 
     return (
         <div className={classes.root}>
+            {isLoading?
+            <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Loader 
+                    type="Bars"
+                    color="#00BFFF"
+                    height={200}
+                    width={200}
+                />
+            </div>:(<>
             <Grid container spacing={5}>
                 <Grid className={classes.userInfoArea} item xs={12} sm={8}>              
                     <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
@@ -207,16 +216,16 @@ const FreelancerProfile = () => {
                             <SkillModalButton token={authTokens.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />
                         </h4>
                         <ul style={{listStyle: 'none'}}>
-                            {/* {skills.map(skill => (
-                                <li key={skill.id}>SERVISAS</li>
-                            ))} */}
+                            {skills.map(skill => (
+                                <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
+                            ))}
                         </ul>
                     </div>
                     
                 </Grid>
                 <Grid className={classes.photoArea} item xs={12} md={4}>
                     <div className={classes.profileImage}>
-                        <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: 'http://localhost/storage/' + userInfo.photo} alt="#" />
+                        <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
                         <PhotoModalButton 
                             className={classes.imageAddIcon}
                             userInfo={userInfo} 
@@ -225,7 +234,7 @@ const FreelancerProfile = () => {
                     </div>
                 </Grid>
             </Grid>
-            <Grid container >
+            <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <h2>
                         Portfolio
@@ -233,12 +242,19 @@ const FreelancerProfile = () => {
                     </h2>
                 </Grid>
                 {works.map(work => (
-                    <Grid key={work.id} item xs={12} md={6} lg={4}>
-                        <Portfolio title={work.title} imageUrl={work.filePath} />
+                    <Grid className={classes.portfolio} key={work.id} item xs={12} md={6} lg={4}>
+                        <Portfolio title={work.title} imageUrl={work.filePath}  />
+                        <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
+                            <RemoveCircleIcon fontSize="large" classes={{colorPrimary: classes.red}} color='primary' />
+                        </IconButton>
+                        <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
+                            <EditIcon fontSize="large" color='primary' />
+                        </IconButton>
                     </Grid>
                 ))}
             </Grid>
             <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
+            </>)}
         </div>
     )
 }

@@ -19,7 +19,7 @@ class SkillController extends Controller
             ->get();
 
     }
-    public function create(Request $request)
+    public function create(Request $request, SkillApproval $skillas)
     {
         try {
             $user = auth()->userOrFail();
@@ -27,13 +27,16 @@ class SkillController extends Controller
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         $skillArr = $request->all();
-        for ($i = 0; $i < count($skillArr); $i++){
-            $skill = new SkillApproval;
-            $skill->user_id = auth()->user()->id;
-            $skill->skill_id = $skillArr[$i];
-            $skill->approved = 0;
-            $skill->comment = '';
-            $skill->save();
+        $loopLenght = count($skillArr);
+        SkillApproval::where('user_id',auth()->user()->id)->delete();
+        for ($i = 0; $i < $loopLenght; $i++){
+                $skill = new SkillApproval;
+                $skill->user_id = auth()->user()->id;
+                $skill->skill_id = $skillArr[$i];
+                $skill->approved = 0;
+                $skill->comment = '';
+                $skill->save();
+         
         }
 
 
