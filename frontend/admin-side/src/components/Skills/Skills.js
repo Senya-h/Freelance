@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Skills.css';
 import axios from '../../axios';
+import {Modal} from 'react-modal';
 
 class Skills extends Component{
     constructor() {
@@ -8,10 +9,12 @@ class Skills extends Component{
         this.state = {
             skills: [],
             skillName: "",
-            error: ""
+            error: "",
+            modalIsOpen: false,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
+        this.setModal = this.setModal.bind(this);
     }
 
     handleChangeskillName(event){
@@ -21,6 +24,7 @@ class Skills extends Component{
     componentDidMount(){
         axios.get(`/skills`)
             .then(data => {
+                console.log(data.data)
                 this.setState({
                     skills: data.data
                 })
@@ -53,6 +57,10 @@ class Skills extends Component{
 
     }
     
+    setModal = (bool) => {
+        this.setState({modalIsOpen: bool})
+    }
+
     delete = (id) => {
         axios.delete(`/skill/delete/${id}`)
         .then(data => {
@@ -62,14 +70,17 @@ class Skills extends Component{
     }
 
     render(){
-        
-    
     const skillsList = this.state.skills.map(skill => ( 
         <tr key={skill.id}>
         <th scope="row">{skill.id}</th>
         <td>{skill.skillName}</td>
-        <td><button className="btn btn-danger" onClick={() => this.delete(skill.id)}>x</button></td>
+        <button type="button" onClick={() => this.delete(skill.id)} class="btn btn-primary">Ištrinti</button>
+        <button className="btn btn-danger" onClick={()=>this.setModal(true)}>x</button>
+        <Modal isOpen={this.state.modalIsOpen}>
+            <h1>Test</h1>
+        </Modal>
         </tr>
+        
         ));
         return(
             <main>
