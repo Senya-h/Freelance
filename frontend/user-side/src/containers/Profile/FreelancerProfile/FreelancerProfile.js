@@ -132,10 +132,10 @@ const FreelancerProfile = () => {
                 setServices(portfolio.services);
                 setLoading(false);
             })
-
+        
+        //all possible skills
         axios.get('/skills')
             .then(res => {
-                console.log("Skills: ", res);
                 setAllSkills(res.data);
             })
     }, [])
