@@ -12,22 +12,22 @@ export class DeleteModal extends Component{
         .then(data => {
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdis ištrintas</div>"
         })
+        this.props.onHide()
     }
 
     render() {
-        console.log(this.props.show)
         return(
 
             <Modal show={this.props.show} onHide={this.props.onHide}>
                 <Modal.Header closeButton>
                 <Modal.Title>Patvirtinimas</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Ar tikrai norite ištrinti {this.props.skillName}? </Modal.Body>
+                <Modal.Body>Ar tikrai norite ištrinti šį įgūdį? ( {this.props.skillName} ) </Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={this.props.onHide}>
                     Uždaryti
                 </Button>
-                <Button variant="danger" onClick={() => this.delete(this.props.skillID)}>
+                <Button variant="danger" onClick={() => this.delete(this.props.skillID)} >
                     Ištrinti
                 </Button>
                 </Modal.Footer>

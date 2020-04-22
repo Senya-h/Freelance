@@ -68,13 +68,15 @@ class Skills extends Component{
             modalSkillName: name
     })
     }
-    modalClose = () => {
-        this.setState({
-            modelShow:false
-        })
-    }
+    
 
     render(){
+        let modalClose = () => {
+            this.setState({
+                modalShow:false
+            })
+            console.log("Modalo statusas: " + this.state.modalShow)
+        }
     
     
     //<td><button type="button" onClick={() => this.delete(skill.id)} className="btn btn-primary">Ištrinti</button></td>
@@ -93,7 +95,7 @@ class Skills extends Component{
                 
                 <DeleteModal
                     show={this.state.modalShow}
-                    onHide={this.modalClose}
+                    onHide={modalClose}
                     skillID={this.state.skillID}
                     skillName={this.state.modalSkillName}
                 />
