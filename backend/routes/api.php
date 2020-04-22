@@ -64,9 +64,9 @@ Route::get('skill&id={id}/admin/list', 'AdminController@aboutskillApproval');  /
 Route::post('skill&id={skill_id}/user&id={user_id}','AdminController@skillApproval');  //Skill patvirtinimas
 
 //Message
-Route::get('message/from/{id}', 'MessageController@fromMsg'); //Išsiųstos
-Route::get('message/to/{id}', 'MessageController@toMsg'); //Gautos
-Route::post('message', 'MessageController@create');
+Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Išsiųstos
+Route::put('message/notification/{senders_id}', 'MessageController@notifi'); //Pažymeti,kad visi notification peržiurėti pagal senders_id,tai notifiable_id
+Route::post('message', 'MessageController@create'); //Išsiuntus žinute atsiranda info notifications table,notifible_id colum tai siuntejo_id, data colum tai gavejio_id ir vardas
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 
 //Rating

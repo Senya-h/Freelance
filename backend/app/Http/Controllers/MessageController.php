@@ -3,18 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Message;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use \App\Notifications\privateMessage;
 
 class MessageController extends Controller
 {
-    public function fromMsg($id)
+    public function fromMsg($senders_id,$receivers_id)
     {
-        return response()->json(Message::select('*')->where('senders_id',$id)->get(),200);
+        $user = User::findOrFail($senders_id);     
+        $user->notifications->where('notifiable_id', $senders_id)->markAsRead();
+        return response()->json(Message::select('*')->where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->get(),200);
     }
-    public function toMsg($id)
+
+
+    public function notifi($senders_id)
     {
-        return response()->json(Message::select('*')->where('receivers_id',$id)->get(),200);
+        $user = User::findOrFail($senders_id);     
+        $user->notifications->where('notifiable_id', $senders_id)->markAsRead();
+        return response()->json(["message" => "Notification atnaujintas"], 201);
     }
 
     public function create(Request $request)
@@ -24,6 +32,8 @@ class MessageController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
+        $receiver = User::findOrFail($user->id);
+        $receiver->notify(new privateMessage(User::findOrFail($request->input('receivers_id'))));
         return Message::create([
             'senders_id' => auth()->user()->id,
             'receivers_id' => $request->input('receivers_id'),
