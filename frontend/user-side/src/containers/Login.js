@@ -12,10 +12,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 import {Link, Redirect} from 'react-router-dom';
-import axios from '../../axios';
+import axios from '../axios';
 import * as Yup from 'yup';
 
-import { useAuth } from '../../context/auth';
+import { useAuth } from '../context/auth';
 
 const useStyles = makeStyles( theme => ({
     root: {

@@ -89,8 +89,15 @@ const PORTFOLIO_TYPES = {
     }
 }
 
-const FreelancerProfile = () => {
+const FreelancerProfile = (props) => {
+    //Get logged in user information
     let { authTokens } = useAuth();
+    console.log(props);
+    let profileUserID = authTokens.userID;
+
+    if(props.match.params.id) {
+        profileUserID = parseInt(props.match.params.id);
+    }
 
     const [userInfo, setUserInfo] = useState({
         name: '',
@@ -116,7 +123,7 @@ const FreelancerProfile = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        axios.get('/user/' + authTokens.userID)
+        axios.get('/user/' + profileUserID)
             .then(res => {
                 console.log("Userio duomenys: ", res);
                 const info = res.data.info;
@@ -132,13 +139,14 @@ const FreelancerProfile = () => {
                 setServices(portfolio.services);
                 setLoading(false);
             })
-        
+        console.log("SKILLING");
         //all possible skills
         axios.get('/skills')
             .then(res => {
                 setAllSkills(res.data);
+                console.log("ALL SKILLS");
             })
-    }, [])
+    }, [profileUserID])
 
     const openModal = (id, type) => {
         let deleteLink = '';
@@ -174,6 +182,7 @@ const FreelancerProfile = () => {
     };
 
     return (
+        <>
         <div className={classes.root}>
             {isLoading?
             <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -187,11 +196,11 @@ const FreelancerProfile = () => {
             <Grid container spacing={5}>
                 <Grid className={classes.userInfoArea} item xs={12} sm={8}>              
                     <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
-                    <SendMessage recipient={userInfo.name} id={0}/>
+                    {authTokens.userID !== profileUserID? <SendMessage recipientName={userInfo.name} recipientID={profileUserID}/>: null}
                     <div>
                         <h4>
                             Siūlomos paslaugos:
-                            <ServiceModalButton services={services} setServices={setServices} token={authTokens.token}/>             
+                            {authTokens.userID === profileUserID? <ServiceModalButton services={services} setServices={setServices} token={authTokens.token}/>: null}             
                         </h4>
                         <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
                             {services.map(service => (
@@ -199,13 +208,16 @@ const FreelancerProfile = () => {
                                     <h5>{service.service}</h5>
                                     <p>{service.description}</p>
                                     <p>Užmokestis: <strong>{service.price_per_hour} €/h</strong></p>
-
+                                    {authTokens.userID === profileUserID ? (
+                                    <>
                                     <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(service.id, PORTFOLIO_TYPES.SERVICE.name)}>
                                         <RemoveCircleIcon classes={{colorPrimary: classes.red}} color='primary' />
                                     </IconButton>
                                     <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
                                         <EditIcon color='primary' />
                                     </IconButton>
+                                    </>
+                                    ): null}
                                 </li>
                             ))}
                         </ul>
@@ -213,7 +225,7 @@ const FreelancerProfile = () => {
                     <div>
                         <h4
                             >Gebėjimai:
-                            <SkillModalButton token={authTokens.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />
+                            {authTokens.userID === profileUserID?<SkillModalButton token={authTokens.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />: null}
                         </h4>
                         <ul style={{listStyle: 'none'}}>
                             {skills.map(skill => (
@@ -226,11 +238,14 @@ const FreelancerProfile = () => {
                 <Grid className={classes.photoArea} item xs={12} md={4}>
                     <div className={classes.profileImage}>
                         <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
+                        {authTokens.userID === profileUserID?
                         <PhotoModalButton 
                             className={classes.imageAddIcon}
                             userInfo={userInfo} 
                             setUserInfo={setUserInfo}
-                            token={authTokens.token} />
+                            token={authTokens.token} 
+                        />
+                        : null}
                     </div>
                 </Grid>
             </Grid>
@@ -238,39 +253,32 @@ const FreelancerProfile = () => {
                 <Grid item xs={12}>
                     <h2>
                         Portfolio
-                        <PortfolioModalButton token={authTokens.token} works={works} setWorks={setWorks} />
+                        {authTokens.userID === profileUserID?
+                            <PortfolioModalButton token={authTokens.token} works={works} setWorks={setWorks} />
+                            : null}
                     </h2>
                 </Grid>
                 {works.map(work => (
                     <Grid className={classes.portfolio} key={work.id} item xs={12} md={6} lg={4}>
                         <Portfolio title={work.title} imageUrl={work.filePath}  />
+                        {authTokens.userID === profileUserID? (
+                        <>
                         <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
                             <RemoveCircleIcon fontSize="large" classes={{colorPrimary: classes.red}} color='primary' />
                         </IconButton>
                         <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
                             <EditIcon fontSize="large" color='primary' />
                         </IconButton>
+                        </>
+                        ):null}
                     </Grid>
                 ))}
             </Grid>
             <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
             </>)}
         </div>
+        </>
     )
 }
 
 export default FreelancerProfile;
-
-// () => {
-//     axios.delete('/delete/service&id=' + service.id, {
-//         headers: {
-//             'Authorization': 'Bearer ' + authTokens.token
-//         }
-//     })
-//         .then(res => {
-//             if(!res.error && res.status === 200) {
-//                 setServices([...services.filter(serv => serv.id !== service.id)])
-//             }
-//             console.log(res);
-//         })
-// }

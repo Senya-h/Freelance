@@ -28,7 +28,7 @@ const SkillModalButton = (props) => {
     const [checkedSkills, setCheckedSkills] = useState(props.skills.map(skill => {
         return skill.id.toString();
     }));
-
+    console.log("AS CIAAA");
     const formik = useFormik({
         initialValues: {
             skills_id: [...checkedSkills]

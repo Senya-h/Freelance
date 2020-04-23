@@ -12,7 +12,7 @@ import {useFormik} from 'formik';
 import axios from '../../../axios';
 import TextField from '@material-ui/core/TextField';
 
-import {object as yupObject, string as yupString, number as yupNumber} from 'yup';
+import {object as yupObject, string as yupString} from 'yup';
 
 const useStyles = makeStyles(theme => ({
     root: {

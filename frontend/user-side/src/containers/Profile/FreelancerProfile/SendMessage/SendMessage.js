@@ -36,7 +36,7 @@ const SendMessage = (props) => {
             <Modal open={open} onClose={handleClose}>
                 <Fade in={open}>
                     <div style={{left: '50%', top: '50%', translate: 'transformX(-50%,-50%)'}} className={classes.Modal}>
-                        <h3>Adresatas: {props.recipient}</h3>
+                        <h3>Adresatas: {props.recipientName}</h3>
                         <IconButton onClick={handleClose} className={classes.CloseButton}>
                             <CloseIcon />
                         </IconButton>
