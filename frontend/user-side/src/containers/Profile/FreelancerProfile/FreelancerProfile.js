@@ -123,6 +123,7 @@ const FreelancerProfile = (props) => {
     const classes = useStyles();
 
     useEffect(() => {
+        setLoading(true);
         axios.get('/user/' + profileUserID)
             .then(res => {
                 console.log("Userio duomenys: ", res);
@@ -182,7 +183,6 @@ const FreelancerProfile = (props) => {
     };
 
     return (
-        <>
         <div className={classes.root}>
             {isLoading?
             <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -277,7 +277,6 @@ const FreelancerProfile = (props) => {
             <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
             </>)}
         </div>
-        </>
     )
 }
 
