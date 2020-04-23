@@ -16,7 +16,8 @@ class Skills extends Component{
             skillID: "",
             modalSkillName: "",
             token: 'Bearer '+localStorage.getItem('loginToken'), 
-            loading: true
+            loading: true,
+            refetch: false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
@@ -42,6 +43,24 @@ class Skills extends Component{
                 
             })
     }
+    componentDidUpdate(prevProps){
+        if(this.state.refetch == true) {
+            axios.get(`/skills`, {
+                headers: {
+                        'Authorization': this.state.token,
+                        'Content-Type': 'multipart/form-data'
+                    }
+            })
+                .then(data => {
+                    this.setState({
+                        skills: data.data,
+                        loading: false,
+                        refetch: false
+                    })
+                    
+                })
+        }
+    }
 
     handleSubmit(event){
         event.preventDefault();
@@ -56,7 +75,6 @@ class Skills extends Component{
             }).then(res => {
                 console.log(res.data)
                 this.setState({error: res.data})
-                this.componentDidMount()
                 if(this.state.error['error']) {
                     if(this.state.error['error']['skillName'] == "The skill name may not be greater than 255 characters.") {
                         document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdžio pavadinimas per ilgas. Daugiausiai gali būt 255 simboliai!</div>"
@@ -66,6 +84,7 @@ class Skills extends Component{
                 } else {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Įgūdis pridėtas</div>"
                     this.mainInput.value = "";
+                    this.setState({refetch: true});
                 }
             })
             

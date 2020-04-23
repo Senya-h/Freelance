@@ -46,17 +46,6 @@ class Users extends Component{
                 modalShow:false
             })
         }
-    delete = (id) => {
-        axios.post(`user&id=${id}/ban/delete`, {
-            headers: {
-                    'Authorization': this.state.token,
-                    'Content-Type': 'multipart/form-data'
-                }, deleted:false
-        })
-        .then(data => {
-            document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+test+"</div>"
-        })
-    }
 render() {
     const usersList = this.state.users.map(user => ( 
         <tr key={user.id}>
@@ -65,9 +54,6 @@ render() {
         <td>{user.email}</td>
         <td>{user.location}</td>
         <td>{user.created_at}</td>
-        <td><Button variant="danger" onClick={() => this.delete(user.id)}>
-            Test
-        </Button></td>
         <td><Button variant="danger" onClick={() => this.modalOpen(user.id, user.name)}>
             Pašalinti
         </Button></td>

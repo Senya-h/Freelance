@@ -36,6 +36,7 @@ class AdminController extends Controller
                 $role_user->delete();
                 $user = User::find($id);
                 $user->delete();
+                return response()->json('work');
             }
         }
     }

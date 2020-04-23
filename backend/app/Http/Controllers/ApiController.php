@@ -109,12 +109,20 @@ class ApiController extends Controller
             }
     }
     public function freelancersList() {
-        $users = User::select('id', 'name', 'email', 'location', 'created_at', 'foto')->where('role',3)->get();
+        $users = User::select('id', 'name', 'email', 'location', 'created_at', 'foto')
+        ->where('role',3)
+        ->get();
         
         $freelancers = [];
         foreach($users as $user) {
-            $services = Service::select('services.id','service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$user->id)->get();
-            $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$user->id)->get();
+            $services = Service::select('services.id','service', 'description', 'price_per_hour')
+            ->join('users','users.id','=','services.user_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
+            ->join('skill','skill.id','=','user_skill.skill_id')
+            ->where('user_id',$user->id)
+            ->get();
             $info = [
                 'info' => $user,
                 'portfolio' => [
@@ -126,8 +134,61 @@ class ApiController extends Controller
         }
         return response()->json($freelancers, 200);
     }
+    public function search(Request $request) {
+        $searchQuery = $request->input("service");
+        $skillQuery = $request->input("skill");
+        if(!$skillQuery){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        } else if(!$searchQuery) {
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->where('role',3)
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->get();
+        } else {
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        }
+        
+        $freelancers = [];
+        foreach($users as $user) {
+            $services = Service::select('services.id','service', 'description', 'price_per_hour')
+            ->join('users','users.id','=','services.user_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $skills = DB::table('user_skill')
+            ->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
+            ->join('skill','skill.id','=','user_skill.skill_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $info = [
+                'info' => $user,
+                'portfolio' => [
+                    'skills' => $skills,
+                    'services' => $services
+                ]
+            ];
+                $freelancers[] = $info;
+        }
+        return response()->json($freelancers, 200);
+    }
     public function usersList() {
-        $users = User::select('id', 'name', 'email', 'location', 'created_at')->get();
+        $users = User::select('id', 'name', 'email', 'location', 'created_at')
+        ->get();
         return response()->json($users, 200);
     }
 
