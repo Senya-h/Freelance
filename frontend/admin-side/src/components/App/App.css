@@ -142,3 +142,8 @@ html.fullscreen-bg #wrapper {
 .vertical-align-middle {
   display: table-cell;
   vertical-align: middle; }
+
+.loading {
+  margin: auto;
+  margin-top: 300px;
+}

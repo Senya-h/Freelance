@@ -3,6 +3,7 @@ import './Skills.css';
 import axios from '../../axios';
 import DeleteModal from '../DeleteModal';
 import {Button} from 'react-bootstrap';
+import load from '../../img/loading.gif';
 
 class Skills extends Component{
     constructor() {
@@ -14,7 +15,8 @@ class Skills extends Component{
             modalShow:false,
             skillID: "",
             modalSkillName: "",
-            token: 'Bearer '+localStorage.getItem('loginToken')
+            token: 'Bearer '+localStorage.getItem('loginToken'), 
+            loading: true
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
@@ -35,6 +37,7 @@ class Skills extends Component{
                 console.log(data.data)
                 this.setState({
                     skills: data.data,
+                    loading: false
                 })
                 
             })
@@ -98,6 +101,11 @@ class Skills extends Component{
         </tr>
         
         ));
+        if(this.state.loading) {
+            return(
+                <img className="loading" src={load} alt="loading..." />
+            )
+        }
         return(
             <main>
                 

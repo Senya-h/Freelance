@@ -3,25 +3,28 @@ import './Sidebar.css';
 import {NavLink} from "react-router-dom";
 
 class Sidebar extends Component{
+    constructor(props) {
+        super(props)
+    }
     logout = () => {
         localStorage.removeItem('loginToken')
+        window.location.reload(false);
     }
     isLoggedIn = () => {
         const token = localStorage.getItem('loginToken');
         if(!token) {
             return false;
+        } else {
+            return true;
         }
-        return true;
     }
     render() {
-    if(this.isLoggedIn) {
-        return(
-        <div className="Sidebar">
-            <div id="sidebar-nav" className="sidebar">
-                <div className="sidebar-scroll">
-                    <nav>
-                        <ul className="nav">
-                            <li><NavLink to="/" className="nav-link"><i className="fa fa-home"></i>
+        let links;
+        console.log(this.isLoggedIn())
+    if(this.isLoggedIn()) {
+        links = (
+            <>
+            <li><NavLink to="/" className="nav-link"><i className="fa fa-home"></i>
                                 <span>Pagrindinis</span></NavLink></li>
                             <li><NavLink to="/igudziai" className="nav-link"><i className="fa fa-code"></i>
                                 <span>Įgūdžių pridėjimas</span></NavLink></li>
@@ -31,30 +34,32 @@ class Sidebar extends Component{
                                 <span>Portfolio</span></NavLink></li>
                             <li><NavLink to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
                                 <span>Vartotojai</span></NavLink></li>
-                            <li><NavLink to="/login" className="nav-link" onClick={this.logout}><span>Atsijungti</span></NavLink></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-     </div>
-    )
+                            <li><NavLink to="/login" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
+                                <span>Atsijungti</span></NavLink></li>
+            </>
+        )
     } else {
+        links = (
+            <>
+            <li><NavLink to="/login" className="nav-link"><i className="fa fa-users"></i>
+                                <span>Prisijungti</span></NavLink></li>
+            </>
+        )
+    }
         return(
         <div className="Sidebar">
             <div id="sidebar-nav" className="sidebar">
                 <div className="sidebar-scroll">
                     <nav>
                         <ul className="nav">
-                            <li><NavLink to="/login" className="nav-link"><i className="fa fa-users"></i>
-                                <span>Prisijungti</span></NavLink></li>
+                            {links}
                         </ul>
                     </nav>
                 </div>
             </div>
      </div>
     )
-    }
-    }
+    } 
 }
 
 export default Sidebar;

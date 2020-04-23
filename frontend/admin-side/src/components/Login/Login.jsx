@@ -34,7 +34,7 @@ class Login extends Component{
             ).then(data => {
                 if(data.data.token) {
                     localStorage.setItem('loginToken', data.data.token);
-                    this.props.history.push("/");
+                    window.location.reload(false);
                 } else {
                     console.log(data.data)
                 }

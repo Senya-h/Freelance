@@ -7,7 +7,7 @@ export class DeleteModal extends Component{
         super(props)
     }
 
-    delete = (id) => {
+    delete = () => {
         axios(this.props.fetchLink, {
             method: this.props.method,
             headers: {
@@ -33,7 +33,7 @@ export class DeleteModal extends Component{
                 <Button variant="secondary" onClick={this.props.onHide}>
                     Uždaryti
                 </Button>
-                <Button variant="danger" onClick={() => this.delete(this.props.skillID)} >
+                <Button variant="danger" onClick={() => this.delete()} >
                     Ištrinti
                 </Button>
                 </Modal.Footer>
