@@ -43,7 +43,8 @@ const App = () => {
           <Route path='/login' component={Login} />
           <Route path='/password-reminder' component={RemindPassword} />
           <Route path='/password/reset/' component={ForgotChangePassword} />
-          <Route path='/profile' component={FreelancerProfile} />
+          <Route path='/profile' exact component={FreelancerProfile} />
+          <Route path='/profile/:id' component={FreelancerProfile} />
           <Route path='/jobs' component={BrowseJobs} />
           <Route component={PageNotFound} />
         </Switch>
