@@ -91,5 +91,8 @@ Route::put('skill/{skill}', 'SkillController@update');
 //delete cia pagal id istrina is table user_skill irasa
 Route::post('skill/{id}', 'SkillController@delete');
 
-//addSkill i skill lentele ideda skilus
-Route::post('skill_add','SkillController@addSkill');
+//addSkill i skill lentele ideda skilus(Admin f-cija)
+Route::post('skill_add','AdminController@addSkill');
+
+//Vartotojų sąrašas
+Route::get('users','ApiController@usersList');

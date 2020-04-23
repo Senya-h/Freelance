@@ -13,7 +13,7 @@ export class DeleteModal extends Component{
             headers: {
                     'Authorization': this.props.token,
                     'Content-Type': 'multipart/form-data'
-                }
+                }, deleted:false
         })
         .then(data => {
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+this.props.message+"</div>"

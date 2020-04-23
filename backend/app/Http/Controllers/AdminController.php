@@ -122,4 +122,19 @@ class AdminController extends Controller
             return response()->json(["message" => request('format')." formatas pridėtas"]);
         }
     }
+
+    public function addSkill(Request $request)
+    {
+            $validation = Validator::make($request->all(),[
+                'skillName' => ['required', 'string', 'max:255', 'unique:skill'],
+            ]);
+            if ($validation->fails()) {
+                return response()->json(["error" => $validation->errors()]);
+            } else {
+                $skill = new Skill;
+                $skill->skillName = $request->skillName;
+                $skill->save();
+                return response()->json(["SkillName"=>$skill->skillName]);
+            }
+    }
 }

@@ -107,5 +107,9 @@ class ApiController extends Controller
                 return response()->json(["file" => $filename],200);
             }
     }
+    public function usersList() {
+        $users = User::select('id', 'name', 'email', 'location', 'created_at')->get();
+        return response()->json($users, 200);
+    }
 
 }

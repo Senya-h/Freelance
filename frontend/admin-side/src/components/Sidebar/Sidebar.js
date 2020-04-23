@@ -1,9 +1,21 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './Sidebar.css';
 import {NavLink} from "react-router-dom";
 
-function Sidebar(){
-    return(
+class Sidebar extends Component{
+    logout = () => {
+        localStorage.removeItem('loginToken')
+    }
+    isLoggedIn = () => {
+        const token = localStorage.getItem('loginToken');
+        if(!token) {
+            return false;
+        }
+        return true;
+    }
+    render() {
+    if(this.isLoggedIn) {
+        return(
         <div className="Sidebar">
             <div id="sidebar-nav" className="sidebar">
                 <div className="sidebar-scroll">
@@ -19,12 +31,30 @@ function Sidebar(){
                                 <span>Portfolio</span></NavLink></li>
                             <li><NavLink to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
                                 <span>Vartotojai</span></NavLink></li>
+                            <li><NavLink to="/login" className="nav-link" onClick={this.logout}><span>Atsijungti</span></NavLink></li>
                         </ul>
                     </nav>
                 </div>
             </div>
      </div>
     )
+    } else {
+        return(
+        <div className="Sidebar">
+            <div id="sidebar-nav" className="sidebar">
+                <div className="sidebar-scroll">
+                    <nav>
+                        <ul className="nav">
+                            <li><NavLink to="/login" className="nav-link"><i className="fa fa-users"></i>
+                                <span>Prisijungti</span></NavLink></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+     </div>
+    )
+    }
+    }
 }
 
 export default Sidebar;

@@ -13,7 +13,8 @@ class Skills extends Component{
             error: "",
             modalShow:false,
             skillID: "",
-            modalSkillName: ""
+            modalSkillName: "",
+            token: 'Bearer '+localStorage.getItem('loginToken')
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
@@ -24,7 +25,12 @@ class Skills extends Component{
     }
 
     componentDidMount(){
-        axios.get(`/skills`)
+        axios.get(`/skills`, {
+            headers: {
+                    'Authorization': this.state.token,
+                    'Content-Type': 'multipart/form-data'
+                }
+        })
             .then(data => {
                 console.log(data.data)
                 this.setState({
@@ -40,8 +46,12 @@ class Skills extends Component{
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neįvestas joks tekstas</div>"
         }else{
             axios.post("/skill_add", {
-                skillName: this.state.skillName
+                headers: {
+                    'Authorization': this.state.token,
+                    'Content-Type': 'multipart/form-data'
+                }, skillName: this.state.skillName
             }).then(res => {
+                console.log(res.data)
                 this.setState({error: res.data})
                 this.componentDidMount()
                 if(this.state.error['error']) {
@@ -68,18 +78,16 @@ class Skills extends Component{
             modalSkillName: name
     })
     }
-    
-
-    render(){
-        let modalClose = () => {
+    modalClose = () => {
             this.setState({
                 modalShow:false
             })
-            console.log("Modalo statusas: " + this.state.modalShow)
         }
     
+
+    render(){
+        
     
-    //<td><button type="button" onClick={() => this.delete(skill.id)} className="btn btn-primary">Ištrinti</button></td>
     const skillsList = this.state.skills.map(skill => ( 
         <tr key={skill.id}>
         <th scope="row">{skill.id}</th>
@@ -94,10 +102,13 @@ class Skills extends Component{
             <main>
                 
                 <DeleteModal
+                    method = "delete"
+                    fetchLink={`/skill/delete/${this.state.skillID}`}
                     show={this.state.modalShow}
-                    onHide={modalClose}
-                    skillID={this.state.skillID}
-                    skillName={this.state.modalSkillName}
+                    onHide={this.modalClose}
+                    text={`Ar tikrai norite ištrinti šį įgūdį? ( ${this.state.modalSkillName} )`}
+                    token={this.state.token}
+                    message = {"Įgūdis ištrintas"}
                 />
                 <div className="main">
                     <div className="main-content">
