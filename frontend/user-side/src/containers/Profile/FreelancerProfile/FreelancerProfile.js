@@ -174,6 +174,7 @@ const FreelancerProfile = () => {
     };
 
     return (
+        <>
         <div className={classes.root}>
             {isLoading?
             <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -256,21 +257,8 @@ const FreelancerProfile = () => {
             <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
             </>)}
         </div>
+        </>
     )
 }
 
 export default FreelancerProfile;
-
-// () => {
-//     axios.delete('/delete/service&id=' + service.id, {
-//         headers: {
-//             'Authorization': 'Bearer ' + authTokens.token
-//         }
-//     })
-//         .then(res => {
-//             if(!res.error && res.status === 200) {
-//                 setServices([...services.filter(serv => serv.id !== service.id)])
-//             }
-//             console.log(res);
-//         })
-// }
