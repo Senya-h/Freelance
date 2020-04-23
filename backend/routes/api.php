@@ -96,3 +96,5 @@ Route::post('skill_add','AdminController@addSkill');
 
 //Vartotojų sąrašas
 Route::get('users','ApiController@usersList');
+//Freelancerių sąrašas
+Route::get('freelancers','ApiController@freelancersList');

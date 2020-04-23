@@ -144,6 +144,5 @@ html.fullscreen-bg #wrapper {
   vertical-align: middle; }
 
 .loading {
-  margin: auto;
-  margin-top: 300px;
+  margin: 300px;
 }

@@ -72,11 +72,6 @@ class SkillController extends Controller
     }
     
     public function skillsList() {
-        try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti'], 401);
-        }
         $skills = Skill::all();
         return response()->json($skills,200);
     }

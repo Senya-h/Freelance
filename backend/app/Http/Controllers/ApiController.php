@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Message;
 use App\Role;
+use App\Service;
 use File;
 
 class ApiController extends Controller
@@ -106,6 +107,24 @@ class ApiController extends Controller
                 User::where('id', auth()->user()->id)->update(['foto' => $filename]);
                 return response()->json(["file" => $filename],200);
             }
+    }
+    public function freelancersList() {
+        $users = User::select('id', 'name', 'email', 'location', 'created_at', 'foto')->where('role',3)->get();
+        
+        $freelancers = [];
+        foreach($users as $user) {
+            $services = Service::select('services.id','service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$user->id)->get();
+            $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$user->id)->get();
+            $info = [
+                'info' => $user,
+                'portfolio' => [
+                    'skills' => $skills,
+                    'services' => $services
+                ]
+            ];
+            $freelancers[] = $info;
+        }
+        return response()->json($freelancers, 200);
     }
     public function usersList() {
         $users = User::select('id', 'name', 'email', 'location', 'created_at')->get();

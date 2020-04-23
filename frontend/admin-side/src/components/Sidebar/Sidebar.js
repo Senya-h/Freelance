@@ -24,17 +24,17 @@ class Sidebar extends Component{
     if(this.isLoggedIn()) {
         links = (
             <>
-            <li><NavLink to="/" className="nav-link"><i className="fa fa-home"></i>
+            <li><NavLink exact to="/" className="nav-link"><i className="fa fa-home"></i>
                                 <span>Pagrindinis</span></NavLink></li>
-                            <li><NavLink to="/igudziai" className="nav-link"><i className="fa fa-code"></i>
+                            <li><NavLink exact to="/igudziai" className="nav-link"><i className="fa fa-code"></i>
                                 <span>Įgūdžių pridėjimas</span></NavLink></li>
-                            <li><NavLink to="/paslaugos" className="nav-link"><i className="fa fa-chart-bars"></i>
+                            <li><NavLink exact to="/paslaugos" className="nav-link"><i className="fa fa-chart-bars"></i>
                                 <span>Visos paslaugos</span></NavLink></li>
-                            <li><NavLink to="/portfolio" className="nav-link"><i className="fa fa-briefcase"></i>
+                            <li><NavLink exact to="/portfolio" className="nav-link"><i className="fa fa-briefcase"></i>
                                 <span>Portfolio</span></NavLink></li>
-                            <li><NavLink to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
+                            <li><NavLink exact to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
                                 <span>Vartotojai</span></NavLink></li>
-                            <li><NavLink to="/login" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
+                            <li><NavLink exact to="/login" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
                                 <span>Atsijungti</span></NavLink></li>
             </>
         )
