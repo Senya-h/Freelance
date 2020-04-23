@@ -7,14 +7,16 @@ export class DeleteModal extends Component{
         super(props)
     }
 
-    delete = () => {
-        axios(this.props.fetchLink, {
-            method: this.props.method,
+     delete = () => {
+        console.log(this.props.token)
+        axios.post(this.props.fetchLink, {
             headers: {
                     'Authorization': this.props.token,
                     'Content-Type': 'multipart/form-data'
-                }, deleted:1,
+                }, 
+                    deleted:1,
                     baned:0
+                
         })
         .then(data => {
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+this.props.message+"</div>"

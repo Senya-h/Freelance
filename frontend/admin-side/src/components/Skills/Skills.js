@@ -84,7 +84,8 @@ class Skills extends Component{
                 } else {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Įgūdis pridėtas</div>"
                     this.mainInput.value = "";
-                    this.setState({refetch: true});
+                    this.setState({refetch: true,
+                                    loading: true});
                 }
             })
             

@@ -187,6 +187,11 @@ class ApiController extends Controller
         return response()->json($freelancers, 200);
     }
     public function usersList() {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $users = User::select('id', 'name', 'email', 'location', 'created_at')
         ->get();
         return response()->json($users, 200);

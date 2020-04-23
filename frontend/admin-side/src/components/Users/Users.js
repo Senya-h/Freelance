@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Users.css';
 import axios from '../../axios';
-import UserDeleteModal from '../DeleteModal';
+import UserDeleteModal from '../UserDeleteModal';
 import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 
@@ -78,8 +78,8 @@ render() {
                         <h1>Vartotojai</h1>
                         <div className="error"></div>
                         <UserDeleteModal
-                            method = "post"
-                            fetchLink={`user&id=${this.state.userID}/ban/delete`}
+                            fetchLink={`/user&id=${this.state.userID}/ban/delete`}
+                            userID={this.state.userID}
                             show={this.state.modalShow}
                             onHide={this.modalClose}
                             text={`Ar tikrai norite ištrinti šį vartotoją? ( ${this.state.modalUserName} )`}
