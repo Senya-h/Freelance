@@ -8,14 +8,17 @@ export class DeleteModal extends Component{
     }
 
      delete = () => {
-        console.log(this.props.token)
+        console.log(this.props.fetchLink)
+        const data = {
+            deleted:1,
+            baned:0
+        }
         axios.post(this.props.fetchLink, {
             headers: {
                     'Authorization': this.props.token,
                     'Content-Type': 'multipart/form-data'
-                }, 
-                    deleted:1,
-                    baned:0
+                }, data
+                    
                 
         })
         .then(data => {

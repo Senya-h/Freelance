@@ -92,7 +92,6 @@ class Skills extends Component{
         }
 
     }
-
     
     modalOpen = (id, name) => {
         this.setState({
@@ -107,6 +106,22 @@ class Skills extends Component{
             })
         }
     
+        delete = (id) => {
+            console.log('test')
+            axios.delete(`/skill/delete/${this.state.skillID}`, {
+                headers: {
+                        'Authorization': this.state.token,
+                        'Content-Type': 'multipart/form-data'
+                    }
+            })
+            .then(data => {
+                this.setState({refetch:true})
+            }).then(
+                document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdis ištrintas</div>"
+            )
+            
+            this.modalClose();
+        }
 
     render(){
         
@@ -130,13 +145,11 @@ class Skills extends Component{
             <main>
                 
                 <DeleteModal
-                    method = "delete"
-                    fetchLink={`/skill/delete/${this.state.skillID}`}
+                    method = {() => this.delete(this.state.skillID)}
                     show={this.state.modalShow}
                     onHide={this.modalClose}
                     text={`Ar tikrai norite ištrinti šį įgūdį? ( ${this.state.modalSkillName} )`}
                     token={this.state.token}
-                    message = {"Įgūdis ištrintas"}
                 />
                 <div className="main">
                     <div className="main-content">

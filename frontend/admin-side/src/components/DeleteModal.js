@@ -7,20 +7,7 @@ export class DeleteModal extends Component{
         super(props)
     }
 
-    delete = (id) => {
-        axios(this.props.fetchLink, {
-            method: this.props.method,
-            headers: {
-                    'Authorization': this.props.token,
-                    'Content-Type': 'multipart/form-data'
-                }
-        })
-        .then(data => {
-            document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+this.props.message+"</div>"
-        })
-        this.props.onHide()
-    }
-
+    
     render() {
         return(
 
@@ -33,7 +20,7 @@ export class DeleteModal extends Component{
                 <Button variant="secondary" onClick={this.props.onHide}>
                     Uždaryti
                 </Button>
-                <Button variant="danger" onClick={() => this.delete(this.props.skillID)} >
+                <Button variant="danger" onClick={this.props.method} >
                     Ištrinti
                 </Button>
                 </Modal.Footer>
