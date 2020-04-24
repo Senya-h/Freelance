@@ -19,7 +19,9 @@ class AdminController extends Controller
     //Blokuoti trinti user
     public function create(Request $request,$id)
     {
-        if($request->user()->authorizeRoles('Admin')){
+        return response()->json(['message'=>"zdrw ".$request->user()->name],200);
+        if(auth()->user()->authorizeRoles('Admin')){
+            return response()->json(['message'=>"Turite teises mldc"],200);
             if($request->input('baned') == 1){
             return BanDeleteUser::create([
                 'user_id' => $id,
@@ -127,6 +129,11 @@ class AdminController extends Controller
 
     public function addSkill(Request $request)
     {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
             $validation = Validator::make($request->all(),[
                 'skillName' => ['required', 'string', 'max:255', 'unique:skill'],
             ]);

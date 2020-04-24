@@ -24,19 +24,21 @@ class Login extends Component{
     }
     handleOnSubmit(event) {
         event.preventDefault();
-        console.log(this.state.email)
-        console.log(this.state.password)
         const values = {
                 email: this.state.email,
                 password: this.state.password
         }
         axios.post("/login", values
             ).then(data => {
+                console.log(data)
                 if(data.data.token) {
-                    localStorage.setItem('loginToken', data.data.token);
-                    window.location.reload(false);
+                    localStorage.setItem('login', 
+                    JSON.stringify({
+                        token:data.data.token,
+                        id: data.data.userID})
+                        );
                 } else {
-                    console.log(data.data)
+                    document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+data.data.error+"</div>"
                 }
             })
             
@@ -50,6 +52,7 @@ class Login extends Component{
                     <div className="container-fluid">
                         <h1>Prisijungimas</h1>
                         <div className="loginForm container w-50">
+                            <div className="error"></div>
                             <Form onSubmit={this.handleOnSubmit}> 
                                 <Form.Group controlId="formBasicEmail">
                                     <Form.Control type="email" placeholder="El.Paštas" value={this.state.email} onChange={this.handleChangeEmail}/>

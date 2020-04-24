@@ -7,6 +7,7 @@ import Services from "../Services/Services";
 import Portfolio from "../Portfolio/Portfolio";
 import Users from "../Users/Users";
 import Login from "../Login/Login";
+import decode from 'jwt-decode';
 import{
     BrowserRouter as Router,
     Route,
@@ -21,11 +22,21 @@ class App extends Component{
     }
 
 checkAuth = () => {
-  const token = localStorage.getItem('loginToken');
+  const login = localStorage.getItem('login')
+  if (!login) {
+    return false
+  } 
+  const token = JSON.parse(login).token;
   if(!token) {
     return false;
   }
-  return true;
+  try {
+    if(decode(token)) {
+      return true
+    }
+  } catch (e) {
+    return false
+  }
 }
 
 
@@ -54,7 +65,7 @@ const NonAuthRoute = ({ component: Component, ...rest }) => (
         <div id="wrapper">
         
         
-      <Sidebar/>
+      <Sidebar isLoggedIn={this.checkAuth}/>
             <Switch>
                 <AuthRoute path="/" exact component={Main}/>
                 <AuthRoute path="/igudziai" exact component={Skills}/>

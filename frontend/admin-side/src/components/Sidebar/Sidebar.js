@@ -1,27 +1,19 @@
 import React, {Component} from 'react';
 import './Sidebar.css';
 import {NavLink} from "react-router-dom";
+import decode from 'jwt-decode';
 
 class Sidebar extends Component{
     constructor(props) {
         super(props)
     }
     logout = () => {
-        localStorage.removeItem('loginToken')
+        localStorage.removeItem('login')
         window.location.reload(false);
-    }
-    isLoggedIn = () => {
-        const token = localStorage.getItem('loginToken');
-        if(!token) {
-            return false;
-        } else {
-            return true;
-        }
     }
     render() {
         let links;
-        console.log(this.isLoggedIn())
-    if(this.isLoggedIn()) {
+    if(this.props.isLoggedIn()) {
         links = (
             <>
             <li><NavLink exact to="/" className="nav-link"><i className="fa fa-home"></i>

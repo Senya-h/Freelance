@@ -6,6 +6,7 @@ import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 
 class Skills extends Component{
+    _isMounted = false
     constructor() {
         super()
         this.state = {
@@ -15,42 +16,35 @@ class Skills extends Component{
             modalShow:false,
             skillID: "",
             modalSkillName: "",
-            token: 'Bearer '+localStorage.getItem('loginToken'), 
+            token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
             loading: true,
             refetch: false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
     }
-
     handleChangeskillName(event){
         this.setState({skillName: event.target.value})
     }
 
     componentDidMount(){
-        axios.get(`/skills`, {
-            headers: {
-                    'Authorization': this.state.token,
-                    'Content-Type': 'multipart/form-data'
-                }
-        })
+        this._isMounted = true;
+        axios.get(`/skills`)
             .then(data => {
-                console.log(data.data)
-                this.setState({
-                    skills: data.data,
-                    loading: false
-                })
-                
+                if(this._isMounted) {
+                    this.setState({
+                        skills: data.data,
+                        loading: false
+                    })
+                }
             })
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
     componentDidUpdate(prevProps){
         if(this.state.refetch == true) {
-            axios.get(`/skills`, {
-                headers: {
-                        'Authorization': this.state.token,
-                        'Content-Type': 'multipart/form-data'
-                    }
-            })
+            axios.get(`/skills`)
                 .then(data => {
                     this.setState({
                         skills: data.data,
@@ -69,8 +63,9 @@ class Skills extends Component{
         }else{
             axios.post("/skill_add", {
                 headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     'Authorization': this.state.token,
-                    'Content-Type': 'multipart/form-data'
                 }, skillName: this.state.skillName
             }).then(res => {
                 console.log(res.data)
@@ -87,7 +82,9 @@ class Skills extends Component{
                     this.setState({refetch: true,
                                     loading: true});
                 }
-            })
+            }).catch(error => {
+                console.log(error.response)
+          })
             
         }
 
@@ -126,6 +123,7 @@ class Skills extends Component{
     render(){
         
     
+        console.log(this.state.token)
     const skillsList = this.state.skills.map(skill => ( 
         <tr key={skill.id}>
         <th scope="row">{skill.id}</th>

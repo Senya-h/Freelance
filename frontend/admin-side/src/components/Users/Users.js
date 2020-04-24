@@ -6,6 +6,7 @@ import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 
 class Users extends Component{
+    _isMounted = false;
     constructor() {
         super()
         this.state = {
@@ -14,26 +15,29 @@ class Users extends Component{
             modalShow:false,
             userID: "",
             modalUserName: "",
-            token: 'Bearer '+localStorage.getItem('loginToken'),
+            token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token,
             loading: true
         }
     }
     componentDidMount(){
+        this._isMounted = true;
         axios.get(`/users`, {
             headers: {
                     'Authorization': this.state.token,
-                    'Content-Type': 'multipart/form-data'
                 }
         })
             .then(data => {
-                console.log(data.data)
-                this.setState({
-                    users: data.data,
-                    loading: false
-                })
-                
+                if(this._isMounted) {
+                    this.setState({
+                        users: data.data,
+                        loading: false
+                    })
+                }
             })
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
     modalOpen = (id, name) => {
         this.setState({
             modalShow:true,
@@ -45,6 +49,22 @@ class Users extends Component{
             this.setState({
                 modalShow:false
             })
+        }
+    delete = () => {
+            axios.post(`/user&id=${this.state.userID}/ban/delete`, {
+                headers: {
+                        'Authorization': this.state.token,
+                        'Content-Type': 'application/json',
+                    }, deleted:1,
+                        baned:0
+            })
+            .then(data => {
+                console.log(data)
+                document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Ištrintas</div>"
+            }).catch(error => {
+                console.log(error.response)
+          })
+            this.modalClose()
         }
 render() {
     const usersList = this.state.users.map(user => ( 
@@ -78,7 +98,7 @@ render() {
                         <h1>Vartotojai</h1>
                         <div className="error"></div>
                         <UserDeleteModal
-                            fetchLink={`/user&id=${this.state.userID}/ban/delete`}
+                            delete={()=>this.delete()}
                             userID={this.state.userID}
                             show={this.state.modalShow}
                             onHide={this.modalClose}
