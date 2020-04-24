@@ -61,13 +61,14 @@ class Skills extends Component{
         if(document.getElementById('exampleInput').value == ""){
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neįvestas joks tekstas</div>"
         }else{
-            axios.post("/skill_add", {
+            console.log(this.state.skillName)
+            axios.post("/skill_add", {skillName: this.state.skillName}, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': this.state.token,
-                }, skillName: this.state.skillName
-            }).then(res => {
+                }}
+            ).then(res => {
                 console.log(res.data)
                 this.setState({error: res.data})
                 if(this.state.error['error']) {

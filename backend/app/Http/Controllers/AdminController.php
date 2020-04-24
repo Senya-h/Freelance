@@ -19,9 +19,7 @@ class AdminController extends Controller
     //Blokuoti trinti user
     public function create(Request $request,$id)
     {
-        return response()->json(['message'=>"zdrw ".$request->user()->name],200);
         if(auth()->user()->authorizeRoles('Admin')){
-            return response()->json(['message'=>"Turite teises mldc"],200);
             if($request->input('baned') == 1){
             return BanDeleteUser::create([
                 'user_id' => $id,

@@ -35,8 +35,11 @@ const useStyles = makeStyles( theme => ({
         },
         padding: '20px',
         backgroundColor: '#eee',
-        width: '750px',
-        margin: '0 auto'
+        width: '100%',
+        margin: '0 auto',
+        [theme.breakpoints.up('md')]: {
+            width: '750px'
+        }
     }
 }))
 

@@ -92,12 +92,18 @@ const PORTFOLIO_TYPES = {
 const FreelancerProfile = (props) => {
     //Get logged in user information
     let { authTokens } = useAuth();
-    console.log(props);
-    let profileUserID = authTokens.userID;
+    let profileUserID = 0;
+
+    if(authTokens) {
+        profileUserID = authTokens.userID;
+    }
 
     if(props.match.params.id) {
         profileUserID = parseInt(props.match.params.id);
     }
+    
+    
+    
 
     const [userInfo, setUserInfo] = useState({
         name: '',
@@ -188,7 +194,7 @@ const FreelancerProfile = (props) => {
             <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Loader 
                     type="Bars"
-                    color="#00BFFF"
+                    color="#9200e6"
                     height={200}
                     width={200}
                 />
