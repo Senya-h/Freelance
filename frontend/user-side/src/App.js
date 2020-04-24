@@ -10,7 +10,11 @@ import Login from './containers/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
 import BrowseJobs from './containers/BrowseJobs';
+import Messages from './containers/Messages';
 import Footer from './components/Footer';
+
+import ScrollToTop from './components/ScrollToTop';
+
 import HeroWrap from './hoc/HeroWrap';
 import {AuthContext} from './context/auth';
 
@@ -37,17 +41,20 @@ const App = () => {
     <AuthContext.Provider value={{authTokens, setAuthTokens: setTokens, removeAuthTokens: removeTokens}}>
       <Navbar />
       <HeroWrap>
-        <Switch>
-          <Route path='/' exact component={Main} />
-          <Route path='/register' component={Register} />
-          <Route path='/login' component={Login} />
-          <Route path='/password-reminder' component={RemindPassword} />
-          <Route path='/password/reset/' component={ForgotChangePassword} />
-          <Route path='/profile' exact component={FreelancerProfile} />
-          <Route path='/profile/:id' component={FreelancerProfile} />
-          <Route path='/jobs' component={BrowseJobs} />
-          <Route component={PageNotFound} />
-        </Switch>
+        <ScrollToTop>
+          <Switch>
+            <Route path='/' exact component={Main} />
+            <Route path='/register' component={Register} />
+            <Route path='/login' component={Login} />
+            <Route path='/password-reminder' component={RemindPassword} />
+            <Route path='/password/reset/' component={ForgotChangePassword} />
+            <Route path='/profile' exact component={FreelancerProfile} />
+            <Route path='/profile/:id' component={FreelancerProfile} />
+            <Route path='/jobs' component={BrowseJobs} />
+            <Route path='/messages' component={Messages} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </ScrollToTop>
         <Footer />
       </HeroWrap>
     </AuthContext.Provider>

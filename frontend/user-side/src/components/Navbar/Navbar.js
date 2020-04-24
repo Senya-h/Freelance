@@ -123,13 +123,13 @@ const Navbar = () => {
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/candidates' activeClassName={classes['active']}>
-                                Candidates
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
+                                Kontaktai
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
-                                Kontaktai
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                                Pranešimai
                             </NavLink>
                         </li>
                         { loginArea }

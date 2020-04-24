@@ -191,7 +191,7 @@ const FreelancerProfile = (props) => {
     return (
         <div className={classes.root}>
             {isLoading?
-            <div style={{textAlign: 'center', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <div style={{backgroundColor: '#fff', textAlign: 'center', height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Loader 
                     type="Bars"
                     color="#9200e6"
