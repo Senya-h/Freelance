@@ -51,12 +51,11 @@ class Users extends Component{
             })
         }
     delete = () => {
-            axios.post(`/user&id=${this.state.userID}/ban/delete`, {
+            axios.post(`/user&id=${this.state.userID}/ban/delete`, {deleted: 1, banned: 0}, {
                 headers: {
-                        'Authorization': this.state.token,
-                        'Content-Type': 'application/json',
-                    }, deleted:1,
-                        baned:0
+                    'Authorization': this.state.token,
+                    'Content-Type': 'application/json',
+                }
             })
             .then(data => {
                 console.log(data)
