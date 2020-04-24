@@ -84,4 +84,5 @@ class SkillController extends Controller
         $skill->delete();
         return response()->json(["message"=>"Ištrinta"],200);
     }
+    
 }
