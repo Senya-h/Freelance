@@ -64,7 +64,7 @@ class Skills extends Component{
             axios.post("/skill_add", {
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': this.state.token,
                 }, skillName: this.state.skillName
             }).then(res => {

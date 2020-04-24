@@ -55,8 +55,7 @@ class Users extends Component{
                 headers: {
                         'Authorization': this.state.token,
                         'Content-Type': 'application/json',
-                    }, deleted:1,
-                        baned:0
+                    }
             })
             .then(data => {
                 console.log(data)
