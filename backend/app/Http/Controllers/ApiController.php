@@ -12,6 +12,10 @@ use App\Role;
 use App\Service;
 use File;
 
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class ApiController extends Controller
 {
     protected function register(Request $request){
@@ -109,7 +113,7 @@ class ApiController extends Controller
             }
     }
     public function freelancersList() {
-        $users = User::select('id', 'name', 'email', 'location', 'created_at', 'foto')
+        $users = User::select('*')
         ->where('role',3)
         ->get();
         
@@ -131,8 +135,9 @@ class ApiController extends Controller
                 ]
             ];
             $freelancers[] = $info;
+            $data = $this->paginate($freelancers);
         }
-        return response()->json($freelancers, 200);
+        return response()->json($data, 200);
     }
     public function search(Request $request) {
         $searchQuery = $request->input("service");
@@ -183,8 +188,16 @@ class ApiController extends Controller
                 ]
             ];
                 $freelancers[] = $info;
+                $data = $this->paginate($freelancers);
         }
-        return response()->json($freelancers, 200);
+        $data = $this->paginate($freelancers);
+        return response()->json($data, 200);
+    }
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
     public function usersList() {
         try {
@@ -194,6 +207,10 @@ class ApiController extends Controller
         }
         $users = User::select('id', 'name', 'email', 'location', 'created_at')
         ->get();
+        return response()->json($users, 200);
+    }
+    public function test(){
+        $users = User::find(5)->skills();
         return response()->json($users, 200);
     }
 
