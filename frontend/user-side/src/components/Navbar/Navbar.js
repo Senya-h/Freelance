@@ -47,12 +47,12 @@ const Navbar = () => {
             navbar.current.classList.remove(classes.scrolled, classes.sleep);
         }
     } 
-    if (offsetTop > 350 ) {
+    if (offsetTop > 175 ) {
         if ( !navbar.current.classList.contains(classes.awake) ) {
             navbar.current.classList.add(classes.awake);	
         } 
     }
-    if (offsetTop < 350 ) {
+    if (offsetTop < 175 ) {
         if (navbar.current.classList.contains(classes.awake) ) {
             navbar.current.classList.remove(classes.awake);
             navbar.current.classList.add(classes.sleep);
@@ -119,7 +119,7 @@ const Navbar = () => {
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/jobs' activeClassName={classes['active']}>
-                                Browse Jobs
+                                Freelanceriai
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
