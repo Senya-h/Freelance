@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import CountrySelect from './CountrySelect/CountrySelect';
-import { useAuth } from '../../context/auth';
+import Autocomplete from '../Autocomplete';
+import cities from '../cities';
+
+import { useAuth } from '../context/auth';
 
 import {Link, Redirect} from 'react-router-dom';
 
@@ -21,7 +23,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import {Formik, Form, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 
-import axios from '../../axios';
+import axios from '../axios';
 
 
 import { makeStyles} from '@material-ui/core/styles';
@@ -142,7 +144,12 @@ const Register = (props) => {
                         <ErrorMessage name='name' render={msg => <div className='text-danger'>{msg}</div>} />
                     </FormGroup>
                     <FormGroup>
-                        <CountrySelect change={(e, value) => {
+                        <Autocomplete 
+                        width="300px"
+                        name='location'
+                        label='Miestas'
+                        options={cities}
+                        change={(e, value) => {
                             setFieldValue(
                             "location",
                             value !== null ? value : initialValues.location

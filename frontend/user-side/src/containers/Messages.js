@@ -51,7 +51,6 @@ const Messages = () => {
                         </TableRow>
                     </TableHead>     
                     <TableBody>
-                        
                         {messages.map((message, index) => (
                             <TableRow key={index}>
                                 <TableCell><Link>Pavadinimas</Link></TableCell>

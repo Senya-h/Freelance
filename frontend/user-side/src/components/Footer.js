@@ -96,8 +96,8 @@ const Footer = () => {
                         Apie projektą
                     </Typography>
                     <Typography style={{ color: "#8f9296" }} paragraph>
-                        Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce
-                        euismod convallis velit, eu auctor lacus vehicula sit amet.
+                        Šį projektinį darbą atliko KITM ŽP 19/1 komanda.
+                        Komandos nariai: Simonas Raugevičius, Saulius Rekašius, Deividas Kozlovas, Ramūnas Petrokas, Karolis Vasiliauskas.
                     </Typography>
                 </Grid>
             </Grid>

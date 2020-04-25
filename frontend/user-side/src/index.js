@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import './index.css';
-import './assets/css/aos.css';
 import './assets/css/ionicons.min.css';
 import './assets/css/flaticon.css';
 import './assets/css/icomoon.css';

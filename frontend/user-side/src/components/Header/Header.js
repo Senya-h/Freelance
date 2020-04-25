@@ -14,7 +14,6 @@ const Header = () => {
                 <div className={cx(classes.text, "text-center pt-5 mt-md-5")}>
                     <p className="mb-4">Čia rasi darbo, įdarbinimo ir karjeros galimybių</p>
                     <Typography variant='h1' className="mb-5">Lengviausias būdas rasti naują darbą</Typography>
-                    <Counters />
                     <SearchBox />
                 </div>
             </div>

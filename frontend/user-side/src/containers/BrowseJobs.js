@@ -24,6 +24,11 @@ const useStyles = makeStyles(theme => ({
     },
     mainGrid: {
         marginBottom: '20px'
+    },
+    linkButton: {
+        '&:hover': {
+            color: '#fff'
+        }
     }
 }))
 
@@ -51,13 +56,10 @@ const BrowseJobs = (props) => {
                 setLoading(false);
 
                 if(!res.error && res.status === 200) {
-                    console.log(typeof(res.data.data));
-                    console.log(res.data);
                     let arr = [];
                     for(let i in res.data.data) {
                         arr.push(res.data.data[i]);
                     }
-                    console.log(arr);
                     setFreelancers([...arr]);
                     setPageCount(res.data.last_page)
                 }
@@ -90,7 +92,7 @@ const BrowseJobs = (props) => {
                                 <h4 className="mb-2">{services}</h4>
                                 <h5 className="mb-2">{skills}</h5>
                                 <p className="seen">Last Activity 4 months ago</p>
-                                <Button variant='contained' color='primary'><Link style={{color: '#FFF'}} to={`/profile/${freelancer.info.id}`}>Daugiau</Link></Button>
+                                <Button className={classes.linkButton} component={Link} to={`/profile/${freelancer.info.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>
                         </Grid>
                     </Grid>

@@ -4,8 +4,8 @@ import FreelancerProfile from './containers/Profile/FreelancerProfile/Freelancer
 
 import {Switch, Route} from 'react-router-dom';
 import Main from './containers/Main';
-import PageNotFound from './containers/PageNotFound/PageNotFound';
-import Register from  './containers/Register/Register';
+import PageNotFound from './containers/PageNotFound';
+import Register from  './containers/Register';
 import Login from './containers/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';

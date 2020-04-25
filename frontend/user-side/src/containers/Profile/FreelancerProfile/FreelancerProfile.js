@@ -21,7 +21,6 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 const useStyles = makeStyles(theme => ({
     root: {
