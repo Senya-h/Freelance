@@ -46,13 +46,16 @@ class App extends Component{
       }
       axios.post("/login", values
           ).then(data => {
-              console.log(data)
-              if(data.data.token) {
+              if(data.data.token && data.data.userRole == 1) {
                   localStorage.setItem('login', 
                   JSON.stringify({
                       token:data.data.token,
-                      id: data.data.userID})
+                      id: data.data.userID,
+                      userRole: data.data.userRole})
                       );
+                      console.log("Prisijungta.. Reload page..")
+              } else if(data.data.userRole != 1) {
+                  document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neturite teisės čia prisijungti</div>"
               } else {
                   document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+data.data.error+"</div>"
               }

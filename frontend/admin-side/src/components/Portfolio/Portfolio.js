@@ -85,7 +85,7 @@ render() {
             </Card.Text>
             <div className="row">
                 <div className="col-6">
-                    <Button className="col-6" variant="success">Patvirtinti{work.id}</Button>
+                    <Button className="col-6" variant="success">Patvirtinti</Button>
                 </div>
                 <div className="col-6">
                     <Button className="col-6" variant="danger" onClick={() => this.modalOpen(work.id, work.title)}>Ištrinti</Button>

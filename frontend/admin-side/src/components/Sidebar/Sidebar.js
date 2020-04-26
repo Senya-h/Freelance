@@ -10,9 +10,6 @@ class Sidebar extends Component{
     logout = () => {
         localStorage.removeItem('login')
     }
-    componentDidUpdate() {
-        console.log("test")
-    }
     render() {
         let links;
     if(this.props.isLoggedIn()) {
@@ -28,14 +25,14 @@ class Sidebar extends Component{
                 <span>Portfolio</span></NavLink></li>
             <li><NavLink exact to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
                 <span>Vartotojai</span></NavLink></li>
-            <li><NavLink exact to="/" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
+            <li><NavLink exact to="/logout" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
                 <span>Atsijungti</span></NavLink></li>
             </>
         )
     } else {
         links = (
             <>
-            <li><NavLink to="/login" className="nav-link"><i className="fa fa-users"></i>
+            <li><NavLink exact to="/login" className="nav-link"><i className="fa fa-users"></i>
                                 <span>Prisijungti</span></NavLink></li>
             </>
         )
