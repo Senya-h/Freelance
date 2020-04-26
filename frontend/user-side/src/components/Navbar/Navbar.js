@@ -62,14 +62,14 @@ const Navbar = () => {
     
     window.addEventListener("scroll", debounce(handleScroll));
 
-    const {removeAuthTokens, authTokens} = useAuth()
+    const {removeAuthData, authData} = useAuth()
 
     const logOut = () => {
-        removeAuthTokens()
+        removeAuthData()
     }
 
     let loginArea = null;
-    if(authTokens) {
+    if(authData) {
         loginArea = (
             <>
                 <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>

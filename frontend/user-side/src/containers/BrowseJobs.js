@@ -45,14 +45,15 @@ const useStyles = makeStyles(theme => ({
 
 const BrowseJobs = (props) => {
     const classes = useStyles();
-
-    const [freelancers, setFreelancers] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [skillNames, setSkillNames] = useState(['Kraunama...']);
 
     const [pageCount, setPageCount] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [skillNames, setSkillNames] = useState(['Kraunama...']);
+    const [freelancers, setFreelancers] = useState([]);
+    
+    
     useEffect(() => {
         axios.get('/skills')
             .then(res => {
@@ -105,7 +106,6 @@ const BrowseJobs = (props) => {
             })
         }
     }, [props.location.search, props.history, props.location.state]);
-    console.log(props.location.state.searchQuery);
 
     const formik = useFormik({
         initialValues: {
@@ -114,7 +114,20 @@ const BrowseJobs = (props) => {
             city: props.location.state? props.location.state.searchQuery.city: '',
         },
         onSubmit: values => {
+            setLoading(true);
+            axios.get('/search', values)
+                .then(res => {
+                    setLoading(false);
 
+                    if(!res.error && res.status === 200) {
+                        let arr = [];
+                        for(let i in res.data.data) {
+                            arr.push(res.data.data[i]);
+                        }
+                        setFreelancers([...arr]);
+                        setPageCount(res.data.last_page)
+                    }
+                })
         }
     })
 
@@ -180,7 +193,7 @@ const BrowseJobs = (props) => {
                                 <h4 className="mb-2">{services}</h4>
                                 <h5 className="mb-2">{skills}</h5>
                                 <p className="seen">Last Activity 4 months ago</p>
-                                <Button className={classes.linkButton} component={Link} to={`/profile/${freelancer.info.id}`} variant='contained' color='primary'>Daugiau</Button>
+                                <Button className={classes.linkButton} component={Link} to={`/freelancer/${freelancer.info.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>
                         </Grid>
                     </Grid>

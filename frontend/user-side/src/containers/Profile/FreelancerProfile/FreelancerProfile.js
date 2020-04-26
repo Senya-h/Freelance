@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 
 import Loader from 'react-loader-spinner';
 
@@ -18,6 +19,8 @@ import SkillModalButton from './SkillModalButton';
 import PortfolioModalButton from './PortfolioModalButton';
 import PhotoModalButton from './PhotoModalButton';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
+import Comments from './Comments';
+import AddCommentModal from './AddCommentModal';
 
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
@@ -30,11 +33,9 @@ const useStyles = makeStyles(theme => ({
     profileImage: {
         width: '300px',
         margin: '0 auto',
-        // height: '300px',
         '& > img': {
             width: '100%',
             height: '100%',
-            // borderRadius: '50%',
             objectFit: 'cover'
         },
     },
@@ -44,16 +45,16 @@ const useStyles = makeStyles(theme => ({
         left: '250px',
     },
     userInfoArea: {
-        order: 2,
-        [theme.breakpoints.up('md')]: {
-            order: 1
-        }
+        // order: 2,
+        // [theme.breakpoints.up('md')]: {
+        //     order: 1
+        // }
     },
     photoArea: {
-        order: 1,
-        [theme.breakpoints.up('md')]: {
-            order: 2
-        }
+        // order: 1,
+        // [theme.breakpoints.up('md')]: {
+        //     order: 2
+        // }
     },
     service: {
         marginBottom: '25px',
@@ -72,9 +73,6 @@ const useStyles = makeStyles(theme => ({
     red: {
         color: 'red'
     },
-    green: {
-        color: '#3af700'
-    }
 }));
 
 const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
@@ -95,20 +93,17 @@ const PORTFOLIO_TYPES = {
 
 const FreelancerProfile = (props) => {
     //Get logged in user information
-    let { authTokens } = useAuth();
-    let profileUserID = 0;
+    let { authData } = useAuth();
+    const {id} = useParams();
+    console.log("ID:", id);
 
-    if(authTokens) {
-        profileUserID = authTokens.userID;
-    }
+    //if the visiting user is authenticated
+    const visitingUserID = authData? authData.userID: 0;
 
-    if(props.match.params.id) {
-        profileUserID = parseInt(props.match.params.id);
-    }
+    //The id can either be the visiting user ID, or the id from the url params
+    let profileUserID = id? id: visitingUserID;
     
     
-    
-
     const [userInfo, setUserInfo] = useState({
         name: '',
         email: '',
@@ -194,7 +189,7 @@ const FreelancerProfile = (props) => {
 
     return (
         <>
-{isLoading?
+            {isLoading?
             <div style={{backgroundColor: '#fff', textAlign: 'center', height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Loader 
                     type="Bars"
@@ -203,88 +198,101 @@ const FreelancerProfile = (props) => {
                     width={200}
                 />
             </div>:(<div className={classes.root}>
-            <Grid container spacing={5}>
-                <Grid className={classes.userInfoArea} item xs={12} sm={8}>              
-                    <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
-                    {authTokens.userID !== profileUserID? <SendMessage recipientName={userInfo.name} recipientID={profileUserID}/>: null}
-                    <div>
-                        <h4>
-                            Siūlomos paslaugos:
-                            {authTokens.userID === profileUserID? <ServiceModalButton services={services} setServices={setServices} token={authTokens.token}/>: null}             
-                        </h4>
-                        <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
-                            {services.map(service => (
-                                <li key={service.id} className={classes.service}>
-                                    <h5>{service.service}</h5>
-                                    <p>{service.description}</p>
-                                    <p>Užmokestis: <strong>{service.price_per_hour} €/h</strong></p>
-                                    {authTokens.userID === profileUserID ? (
+                <Grid container spacing={4}>
+                    {/* Paslaugos, servisai, darbai */}
+                    <Grid container item xs={8}>
+                        <Grid className={classes.userInfoArea} item xs={12}>              
+                        <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
+                        {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID}/>: null}
+                        <div>
+                            <h4>
+                                Siūlomos paslaugos
+                                {visitingUserID === profileUserID? <ServiceModalButton services={services} setServices={setServices} token={authData.token}/>: null}             
+                            </h4>
+                            <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
+                                {services.map(service => (
+                                    <li key={service.id} className={classes.service}>
+                                        <h5>{service.service}</h5>
+                                        <p>{service.description}</p>
+                                        <p>Užmokestis: <strong>{service.price_per_hour} €/h</strong></p>
+                                        {visitingUserID === profileUserID ? (
+                                        <>
+                                        <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(service.id, PORTFOLIO_TYPES.SERVICE.name)}>
+                                            <RemoveCircleIcon classes={{colorPrimary: classes.red}} color='primary' />
+                                        </IconButton>
+                                        <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
+                                            <EditIcon color='primary' />
+                                        </IconButton>
+                                        </>
+                                        ): null}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>
+                                Gebėjimai
+                                {visitingUserID === profileUserID?<SkillModalButton token={authData.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />: null}
+                            </h4>
+                            <ul style={{listStyle: 'none'}}>
+                                {skills.map(skill => (
+                                    <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
+                                ))}
+                            </ul>
+                        </div>   
+                        </Grid>
+                        
+                        {/* Portfolio works */}
+                        <Grid container item justify="space-between">
+                            <Grid item xs={12}>
+                                <h2>
+                                    Portfolio
+                                    {visitingUserID === profileUserID?
+                                        <PortfolioModalButton token={authData.token} works={works} setWorks={setWorks} />
+                                        : null}
+                                </h2>
+                            </Grid>
+                            {works.map(work => (
+                                <Grid item className={classes.portfolio} key={work.id} item xs={12} md={5}>
+                                    <Portfolio title={work.title} imageUrl={work.filePath}  />
+                                    {visitingUserID === profileUserID? (
                                     <>
-                                    <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(service.id, PORTFOLIO_TYPES.SERVICE.name)}>
-                                        <RemoveCircleIcon classes={{colorPrimary: classes.red}} color='primary' />
+                                    <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
+                                        <RemoveCircleIcon fontSize="large" classes={{colorPrimary: classes.red}} color='primary' />
                                     </IconButton>
                                     <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                                        <EditIcon color='primary' />
+                                        <EditIcon fontSize="large" color='primary' />
                                     </IconButton>
                                     </>
-                                    ): null}
-                                </li>
+                                    ):null}
+                                </Grid>
                             ))}
-                        </ul>
-                    </div>
-                    <div>
-                        <h4
-                            >Gebėjimai:
-                            {authTokens.userID === profileUserID?<SkillModalButton token={authTokens.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />: null}
-                        </h4>
-                        <ul style={{listStyle: 'none'}}>
-                            {skills.map(skill => (
-                                <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
-                            ))}
-                        </ul>
-                    </div>
-                    
-                </Grid>
-                <Grid className={classes.photoArea} item xs={12} md={4}>
-                    <div className={classes.profileImage}>
-                        <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
-                        {authTokens.userID === profileUserID?
-                        <PhotoModalButton 
-                            className={classes.imageAddIcon}
-                            userInfo={userInfo} 
-                            setUserInfo={setUserInfo}
-                            token={authTokens.token} 
-                        />
-                        : null}
-                    </div>
-                </Grid>
-            </Grid>
-            <Grid container spacing={5}>
-                <Grid item xs={12}>
-                    <h2>
-                        Portfolio
-                        {authTokens.userID === profileUserID?
-                            <PortfolioModalButton token={authTokens.token} works={works} setWorks={setWorks} />
-                            : null}
-                    </h2>
-                </Grid>
-                {works.map(work => (
-                    <Grid className={classes.portfolio} key={work.id} item xs={12} md={6} lg={4}>
-                        <Portfolio title={work.title} imageUrl={work.filePath}  />
-                        {authTokens.userID === profileUserID? (
-                        <>
-                        <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
-                            <RemoveCircleIcon fontSize="large" classes={{colorPrimary: classes.red}} color='primary' />
-                        </IconButton>
-                        <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                            <EditIcon fontSize="large" color='primary' />
-                        </IconButton>
-                        </>
-                        ):null}
+                        </Grid>
                     </Grid>
-                ))}
-            </Grid>
-            <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
+                        
+                    {/* Profilio nuotrauka, atsiliepimai */}
+                    <Grid container item xs={4} spacing={3} direction='column'>
+                        <Grid className={classes.photoArea} item>
+                            <div className={classes.profileImage}>
+                                <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
+                                {visitingUserID === profileUserID?
+                                <PhotoModalButton 
+                                    className={classes.imageAddIcon}
+                                    userInfo={userInfo} 
+                                    setUserInfo={setUserInfo}
+                                    token={authData.token} 
+                                />
+                                : null}
+                            </div>
+                        </Grid>
+                        <Grid item>
+                            <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal />: null}</h3>
+                            <Comments />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            
+            {visitingUserID === profileUserID && <ConfirmDeleteModal token={authData.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />}
             </div>)}
         </>
     )

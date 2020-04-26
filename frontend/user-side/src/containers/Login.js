@@ -33,7 +33,7 @@ const useStyles = makeStyles( theme => ({
 }))
 
 const Login = (props) => {
-    const { setAuthTokens, authTokens } = useAuth();
+    const { setAuthData, authData } = useAuth();
 
     let referer = '/';
     let alertMessage = null;
@@ -52,7 +52,7 @@ const Login = (props) => {
     const classes = useStyles();
 
     //if is logged in, redirect to previous page
-    if( authTokens ) {
+    if( authData ) {
         return <Redirect to={referer} />
     }
 
@@ -74,7 +74,7 @@ const Login = (props) => {
             .then(res => {
                 if(res.status === 200 && !res.data.error) {
                     console.log(res);
-                    setAuthTokens(res.data);     
+                    setAuthData(res.data);     
                     props.history.push({referer});
                 } else {
                     alertMessage = <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>;
