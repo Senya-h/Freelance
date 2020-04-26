@@ -68,8 +68,9 @@ class ApiController extends Controller
 		}
 
         $userId = auth()->user()->id; //Autentikuoto vartotojo id
+        $userRole = auth()->user()->role; //Autentikuoto vartotojo id
 		//jei duomenys teisingi, login tokena duoda
-		return response()->json(['token' => $token, 'userID' => $userId]);
+		return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole]);
 	}
 	public function tokenRefresh()
 	{
