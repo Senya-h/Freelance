@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
 import {Link} from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
@@ -10,7 +9,14 @@ import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 
+import {useFormik} from 'formik';
 import axios, {baseURL} from '../axios';
+
+
+import Autocomplete from '../Autocomplete';
+import cities from '../cities';
+
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(theme => ({
     name: {
@@ -23,12 +29,17 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     mainGrid: {
-        marginBottom: '20px'
+        marginBottom: '0px'
     },
     linkButton: {
         '&:hover': {
             color: '#fff'
         }
+    },
+    form: {
+        marginBottom: '20px',
+        backgroundColor: '#fff',
+        padding: '10px'
     }
 }))
 
@@ -41,6 +52,16 @@ const BrowseJobs = (props) => {
     const [pageCount, setPageCount] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [skillNames, setSkillNames] = useState(['Kraunama...']);
+    useEffect(() => {
+        axios.get('/skills')
+            .then(res => {
+                console.log(res);
+                setSkillNames(res.data.map(skill => skill.skillName));
+            })
+    },[]);
+
+    console.log("PROPSAI: ", props);
 
     useEffect(() => {
         setLoading(true);
@@ -49,9 +70,27 @@ const BrowseJobs = (props) => {
         if(page !== '1') {
             props.history.push('jobs?page=' + page);
         } 
-
+        
         setCurrentPage(page);
-        axios.get('/freelancers?page=' + page)
+        if(props.location.state) {
+            if(props.location.state.searchQuery) {
+                const {service, skill} = props.location.state.searchQuery;
+                axios.get('/search', {service, skill})
+                    .then(res => {
+                        setLoading(false);
+
+                        if(!res.error && res.status === 200) {
+                            let arr = [];
+                            for(let i in res.data.data) {
+                                arr.push(res.data.data[i]);
+                            }
+                            setFreelancers([...arr]);
+                            setPageCount(res.data.last_page)
+                        }
+                    })
+            }
+        } else {
+            axios.get('/freelancers?page=' + page)
             .then(res => {
                 setLoading(false);
 
@@ -64,10 +103,59 @@ const BrowseJobs = (props) => {
                     setPageCount(res.data.last_page)
                 }
             })
-    }, [props.location.search, props.history]);
+        }
+    }, [props.location.search, props.history, props.location.state]);
+    console.log(props.location.state.searchQuery);
+
+    const formik = useFormik({
+        initialValues: {
+            service: props.location.state? props.location.state.searchQuery.service: '',
+            skill: props.location.state? props.location.state.searchQuery.skill: '',
+            city: props.location.state? props.location.state.searchQuery.city: '',
+        },
+        onSubmit: values => {
+
+        }
+    })
 
     return (
         <>
+        <div className={classes.form} role="tabpanel">
+            <form autoComplete='new-password' onSubmit={formik.handleSubmit} className="search-job">
+                <Grid container spacing={1}>
+                    <Grid item xs={12} md={3}>
+                        <TextField style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <Autocomplete
+                            width="100%"
+                            options={skillNames}
+                            name="skill"
+                            value={formik.values.skill}
+                            label="Gebėjimas"
+                            change={(e, value) => {
+                                formik.setFieldValue('skill', value !== null? value: '')
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <Autocomplete 
+                            width="100%"
+                            options={cities}
+                            name="city"
+                            value={formik.values.city}
+                            label="Miestas"
+                            change={(e, value) => {
+                                formik.setFieldValue('city', value !== null? value: '')
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <Button className={classes.submitBtn} color='primary' type='submit' variant='contained'>Ieškoti</Button>
+                    </Grid>
+                </Grid>
+            </form>
+        </div>
         {isLoading?(          
         <div style={{backgroundColor: '#fff', textAlign: 'center', height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Loader 
@@ -98,7 +186,7 @@ const BrowseJobs = (props) => {
                     </Grid>
                 )
             })}
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination
                     page={parseInt(currentPage, 10)}
                     count={pageCount}

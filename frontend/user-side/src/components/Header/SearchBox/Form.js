@@ -5,12 +5,24 @@ import {withRouter} from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import {makeStyles} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 import {useFormik} from 'formik';
 
 import axios from '../../../axios';
 
+const useStyles = makeStyles(theme => ({
+    submitBtn: {
+        width: '100%',
+        height: '100%',
+        textTransform: 'capitalize',
+        fontSize: '16px'
+    }
+}))
+
 const Form = (props) => {
+    const classes = useStyles();
     const [skillNames, setSkillNames] = useState([]);
 
     const formik = useFormik({
@@ -24,7 +36,12 @@ const Form = (props) => {
             axios.get('/search', {service: values.service, skill: values.skill})
                 .then(res => {
                     console.log(res);
-                    props.history.push('/jobs');
+                    props.history.push({
+                        pathname: '/jobs',
+                        state: {
+                            searchQuery: values
+                        }
+                    });
                 })
             console.log(props);
         }
@@ -39,15 +56,15 @@ const Form = (props) => {
     },[]);
 
     return (
-        <div className={"tab-pane fade show active"} role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
+        <div role="tabpanel">
             <form autoComplete='new-password' onSubmit={formik.handleSubmit} className="search-job">
-                <div className="row no-gutters">
-                    <div className="col-md mr-md-2">
-                        <TextField label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
-                    </div>
-                    <div className="col-md mr-md-2">
+                <Grid container spacing={1}>
+                    <Grid item xs={12} md={3}>
+                        <TextField style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
                         <Autocomplete
-                            width="250px"
+                            width="100%"
                             options={skillNames}
                             name="skill"
                             label="Gebėjimas"
@@ -55,10 +72,10 @@ const Form = (props) => {
                                 formik.setFieldValue('skill', value !== null? value: '')
                             }}
                         />
-                    </div>
-                    <div className="col-md mr-md-2">
+                    </Grid>
+                    <Grid item xs={12} md={3}>
                         <Autocomplete 
-                            width="250px"
+                            width="100%"
                             options={cities}
                             name="city"
                             label="Miestas"
@@ -66,18 +83,11 @@ const Form = (props) => {
                                 formik.setFieldValue('city', value !== null? value: '')
                             }}
                         />
-                    </div>
-                    <div className="col-md">
-                        <div className="form-group">
-                            <div className="form-field">
-                                <button type="submit"
-                                        className="form-control btn btn-primary">Ieškoti
-                                </button>
-                                <Button type='submit' variant='contained'>Ieškoti</Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <Button className={classes.submitBtn} color='primary' type='submit' variant='contained'>Ieškoti</Button>
+                    </Grid>
+                </Grid>
             </form>
         </div>
     )

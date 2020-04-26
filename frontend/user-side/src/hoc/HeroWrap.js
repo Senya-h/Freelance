@@ -28,10 +28,12 @@ const useStyles = makeStyles(theme => ({
         position: 'relative',
         marginTop: '0px',
         height: '100vh',
-        minHeight: '800px',
+        minHeight: '810px',
         [theme.breakpoints.up('md')]: {
             marginTop: '85px'
-        }
+        },
+        display: 'flex',
+        flexDirection: 'column'
     }
 }))
 

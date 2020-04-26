@@ -1,5 +1,4 @@
 import React from 'react';
-import Counters from './Counters/Counters';
 import SearchBox from './SearchBox/SearchBox';
 import classes from './Header.module.scss';
 import cx from 'classnames';

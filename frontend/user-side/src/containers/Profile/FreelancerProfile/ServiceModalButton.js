@@ -116,7 +116,7 @@ const ServceModalButton = (props) => {
                         ) : null}
                 </DialogContent>
                 <DialogActions>
-                    <Button color="primary" onClick={handleClose}>
+                    <Button color="primary" type='button' onClick={handleClose}>
                         Atšaukti
                     </Button>
                     <Button color="primary" type='submit'>

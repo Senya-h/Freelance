@@ -3,16 +3,6 @@
     z-index: 0;
     overflow: hidden; 
 
-    .subheading {
-        color: #000000;
-        font-weight: 700;
-        font-size: 16px;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        display: inline-block;
-        color: #000000; 
-    }
-
     .text {
         position: relative;
         z-index: 1; 
@@ -31,46 +21,13 @@
     p {
         color: rgba(255, 255, 255, 0.8);
         font-weight: 400;
-        
-        .number {
-            color: #fdab44; 
-        } 
     }
 
-    .btn-custom {
-        color: #fff;
-        background: #206dfb;
-        padding: 10px 20px; 
-    }
-
-    .breadcrumbs {
-        font-size: 12px;
-        letter-spacing: 1px;
-        margin-bottom: 20px;
-        z-index: 99;
-        text-transform: uppercase;
-        font-weight: 500 !important;
-        letter-spacing: 2px; 
-
-        span {
-            color: rgba(255, 255, 255, 0.9); 
-            a {
-                color: #fff;
-            }
-        }
-    }
-
-    .bread {
-        font-size: 50px !important;
-        font-weight: 700;
-        color: #fff !important;
-    }
 }
 
 @media (max-width: 991.98px) {
     .slider-text {
         text-align: center;
-        height: 900px; 
         h1 {
             font-size: 50px; 
         } 

@@ -25,8 +25,7 @@ import { useAuth } from '../../../context/auth';
 const useStyles = makeStyles(theme => ({
     root: {
         padding: '30px',
-        backgroundColor: '#eee',
-        
+        backgroundColor: '#eee',     
     },
     profileImage: {
         width: '300px',
@@ -69,6 +68,12 @@ const useStyles = makeStyles(theme => ({
     skill: {
         borderBottom: '1px solid black',
         fontSize: '19px'
+    },
+    red: {
+        color: 'red'
+    },
+    green: {
+        color: '#3af700'
     }
 }));
 
@@ -145,7 +150,7 @@ const FreelancerProfile = (props) => {
                 setServices(portfolio.services);
                 setLoading(false);
             })
-        console.log("SKILLING");
+
         //all possible skills
         axios.get('/skills')
             .then(res => {
@@ -188,8 +193,8 @@ const FreelancerProfile = (props) => {
     };
 
     return (
-        <div className={classes.root}>
-            {isLoading?
+        <>
+{isLoading?
             <div style={{backgroundColor: '#fff', textAlign: 'center', height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Loader 
                     type="Bars"
@@ -197,7 +202,7 @@ const FreelancerProfile = (props) => {
                     height={200}
                     width={200}
                 />
-            </div>:(<>
+            </div>:(<div className={classes.root}>
             <Grid container spacing={5}>
                 <Grid className={classes.userInfoArea} item xs={12} sm={8}>              
                     <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
@@ -280,8 +285,8 @@ const FreelancerProfile = (props) => {
                 ))}
             </Grid>
             <ConfirmDeleteModal token={authTokens.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
-            </>)}
-        </div>
+            </div>)}
+        </>
     )
 }
 

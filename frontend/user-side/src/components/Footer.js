@@ -13,6 +13,7 @@ import {makeStyles} from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
     footer: {
         backgroundColor: theme.palette.primary.darkGrey,
+        marginTop: 'auto',
         paddingTop: theme.spacing(8),
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),

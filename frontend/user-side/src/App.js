@@ -14,7 +14,7 @@ import Messages from './containers/Messages';
 import Footer from './components/Footer';
 
 import ScrollToTop from './components/ScrollToTop';
-
+import ScrollToTopIcon from './components/ScrollToTopIcon';
 import HeroWrap from './hoc/HeroWrap';
 import {AuthContext} from './context/auth';
 
@@ -57,6 +57,7 @@ const App = () => {
         </ScrollToTop>
         <Footer />
       </HeroWrap>
+      <ScrollToTopIcon />
     </AuthContext.Provider>
   );
 }
