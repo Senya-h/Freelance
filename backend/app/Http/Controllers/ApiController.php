@@ -142,14 +142,20 @@ class ApiController extends Controller
     public function search(Request $request) {
         $searchQuery = $request->input("service");
         $skillQuery = $request->input("skill");
-        if(!$skillQuery){
+        $city = $request->input("city");
+
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+        ->distinct()
+        ->where('role',3)
+        ->get();
+        if($request->has('service') && !$request->has('skill') && !$request->has('city')){
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
             ->join('services', 'services.user_id','users.id')
             ->where('role',3)
             ->where('services.service','LIKE','%'.$searchQuery.'%')
             ->get();
-        } else if(!$searchQuery) {
+        } if(!$request->has('service') && $request->has('skill') && !$request->has('city')) {
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
             ->join('user_skill', 'user_skill.user_id','users.id')
@@ -157,13 +163,47 @@ class ApiController extends Controller
             ->where('role',3)
             ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
             ->get();
-        } else {
+        } if (!$request->has('service') && !$request->has('skill') && $request->has('city')){
+            $users = User::select('*')
+            ->where('role',3)
+            ->where('location','LIKE','%'.$city.'%')
+            ->get();
+        } if ($request->has('service') && $request->has('skill') && !$request->has('city')){
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
             ->join('user_skill', 'user_skill.user_id','users.id')
             ->join('skill', 'skill.id','user_skill.skill_id')
             ->join('services', 'services.user_id','users.id')
             ->where('role',3)
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        } if ($request->has('service') && !$request->has('skill') && $request->has('city')){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('users.location','LIKE','%'.$city.'%')
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        } if (!$request->has('service') && $request->has('skill') && $request->has('city')){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->where('role',3)
+            ->where('users.location','LIKE','%'.$city.'%')
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->get();
+        } if ($request->has("skill") && $request->has("city") && $request->has("service") ){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('users.location','LIKE','%'.$city.'%')
             ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
             ->where('services.service','LIKE','%'.$searchQuery.'%')
             ->get();
