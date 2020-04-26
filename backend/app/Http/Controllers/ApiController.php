@@ -65,7 +65,11 @@ class ApiController extends Controller
 		$token = auth()->attempt($creds);
 		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
 			return response()->json(['error' => 'Duomenys neteisingi']);
-		}
+        } 
+        $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
+        if (count($banned) > 0) {
+            return response()->json(['error' => 'Šis vartotojas užblokuotas']);
+        }
 
         $userId = auth()->user()->id; //Autentikuoto vartotojo id
         $userRole = auth()->user()->role; //Autentikuoto vartotojo id
@@ -246,7 +250,18 @@ class ApiController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $users = User::select('id', 'name', 'email', 'location', 'created_at')
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at')
+        ->get();
+        return response()->json($users, 200);
+    }
+    public function bannedUsersList() {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'baned', 'deleted')
+        ->join('ban_delete_users', 'users.id', 'ban_delete_users.user_id')
         ->get();
         return response()->json($users, 200);
     }

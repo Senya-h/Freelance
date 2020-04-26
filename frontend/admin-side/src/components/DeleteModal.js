@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
-import axios from '../axios';
 
 export class DeleteModal extends Component{
     constructor(props) {
@@ -21,7 +20,7 @@ export class DeleteModal extends Component{
                     Uždaryti
                 </Button>
                 <Button variant="danger" onClick={this.props.method} >
-                    Ištrinti
+                    {this.props.btn}
                 </Button>
                 </Modal.Footer>
             </Modal>

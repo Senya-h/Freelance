@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class PortfolioWorksController extends Controller
 {
+    public function list() {
+        $works = PortfolioWorks::select('portfolio_works.id as id', 'portfolio_works.title', 'portfolio_works.description', 'portfolio_works.filePath', 'users.name', 'portfolio_works.user_id')
+                ->join('users', 'users.id', 'portfolio_works.user_id')
+                ->get();
+        return response()->json($works, 200);
+    }
     public function create(Request $request)
     {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą

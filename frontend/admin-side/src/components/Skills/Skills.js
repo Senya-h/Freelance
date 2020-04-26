@@ -61,15 +61,12 @@ class Skills extends Component{
         if(document.getElementById('exampleInput').value == ""){
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neįvestas joks tekstas</div>"
         }else{
-            console.log(this.state.skillName)
             axios.post("/skill_add", {skillName: this.state.skillName}, {
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     'Authorization': this.state.token,
                 }}
             ).then(res => {
-                console.log(res.data)
                 this.setState({error: res.data})
                 if(this.state.error['error']) {
                     if(this.state.error['error']['skillName'] == "The skill name may not be greater than 255 characters.") {
@@ -105,17 +102,16 @@ class Skills extends Component{
         }
     
         delete = (id) => {
-            console.log('test')
             axios.delete(`/skill/delete/${this.state.skillID}`, {
                 headers: {
                         'Authorization': this.state.token,
                         'Content-Type': 'multipart/form-data'
                     }
-            })
-            .then(data => {
-                this.setState({refetch:true})
-            }).then(
+            }).then(res => {
                 document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdis ištrintas</div>"
+                this.setState({refetch:true,
+                                loading: true})
+            }
             )
             
             this.modalClose();
@@ -124,7 +120,6 @@ class Skills extends Component{
     render(){
         
     
-        console.log(this.state.token)
     const skillsList = this.state.skills.map(skill => ( 
         <tr key={skill.id}>
         <th scope="row">{skill.id}</th>
@@ -149,6 +144,7 @@ class Skills extends Component{
                     onHide={this.modalClose}
                     text={`Ar tikrai norite ištrinti šį įgūdį? ( ${this.state.modalSkillName} )`}
                     token={this.state.token}
+                    btn={"Ištrinti"}
                 />
                 <div className="main">
                     <div className="main-content">

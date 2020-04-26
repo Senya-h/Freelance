@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import './Users.css';
 import axios from '../../axios';
 import UserDeleteModal from '../UserDeleteModal';
+import UserBanModal from '../UserBanModal';
 import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
+import {Link} from "react-router-dom";
 
 class Users extends Component{
     _isMounted = false;
@@ -12,7 +14,8 @@ class Users extends Component{
         this.state = {
             users: [],
             error: "",
-            modalShow:false,
+            deleteModalShow:false,
+            banModalShow:false,
             userID: "",
             modalUserName: "",
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token,
@@ -38,16 +41,28 @@ class Users extends Component{
     componentWillUnmount() {
         this._isMounted = false;
       }
-    modalOpen = (id, name) => {
+    deleteModalOpen = (id, name) => {
         this.setState({
-            modalShow:true,
+            deleteModalShow:true,
             userID:id,
             modalUserName: name
     })
     }
-    modalClose = () => {
+    deleteModalClose = () => {
             this.setState({
-                modalShow:false
+                deleteModalShow:false
+            })
+        }
+    banModalOpen = (id, name) => {
+        this.setState({
+            banModalShow:true,
+            userID:id,
+            modalUserName: name
+    })
+    }
+    banModalClose = () => {
+            this.setState({
+                banModalShow:false
             })
         }
     delete = () => {
@@ -63,8 +78,23 @@ class Users extends Component{
             }).catch(error => {
                 console.log(error.response)
           })
-            this.modalClose()
+            this.deleteModalClose()
         }
+    ban = () => {
+        axios.post(`/user&id=${this.state.userID}/ban/delete`, {deleted: 0, baned: 1}, {
+            headers: {
+                    'Authorization': this.state.token,
+                    'Content-Type': 'application/json',
+                }
+        })
+        .then(data => {
+            console.log(data)
+            document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Užblokuotas</div>"
+        }).catch(error => {
+            console.log(error.response)
+        })
+        this.banModalClose()
+    }
 render() {
     const usersList = this.state.users.map(user => ( 
         <tr key={user.id}>
@@ -73,10 +103,10 @@ render() {
         <td>{user.email}</td>
         <td>{user.location}</td>
         <td>{user.created_at}</td>
-        <td><Button variant="danger" onClick={() => this.modalOpen(user.id, user.name)}>
+        <td><Button variant="danger" onClick={() => this.deleteModalOpen(user.id, user.name)}>
             Pašalinti
         </Button></td>
-        <td><Button variant="danger">
+        <td><Button variant="danger" onClick={() => this.banModalOpen(user.id, user.name)}>
             Užblokuoti
         </Button></td>
         </tr>
@@ -95,15 +125,23 @@ render() {
                 <div className="main-content">
                     <div className="container-fluid">
                         <h1>Vartotojai</h1>
+                        <Link to="/banned" className="text-muted">Užblokuoti</Link>
                         <div className="error"></div>
                         <UserDeleteModal
                             delete={()=>this.delete()}
                             userID={this.state.userID}
-                            show={this.state.modalShow}
-                            onHide={this.modalClose}
+                            show={this.state.deleteModalShow}
+                            onHide={this.deleteModalClose}
                             text={`Ar tikrai norite ištrinti šį vartotoją? ( ${this.state.modalUserName} )`}
                             token={this.state.token}
-                            message = {"Vartotojas ištrintas"}
+                        />
+                        <UserBanModal
+                            delete={()=>this.ban()}
+                            userID={this.state.userID}
+                            show={this.state.banModalShow}
+                            onHide={this.banModalClose}
+                            text={`Ar tikrai norite blokuoti šį vartotoją? ( ${this.state.modalUserName} )`}
+                            token={this.state.token}
                         />
                         <table className="table">
                                 <thead>

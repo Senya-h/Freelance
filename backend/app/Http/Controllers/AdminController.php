@@ -10,6 +10,8 @@ use App\User;
 use App\RoleUser;
 use App\SkillUser;
 use App\Skill;
+use App\Service;
+use App\PortfolioWorks;
 use App\AdminServiceApprove;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -143,5 +145,31 @@ class AdminController extends Controller
                 $skill->save();
                 return response()->json(["SkillName"=>$skill->skillName]);
             }
+    }
+    public function serviceDelete(Service $service, Request $request) {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $service->delete();
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Paslauga sekmingai ištrinta"], 200);
+    }
+    public function workDelete(Request $request, PortfolioWorks $work) {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $work->delete();
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Darbas sekmingai ištrintas"], 200);
     }
 }
