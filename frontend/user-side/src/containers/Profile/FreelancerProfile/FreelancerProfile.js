@@ -31,18 +31,21 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#eee',     
     },
     profileImage: {
-        width: '300px',
+        position: 'relative',
+        width: '225px',
+        height: '225px',
         margin: '0 auto',
         '& > img': {
             width: '100%',
             height: '100%',
-            objectFit: 'cover'
+            objectFit: 'cover',
+            borderRadius: '50%',
         },
     },
     imageAddIcon: {
-        position: 'relative',
-        top: '-80px',
-        left: '250px',
+        position: 'absolute',
+        top: '170px',
+        left: '170px',
     },
     userInfoArea: {
         order: 2,
@@ -73,6 +76,24 @@ const useStyles = makeStyles(theme => ({
     red: {
         color: 'red'
     },
+    desktop: {
+        display: 'none',
+        [theme.breakpoints.up('md')]: {
+            display: 'block'
+        }
+    },
+    mobile: {
+        display: 'block',
+        height: '250px',
+        overflowY: 'scroll',
+        [theme.breakpoints.up('md')]: {
+            display: 'none'
+        }
+    },
+    iconBg: {
+        backgroundColor: '#fff',
+        borderRadius: '50%'
+    }
 }));
 
 const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
@@ -117,6 +138,7 @@ const FreelancerProfile = (props) => {
 
     const [allSkills, setAllSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [isMobile, setMobile] = useState(false);
 
     const [deleteModalInfo, setDeleteModalInfo] = useState({
         open: false,
@@ -198,6 +220,7 @@ const FreelancerProfile = (props) => {
                 <Grid container spacing={4}>
                     {/* Paslaugos, servisai, darbai */}
                     <Grid className={classes.userInfoArea} container item xs={12} md={8}>
+                        {/* Paslaugos, servisai */}
                         <Grid item xs={12}>              
                         <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
                         {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID}/>: null}
@@ -255,15 +278,20 @@ const FreelancerProfile = (props) => {
                                     {visitingUserID === profileUserID? (
                                     <>
                                     <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
-                                        <RemoveCircleIcon fontSize="large" classes={{colorPrimary: classes.red}} color='primary' />
+                                        <RemoveCircleIcon fontSize="default" classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                                     </IconButton>
                                     <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                                        <EditIcon fontSize="large" color='primary' />
+                                        <EditIcon color='primary' />
                                     </IconButton>
                                     </>
                                     ):null}
                                 </Grid>
                             ))}
+                        </Grid>
+
+                        <Grid item className={classes.mobile}>
+                            <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal />: null}</h3>
+                            <Comments />
                         </Grid>
                     </Grid>
                         
@@ -282,12 +310,13 @@ const FreelancerProfile = (props) => {
                                 : null}
                             </div>
                         </Grid>
-                        <Grid item>
+                        <Grid item className={classes.desktop}>
                             <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal />: null}</h3>
                             <Comments />
                         </Grid>
                     </Grid>
                 </Grid>
+
             
             {visitingUserID === profileUserID && <ConfirmDeleteModal token={authData.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />}
             </div>)}

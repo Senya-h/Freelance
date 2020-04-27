@@ -125,7 +125,7 @@ class ApiController extends Controller
         $users = User::select('*')
         ->where('role',3)
         ->get();
-        
+
         $freelancers = [];
         foreach($users as $user) {
             $services = Service::select('services.id','service', 'description', 'price_per_hour')
@@ -217,7 +217,7 @@ class ApiController extends Controller
             ->where('services.service','LIKE','%'.$searchQuery.'%')
             ->get();
         }
-        
+
         $freelancers = [];
         foreach($users as $user) {
             $services = Service::select('services.id','service', 'description', 'price_per_hour')
@@ -242,7 +242,7 @@ class ApiController extends Controller
         $data = $this->paginate($freelancers);
         return response()->json($data, 200);
     }
-    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    public function paginate($items, $perPage = 1, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);

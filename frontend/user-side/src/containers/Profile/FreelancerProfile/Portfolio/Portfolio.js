@@ -18,12 +18,9 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '25px'
     },
     portfolioImage: {
-        backgroundImage: "url('https://giantbomb1.cbsistatic.com/uploads/scale_small/7/74829/1389239-180754_untitled_1.png')",
         width: '100%',
-        height: '250px',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        height: '225px',
+        objectFit: 'cover'
     },
     portfolioTitle: {
         backgroundColor: '#343a40',
@@ -56,7 +53,7 @@ const Portfolio = (props) => {
         <>
         <div className={classes.portfolio}>
             <button onClick={handleOpen} type='button' style={{border: 'none', background: 'transparent', padding: 0}}>
-                <img style={{width: '100%'}} src={`${baseURL}/storage/${props.imageUrl}`} alt={props.title}/>
+                <img className={classes.portfolioImage} src={`${baseURL}/storage/${props.imageUrl}`} alt={props.title}/>
                 <div className={classes.portfolioTitle}>
                     <p>{props.title}</p>
                 </div>
