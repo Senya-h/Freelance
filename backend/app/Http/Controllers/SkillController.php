@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Comments;
+use App\PortfolioWorks;
 use Illuminate\Http\Request;
 use App\Skill;
 use App\SkillApproval;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +39,7 @@ class SkillController extends Controller
                 $skill->approved = 0;
                 $skill->comment = '';
                 $skill->save();
-         
+
         }
 
 
@@ -54,6 +57,7 @@ class SkillController extends Controller
         $skill->comment = $request->comment;
         $skill->save();
 
+        return response()->json(["message" => "Skill atnaujintas"]);
     }
 
     public function delete(SkillApproval $id)
@@ -68,6 +72,7 @@ class SkillController extends Controller
         } else if (Gate::denies('authorization', $id)) {
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
+        return response()->json(["message" => "Skill istrintas"]);
 
     }
     

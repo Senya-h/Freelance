@@ -107,3 +107,8 @@ Route::get('banned','ApiController@bannedUsersList');
 Route::get('freelancers','ApiController@freelancersList');
 //Freelancerių paieška
 Route::get('search','ApiController@search');
+
+Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
+Route::post('comment','CommentsController@create');
+Route::put('comment/{comment}','CommentsController@update');
+Route::delete('comment/{id}','CommentsController@delete');
