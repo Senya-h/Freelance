@@ -1,5 +1,9 @@
+<<<<<<< HEAD
+import React, {Component} from 'react';
+=======
 import React, {useState} from 'react';
 import {Button} from 'react-bootstrap';
+>>>>>>> baf1325db14bb65497e501df20d2754a9586105f
 import './Sidebar.css';
 import wrapper from './Wrapper.module.scss'
 import {NavLink} from "react-router-dom";
@@ -42,6 +46,8 @@ const Sidebar = (props) => {
             </>
         )
     }
+<<<<<<< HEAD
+=======
     let btn;
         if(wrapp === 0) {
             btn = (
@@ -56,6 +62,7 @@ const Sidebar = (props) => {
             </>
             )
         }
+>>>>>>> baf1325db14bb65497e501df20d2754a9586105f
 
     return(
         <div className="Sidebar">
