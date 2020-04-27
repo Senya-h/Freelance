@@ -72,12 +72,13 @@ const Login = (props) => {
     const handleSubmit = (values, {setSubmitting}) => {            
         axios.post('/login', values)
             .then(res => {
+                console.log(res);
+
                 if(res.status === 200 && !res.data.error) {
-                    console.log(res);
                     setAuthData(res.data);     
                     props.history.push({referer});
                 } else {
-                    alertMessage = <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>;
+                    alertMessage = <Alert severity="error">{res.data.error}</Alert>;
                     setSubmitting(false);
                 }       
             })

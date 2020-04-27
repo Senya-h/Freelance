@@ -98,7 +98,7 @@ const Footer = () => {
                     </Typography>
                     <Typography style={{ color: "#8f9296" }} paragraph>
                         Šį projektinį darbą atliko KITM ŽP 19/1 komanda.
-                        Komandos nariai: Simonas Raugevičius, Saulius Rekašius, Deividas Kozlovas, Ramūnas Petrokas, Karolis Vasiliauskas.
+                        Komandos nariai: Simonas Raugevičius, Saulius Rekašius, Deividas Kozlovas, Ramūnas Petrokas.
                     </Typography>
                 </Grid>
             </Grid>
