@@ -1,17 +1,26 @@
+<<<<<<< HEAD
 import React, {Component} from 'react';
+=======
+import React, {useState} from 'react';
+import {Button} from 'react-bootstrap';
+>>>>>>> baf1325db14bb65497e501df20d2754a9586105f
 import './Sidebar.css';
+import wrapper from './Wrapper.module.scss'
 import {NavLink} from "react-router-dom";
 import decode from 'jwt-decode';
 import {useAuth} from '../../context/auth';
 
 const Sidebar = (props) => {
     const {authData, removeAuthData} = useAuth();
+    const [wrapp, setWrapp] = useState(0);
 
     const logout = () => {
         removeAuthData();
     }
 
+
     let links;
+    console.log(wrapp);
     if(authData) {
         links = (
             <>
@@ -37,11 +46,29 @@ const Sidebar = (props) => {
             </>
         )
     }
+<<<<<<< HEAD
+=======
+    let btn;
+        if(wrapp === 0) {
+            btn = (
+                <>
+                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(1)}>Meniu</Button>
+                </>
+            )
+        } else if (wrapp === 1) {
+            btn = (
+            <>
+                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(0)}>Meniu</Button>
+            </>
+            )
+        }
+>>>>>>> baf1325db14bb65497e501df20d2754a9586105f
 
     return(
         <div className="Sidebar">
-            <div id="sidebar-nav" className="sidebar">
+            <div id={`sidebar-nav`} className={`sidebar ${wrapp===1 ? wrapper.sidebar1 : wrapper.sidebar2}`}>
                 <div className="sidebar-scroll">
+                    {btn}
                     <nav>
                         <ul className="nav">
                             {links}
