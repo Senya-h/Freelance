@@ -14,4 +14,12 @@
     .sidebar2 {
     left: -260px !important;
     }
+    .overlay1 {
+        display: block;
+        background-color: #00000067;
+        z-index: 1;
+    }
+    .overlay2 {
+        display: none;
+    }
 }

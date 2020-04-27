@@ -52,13 +52,14 @@ const Sidebar = (props) => {
         } else if (wrapp === 1) {
             btn = (
             <>
-                <Button variant="outline-light" className={`menuWrapper ${wrapper.menuWrapper} ${wrapper.menuWrapper1}`} onClick={() => setWrapp(0)}>Meniu</Button>
+                <Button variant="outline-light" className={`menuWrapper ${wrapper.menuWrapper} ${wrapper.menuWrapper1}`} onHide={console.log("onHide")} onClick={() => setWrapp(0)}>Meniu</Button>
             </>
             )
         }
 
     return(
         <div className="Sidebar">
+        <div className={`overlay ${wrapp===1 ? wrapper.overlay1 : wrapper.overlay2}`} onClick={() => setWrapp(0)}></div>
             <div id={`sidebar-nav`} className={`sidebar ${wrapp===1 ? wrapper.sidebar1 : wrapper.sidebar2}`}>
                 <div className="sidebar-scroll">
                     {btn}
