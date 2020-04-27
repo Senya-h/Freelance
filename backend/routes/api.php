@@ -26,6 +26,9 @@ Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
 Route::post('verify_login/{id}', 'ApiController@verifyFirstLogin');
 
+//Admin login
+Route::post('login/admin','AdminController@adminLogin');
+
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 

@@ -18,6 +18,28 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    public function adminLogin(Request $request)
+	{
+		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
+		$token = auth()->attempt($creds);
+		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
+			return response()->json(['error' => 'Duomenys neteisingi']);
+        } 
+        $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
+        if (count($banned) > 0) {
+            return response()->json(['error' => 'Šis vartotojas užblokuotas']);
+        }
+        $userRole = auth()->user()->role; //Autentikuoto vartotojo id
+        if ($userRole === 1){
+            //Autentikuoto vartotojo id
+		    //jei duomenys teisingi, login tokena duoda
+            $userId = auth()->user()->id;
+            return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole, 'role' => 'Admin']);
+        } else {
+            return response()->json(['error' => 'Neturite teisės']);
+        }
+
+	}
     //Blokuoti trinti user
     public function create(Request $request,$id)
     {
