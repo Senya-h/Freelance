@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import React, {Component} from 'react';
-=======
-import React, {useState} from 'react';
+import React, {useState, useHistory} from 'react';
 import {Button} from 'react-bootstrap';
->>>>>>> baf1325db14bb65497e501df20d2754a9586105f
 import './Sidebar.css';
 import wrapper from './Wrapper.module.scss'
 import {NavLink} from "react-router-dom";
@@ -46,23 +42,20 @@ const Sidebar = (props) => {
             </>
         )
     }
-<<<<<<< HEAD
-=======
     let btn;
         if(wrapp === 0) {
             btn = (
                 <>
-                <Button variant="outline-dark" className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(1)}>Meniu</Button>
+                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(1)}>Meniu</Button>
                 </>
             )
         } else if (wrapp === 1) {
             btn = (
             <>
-                <Button variant="outline-dark" className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(0)}>Meniu</Button>
+                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(0)}>Meniu</Button>
             </>
             )
         }
->>>>>>> baf1325db14bb65497e501df20d2754a9586105f
 
     return(
         <div className="Sidebar">
