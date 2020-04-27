@@ -86,7 +86,7 @@ class AdminController extends Controller
         if($request->user()->authorizeRoles('Admin')){
             return AdminWorkApprove::create([
                 'work_id' => $id,
-                'approved' => 1,
+                'approved' => $request->input('approved'),
             ]);
         }
     }
@@ -101,7 +101,7 @@ class AdminController extends Controller
         if($request->user()->authorizeRoles('Admin')){
             return AdminServiceApprove::create([
                 'service_id' => $id,
-                'approved' => 1,
+                'approved' => $request->input('approved'),
             ]);
         }
     }

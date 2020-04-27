@@ -14,7 +14,8 @@ class Portfolio extends Component{
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
             loading: true,
             refetch: false,
-            modalShow:false,
+            deleteModalShow:false,
+            approveModalShow:false,
             workID: "",
             modalWorkName: "",
         }
@@ -47,18 +48,30 @@ class Portfolio extends Component{
                 })
         }
     }
-    modalOpen = (id, name) => {
+    deleteModalOpen = (id, name) => {
         this.setState({
-            modalShow:true,
+            deleteModalShow:true,
             workID:id,
             modalWorkName: name
     })
     }
-    modalClose = () => {
+    deleteModalClose = () => {
             this.setState({
-                modalShow:false
+                deleteModalShow:false
             })
         }
+    approveModalOpen = (id, name) => {
+        this.setState({
+            approveModalShow:true,
+            workID:id,
+            modalWorkName: name
+    })
+    }
+    approveModalClose = () => {
+            this.setState({
+                approveModalShow:false
+            })
+    }
     
         delete = (id) => {
             axios.delete(`admin/delete/work&id=${this.state.workID}`, {
@@ -72,7 +85,24 @@ class Portfolio extends Component{
             }
             )
             
-            this.modalClose();
+            this.deleteModalClose();
+        }
+        approve = (id) => {
+            axios.post(`/work&id=${this.state.workID}/approve`, {approved:1}, {
+                headers: {
+                        'Authorization': this.state.token,
+                        'Content-Type': 'application/json',
+                    }
+            }).then(res => {
+                console.log(res)
+                document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Portfolio darbas patvirtintas</div>"
+                this.setState({refetch:true})
+            }
+            ).catch(error => {
+                console.log(error.response)
+            })
+            
+            this.approveModalClose();
         }
 render() {
     const worksList = this.state.works.map(work => ( 
@@ -85,10 +115,10 @@ render() {
             </Card.Text>
             <div className="row">
                 <div className="col-6">
-                    <Button className="col-6" variant="success">Patvirtinti</Button>
+                    <Button variant="success" onClick={() => this.approveModalOpen(work.id, work.title)}>Patvirtinti</Button>
                 </div>
                 <div className="col-6">
-                    <Button className="col-6" variant="danger" onClick={() => this.modalOpen(work.id, work.title)}>Ištrinti</Button>
+                    <Button variant="danger" onClick={() => this.deleteModalOpen(work.id, work.title)}>Ištrinti</Button>
                 </div>
             </div>
             <br/><span className="text-muted">Autorius: {work.name}</span>
@@ -110,11 +140,19 @@ render() {
                         <div className="error"></div>
                             <DeleteModal
                                 method = {() => this.delete(this.state.workID)}
-                                show={this.state.modalShow}
-                                onHide={this.modalClose}
+                                show={this.state.deleteModalShow}
+                                onHide={this.deleteModalClose}
                                 text={`Ar tikrai norite ištrinti šį darbą? ( ${this.state.modalWorkName} )`}
                                 token={this.state.token}
                                 btn={"Ištrinti"}
+                            />
+                            <DeleteModal
+                                method = {() => this.approve(this.state.workID)}
+                                show={this.state.approveModalShow}
+                                onHide={this.approveModalClose}
+                                text={`Ar tikrai norite patvirtinti šį darbą? ( ${this.state.modalWorkName} )`}
+                                token={this.state.token}
+                                btn={"Patvirtinti"}
                             />
                         <div className="row">
                             {worksList}
