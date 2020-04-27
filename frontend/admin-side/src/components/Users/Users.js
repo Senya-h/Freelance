@@ -18,6 +18,7 @@ class Users extends Component{
             banModalShow:false,
             userID: "",
             modalUserName: "",
+            refetch: false,
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token,
             loading: true
         }
@@ -41,6 +42,23 @@ class Users extends Component{
     componentWillUnmount() {
         this._isMounted = false;
       }
+      componentDidUpdate(prevProps){
+        if(this.state.refetch == true) {
+            axios.get(`/users`, {
+                headers: {
+                        'Authorization': this.state.token,
+                    }
+            })
+                .then(data => {
+                    this.setState({
+                        users: data.data,
+                        loading: false,
+                        refetch: false
+                    })
+                    
+                })
+        }
+    }
     deleteModalOpen = (id, name) => {
         this.setState({
             deleteModalShow:true,
@@ -73,6 +91,7 @@ class Users extends Component{
                     }
             })
             .then(data => {
+                this.setState({refetch:true})
                 console.log(data)
                 document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Ištrintas</div>"
             }).catch(error => {
@@ -88,6 +107,7 @@ class Users extends Component{
                 }
         })
         .then(data => {
+            this.setState({refetch:true})
             console.log(data)
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Užblokuotas</div>"
         }).catch(error => {

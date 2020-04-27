@@ -26,7 +26,7 @@ const Login = (props) => {
                 email: loginInfo.email,
                 password: loginInfo.password
         }
-        axios.post("/login/admin", values
+        axios.post("/login", values
             ).then(data => {
                 console.log(data)
                 if(data.data.token) {

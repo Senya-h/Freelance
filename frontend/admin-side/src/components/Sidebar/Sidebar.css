@@ -43,3 +43,8 @@
 .fa-chart-bars:before{
     content: "\f080";
 }
+.menuWrapper {
+    position: absolute;
+    top: 10px;
+    right: -80px;
+}

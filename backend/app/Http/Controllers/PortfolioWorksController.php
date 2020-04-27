@@ -14,8 +14,33 @@ class PortfolioWorksController extends Controller
     public function list() {
         $works = PortfolioWorks::select('portfolio_works.id as id', 'portfolio_works.title', 'portfolio_works.description', 'portfolio_works.filePath', 'users.name', 'portfolio_works.user_id')
                 ->join('users', 'users.id', 'portfolio_works.user_id')
+                ->orderBy('portfolio_works.created_at', 'desc')
                 ->get();
-        return response()->json($works, 200);
+        foreach ($works as $work) {
+            $approved = DB::table('admin_work_approves')->select('work_id')->where('work_id',$work->id)->where('approved',1)->get();
+            if(count($approved) > 0) {
+                $newWork[] = [
+                'id' => $work->id,
+                'title' => $work->title,
+                'description' => $work->description,
+                'filePath' => $work->filePath,
+                'name' => $work->name,
+                'user_id' => $work->user_id,
+                'approved' => 1
+            ];
+            } else {
+                $newWork[] = [
+                    'id' => $work->id,
+                    'title' => $work->title,
+                    'description' => $work->description,
+                    'filePath' => $work->filePath,
+                    'name' => $work->name,
+                    'user_id' => $work->user_id,
+                    'approved' => 0
+                ];
+            }
+        }
+        return response()->json($newWork, 200);
     }
     public function create(Request $request)
     {
