@@ -73,7 +73,7 @@ const Login = (props) => {
         axios.post('/login', values)
             .then(res => {
                 console.log(res);
-
+                
                 if(res.status === 200 && !res.data.error) {
                     setAuthData(res.data);     
                     props.history.push({referer});

@@ -59,6 +59,7 @@ const Footer = () => {
                 .then(res => {
                     if(!res.data.error && res.status === 200) {
                         alertMessage = <Alert severity="success">Žinutė išsiųsta!</Alert>;
+                        formik.resetForm();
                     } else {
                         alertMessage = <Alert severity="error">Žinutės išsiųsti nepavyko!</Alert>;
                     }
