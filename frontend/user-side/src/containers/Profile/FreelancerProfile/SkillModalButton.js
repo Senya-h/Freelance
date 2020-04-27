@@ -28,13 +28,12 @@ const SkillModalButton = (props) => {
     const [checkedSkills, setCheckedSkills] = useState(props.skills.map(skill => {
         return skill.id.toString();
     }));
-    console.log("AS CIAAA");
+    
     const formik = useFormik({
         initialValues: {
             skills_id: [...checkedSkills]
         },
         onSubmit: values => {
-            console.log("Siunciami skillai: ", values.skills_id);
             //Submitting user's skills to the server
             axios.post('/skill', values.skills_id, {
                 headers: {

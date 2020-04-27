@@ -57,41 +57,25 @@ const BrowseJobs = (props) => {
     useEffect(() => {
         axios.get('/skills')
             .then(res => {
-                console.log(res);
                 setSkillNames(res.data.map(skill => skill.skillName));
             })
     },[]);
-
-    console.log("PROPSAI: ", props);
 
     useEffect(() => {
         setLoading(true);
         const query = new URLSearchParams(props.location.search);
         const page = query.get('page') || '1';
-        if(page !== '1') {
-            props.history.push('jobs?page=' + page);
-        } 
-        
-        setCurrentPage(page);
-        if(props.location.state) {
-            if(props.location.state.searchQuery) {
-                const {service, skill} = props.location.state.searchQuery;
-                axios.get('/search', {service, skill})
-                    .then(res => {
-                        setLoading(false);
+        const service = query.get('service') || '';
+        const skill = query.get('skill') || '';
+        const city = query.get('city') || '';
 
-                        if(!res.error && res.status === 200) {
-                            let arr = [];
-                            for(let i in res.data.data) {
-                                arr.push(res.data.data[i]);
-                            }
-                            setFreelancers([...arr]);
-                            setPageCount(res.data.last_page)
-                        }
-                    })
-            }
-        } else {
-            axios.get('/freelancers?page=' + page)
+        let urlParams = page !== '1'? `page=${page}&`: '';
+        urlParams += skill? `skill=${skill}&`: '';
+        urlParams += service? `service=${service}&`: '';
+        urlParams += city? `city=${city}&`: '';
+
+
+        axios.get(`/search?${urlParams}`)
             .then(res => {
                 setLoading(false);
 
@@ -100,51 +84,49 @@ const BrowseJobs = (props) => {
                     for(let i in res.data.data) {
                         arr.push(res.data.data[i]);
                     }
-                    setFreelancers([...arr]);
-                    setPageCount(res.data.last_page)
+                    setFreelancers(arr);
+                    setPageCount(res.data.last_page);
+                    setCurrentPage(parseInt(res.data.current_page), 10);
                 }
             })
-        }
-    }, [props.location.search, props.history, props.location.state]);
+            .catch(err => {
+                setLoading(false);
+
+            })
+        }, [props.location.search, props.history]);
+
+    const query = new URLSearchParams(props.location.search);
+    const service = query.get('service') || '';
+    const skill = query.get('skill') || '';
+    const city = query.get('city') || '';
 
     const formik = useFormik({
-        initialValues: {
-            service: props.location.state? props.location.state.searchQuery.service: '',
-            skill: props.location.state? props.location.state.searchQuery.skill: '',
-            city: props.location.state? props.location.state.searchQuery.city: '',
-        },
-        onSubmit: values => {
-            setLoading(true);
-            axios.get('/search', values)
-                .then(res => {
-                    setLoading(false);
+        initialValues: {service, skill, city},
+        onSubmit: values => {          
+            setCurrentPage(1);
+            const service = values.service;
+            const skill = values.skill;
+            const city = values.city;
+            props.history.push(`/jobs?service=${service}&skill=${skill}&city=${city}`);
 
-                    if(!res.error && res.status === 200) {
-                        let arr = [];
-                        for(let i in res.data.data) {
-                            arr.push(res.data.data[i]);
-                        }
-                        setFreelancers([...arr]);
-                        setPageCount(res.data.last_page)
-                    }
-                })
         }
     })
 
     return (
         <>
         <div className={classes.form} role="tabpanel">
-            <form autoComplete='new-password' onSubmit={formik.handleSubmit} className="search-job">
+            <form autoComplete='chrome-off' onSubmit={formik.handleSubmit} className="search-job">
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={3}>
-                        <TextField style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
+                        <TextField autoComplete="off" value={formik.values.service} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
+                        {console.log(skillNames)}
                         <Autocomplete
                             width="100%"
                             options={skillNames}
-                            name="skill"
                             value={formik.values.skill}
+                            name="skill"
                             label="Gebėjimas"
                             change={(e, value) => {
                                 formik.setFieldValue('skill', value !== null? value: '')
@@ -155,8 +137,8 @@ const BrowseJobs = (props) => {
                         <Autocomplete 
                             width="100%"
                             options={cities}
-                            name="city"
                             value={formik.values.city}
+                            name="city"
                             label="Miestas"
                             change={(e, value) => {
                                 formik.setFieldValue('city', value !== null? value: '')
@@ -179,7 +161,7 @@ const BrowseJobs = (props) => {
             />
         </div>):(
         <Grid container spacing={5} className={classes.mainGrid}>
-            {freelancers.map(freelancer => {
+            {freelancers.length? freelancers.map(freelancer => {
                 const services = freelancer.portfolio.services.map(service => <span key={service.id}>{service.service} , </span>)
                 const skills = freelancer.portfolio.skills.map(skill => <span key={skill.id}>{skill.skill}, </span>)
                 return (
@@ -198,7 +180,7 @@ const BrowseJobs = (props) => {
                         </Grid>
                     </Grid>
                 )
-            })}
+            }): <Grid item>Rezultatų nerasta</Grid>}
             <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination
                     page={parseInt(currentPage, 10)}

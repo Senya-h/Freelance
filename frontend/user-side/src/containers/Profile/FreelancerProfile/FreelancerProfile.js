@@ -45,16 +45,16 @@ const useStyles = makeStyles(theme => ({
         left: '250px',
     },
     userInfoArea: {
-        // order: 2,
-        // [theme.breakpoints.up('md')]: {
-        //     order: 1
-        // }
+        order: 2,
+        [theme.breakpoints.up('md')]: {
+            order: 1
+        }
     },
     photoArea: {
-        // order: 1,
-        // [theme.breakpoints.up('md')]: {
-        //     order: 2
-        // }
+        order: 1,
+        [theme.breakpoints.up('md')]: {
+            order: 2
+        }
     },
     service: {
         marginBottom: '25px',
@@ -95,7 +95,6 @@ const FreelancerProfile = (props) => {
     //Get logged in user information
     let { authData } = useAuth();
     const {id} = useParams();
-    console.log("ID:", id);
 
     //if the visiting user is authenticated
     const visitingUserID = authData? authData.userID: 0;
@@ -150,7 +149,6 @@ const FreelancerProfile = (props) => {
         axios.get('/skills')
             .then(res => {
                 setAllSkills(res.data);
-                console.log("ALL SKILLS");
             })
     }, [profileUserID])
 
@@ -160,7 +158,6 @@ const FreelancerProfile = (props) => {
             portfolio: undefined,
             setPortfolio: undefined
         }
-
         switch(type) {
             case PORTFOLIO_TYPES.SERVICE.name:
                 deleteLink = PORTFOLIO_TYPES.SERVICE.deleteLink;
@@ -200,8 +197,8 @@ const FreelancerProfile = (props) => {
             </div>:(<div className={classes.root}>
                 <Grid container spacing={4}>
                     {/* Paslaugos, servisai, darbai */}
-                    <Grid container item xs={8}>
-                        <Grid className={classes.userInfoArea} item xs={12}>              
+                    <Grid className={classes.userInfoArea} container item xs={12} md={8}>
+                        <Grid item xs={12}>              
                         <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
                         {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID}/>: null}
                         <div>
@@ -253,8 +250,8 @@ const FreelancerProfile = (props) => {
                                 </h2>
                             </Grid>
                             {works.map(work => (
-                                <Grid item className={classes.portfolio} key={work.id} item xs={12} md={5}>
-                                    <Portfolio title={work.title} imageUrl={work.filePath}  />
+                                <Grid item className={classes.portfolio} key={work.id} xs={12} md={5}>
+                                    <Portfolio title={work.title} imageUrl={work.filePath} description={work.description}/>
                                     {visitingUserID === profileUserID? (
                                     <>
                                     <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
@@ -271,8 +268,8 @@ const FreelancerProfile = (props) => {
                     </Grid>
                         
                     {/* Profilio nuotrauka, atsiliepimai */}
-                    <Grid container item xs={4} spacing={3} direction='column'>
-                        <Grid className={classes.photoArea} item>
+                    <Grid className={classes.photoArea} container item xs={12} md={4} spacing={3} direction='column'>
+                        <Grid item>
                             <div className={classes.profileImage}>
                                 <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
                                 {visitingUserID === profileUserID?

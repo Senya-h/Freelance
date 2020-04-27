@@ -28,6 +28,7 @@ const ServceModalButton = (props) => {
 
     const handleOpen = () => {
         setOpen(true);
+        formik.resetForm();
     }
 
     const handleClose = () => {
@@ -54,7 +55,9 @@ const ServceModalButton = (props) => {
             }).then(res => {
                 if(!res.error && res.status === 201) {
                     handleClose();
+                    console.log(res);
                     props.setServices([...props.services, {
+                        id: res.data.id,
                         service: values.service, 
                         description: values.description, 
                         price_per_hour: values.price_per_hour

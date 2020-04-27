@@ -8,14 +8,14 @@ import { useAuth } from '../../context/auth';
 
 const Profile = () => {
     let { authData } = useAuth();
-
+    
     // if unauthenticated, return to the index page
     if(!authData) {
         return <Redirect to='/' />
     }
 
     authData.role = 2;
-    const profile = authData.role === 2 ? FreelancerProfile: ClientProfile;
+    const profile = authData.userRole === 2 ? ClientProfile: FreelancerProfile;
 
     return profile();
 };
