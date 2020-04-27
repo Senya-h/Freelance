@@ -111,6 +111,8 @@ Route::get('banned','ApiController@bannedUsersList');
 Route::get('freelancers','ApiController@freelancersList');
 //Freelancerių paieška
 Route::get('search','ApiController@search');
+//Tikrina ar useris nėra užblokuotas
+Route::get('checkJWT','ApiController@refreshBannedToken');
 
 Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
 Route::post('comment','CommentsController@create');
