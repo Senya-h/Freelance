@@ -1,18 +1,23 @@
-import React, {Component, useHistory} from 'react';
+import React, {useState} from 'react';
+import {Button} from 'react-bootstrap';
 import './Sidebar.css';
+import wrapper from './Wrapper.module.scss'
 import {NavLink} from "react-router-dom";
 import decode from 'jwt-decode';
+import {useAuth} from '../../context/auth';
 
-class Sidebar extends Component{
-    constructor(props) {
-        super(props)
+const Sidebar = (props) => {
+    const {authData, removeAuthData} = useAuth();
+    const [wrapp, setWrapp] = useState(0);
+
+    const logout = () => {
+        removeAuthData();
     }
-    logout = () => {
-        localStorage.removeItem('login')
-    }
-    render() {
-        let links;
-    if(this.props.isLoggedIn()) {
+
+
+    let links;
+    console.log(wrapp);
+    if(authData) {
         links = (
             <>
             <li><NavLink exact to="/" className="nav-link"><i className="fa fa-home"></i>
@@ -25,7 +30,7 @@ class Sidebar extends Component{
                 <span>Portfolio</span></NavLink></li>
             <li><NavLink exact to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
                 <span>Vartotojai</span></NavLink></li>
-            <li><NavLink exact to="/logout" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
+            <li><NavLink exact to="/login" className="nav-link" onClick={logout}><i className="fa fa-database"></i>
                 <span>Atsijungti</span></NavLink></li>
             </>
         )
@@ -37,10 +42,26 @@ class Sidebar extends Component{
             </>
         )
     }
-        return(
+    let btn;
+        if(wrapp === 0) {
+            btn = (
+                <>
+                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(1)}>Meniu</Button>
+                </>
+            )
+        } else if (wrapp === 1) {
+            btn = (
+            <>
+                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(0)}>Meniu</Button>
+            </>
+            )
+        }
+
+    return(
         <div className="Sidebar">
-            <div id="sidebar-nav" className="sidebar">
+            <div id={`sidebar-nav`} className={`sidebar ${wrapp===1 ? wrapper.sidebar1 : wrapper.sidebar2}`}>
                 <div className="sidebar-scroll">
+                    {btn}
                     <nav>
                         <ul className="nav">
                             {links}
@@ -48,9 +69,8 @@ class Sidebar extends Component{
                     </nav>
                 </div>
             </div>
-     </div>
+        </div>
     )
-    } 
 }
 
 export default Sidebar;

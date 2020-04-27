@@ -38,9 +38,7 @@ const Form = (props) => {
                     console.log(res);
                     props.history.push({
                         pathname: '/jobs',
-                        state: {
-                            searchQuery: values
-                        }
+                        search: `?service=${values.service}&skill=${values.skill}&city=${values.city}`
                     });
                 })
             console.log(props);
@@ -60,7 +58,7 @@ const Form = (props) => {
             <form autoComplete='new-password' onSubmit={formik.handleSubmit} className="search-job">
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={3}>
-                        <TextField style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
+                        <TextField autoComplete="off" style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <Autocomplete

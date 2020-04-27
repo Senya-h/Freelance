@@ -11,7 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 
 import { useFormik} from 'formik';
-import {object as yupObject, string as yupString, number as yupNumber} from 'yup';
+import {object as yupObject, string as yupString} from 'yup';
 import axios from '../../../axios';
 
 const useStyles = makeStyles(theme => ({

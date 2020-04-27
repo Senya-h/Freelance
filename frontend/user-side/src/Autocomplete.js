@@ -25,7 +25,7 @@ const CitySelect = (props) => {
         classes={{
             option: classes.option,
         }}
-        value={props.value || ''}
+        value={props.value}
         autoHighlight
         autoSelect
         getOptionLabel={(option) => option}
@@ -36,11 +36,12 @@ const CitySelect = (props) => {
             <TextField
             {...params}
             label={props.label}
+            value={props.value}
             name={props.name}
             variant="outlined"
             inputProps={{
                 ...params.inputProps,
-                autoComplete: 'new-password', // disable autocomplete and autofill
+                autoComplete: 'off',
             }}          
             />
         )}

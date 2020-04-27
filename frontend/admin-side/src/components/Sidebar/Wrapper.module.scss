@@ -1,0 +1,14 @@
+.menuWrapper {
+    display: none !important;
+}
+@media screen and (max-width: 1024px) {
+    .menuWrapper {
+        display: block !important;
+    }
+    .sidebar1 {
+    left: 0px !important;
+    }
+    .sidebar2 {
+    left: -260px !important;
+    }
+}

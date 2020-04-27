@@ -9,66 +9,43 @@ import Users from "../Users/Users";
 import BannedUsers from "../Users/BannedUsers";
 import Login from "../Login/Login";
 import decode from 'jwt-decode';
-import {Form, Button} from 'react-bootstrap';
 import{
     BrowserRouter as Router,
     Route,
     Switch,
-    NavLink,
     Redirect
 } from "react-router-dom";
-import axios from '../../axios';
+import {AuthContext} from '../../context/auth';
 
 class App extends Component{
-    constructor() {
-        super()
+    constructor(props, context) {
+        super(props, context);
+        this.auth = localStorage.getItem('login');
+
         this.state = {
           email: "",
           password: "",
-          error: ""
+          error: "",
+          authData: this.auth? JSON.parse(this.auth): undefined,
       }
-      this.handleChangeEmail = this.handleChangeEmail.bind(this)
-      this.handleChangePassword = this.handleChangePassword.bind(this)
-      this.handleOnSubmit = this.handleOnSubmit.bind(this)
+
     }
 
-  handleChangeEmail(event){
-      this.setState({email: event.target.value})
-  }
-  handleChangePassword(event){
-      this.setState({password: event.target.value})
-  }
-  handleOnSubmit(event) {
-      event.preventDefault();
-      const values = {
-              email: this.state.email,
-              password: this.state.password
-      }
-      axios.post("/login", values
-          ).then(data => {
-              if(data.data.token && data.data.userRole == 1) {
-                  localStorage.setItem('login', 
-                  JSON.stringify({
-                      token:data.data.token,
-                      id: data.data.userID,
-                      userRole: data.data.userRole})
-                      );
-                      console.log("Prisijungta.. Reload page..")
-              } else if(data.data.userRole != 1) {
-                  document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neturite teisės čia prisijungti</div>"
-              } else {
-                  document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+data.data.error+"</div>"
-              }
-          })
-          
-  }
+    setTokens = (data) => {
+      localStorage.setItem('login', JSON.stringify(data));
+      this.setState({authData: data});
+    }
+
+    removeTokens = () => {
+      localStorage.removeItem('login');
+      this.setState({authData: undefined});
+    }
 
 checkAuth = () => {
-  const login = localStorage.getItem('login')
-  if (!login) {
+  if (!this.state.authData) {
     return false
   } 
-  const token = JSON.parse(login).token;
+  const token = this.state.authData.token;
   if(!token) {
     return false;
   }
@@ -103,11 +80,10 @@ const NonAuthRoute = ({ component: Component, ...rest }) => (
 )
   return (
       <Router>
-    <div className="App">
-        <div id="wrapper">
-        
-        
-      <Sidebar isLoggedIn={this.checkAuth}/>
+        <AuthContext.Provider value={{authData: this.state.authData, setAuthData: this.setTokens, removeAuthData: this.removeTokens}}>
+        <div className="App">
+          <div id="wrapper">   
+            <Sidebar isLoggedIn={this.checkAuth}/>
             <Switch>
                 <AuthRoute path="/" exact component={Main}/>
                 <AuthRoute path="/igudziai" exact component={Skills}/>
@@ -115,36 +91,11 @@ const NonAuthRoute = ({ component: Component, ...rest }) => (
                 <AuthRoute path="/portfolio" exact component={Portfolio}/>
                 <AuthRoute path="/vartotojai" exact component={Users}/>
                 <AuthRoute path="/banned" exact component={BannedUsers}/>
-                <NonAuthRoute path="/login" exact>
-                  <div className="Login">
-                    <div className="main">
-                        <div className="main-content">
-                            <div className="container-fluid">
-                                <h1>Prisijungimas</h1>
-                                <div className="loginForm container w-50">
-                                    <div className="error"></div>
-                                    <Form onSubmit={this.handleOnSubmit}> 
-                                        <Form.Group controlId="formBasicEmail">
-                                            <Form.Control type="email" placeholder="El.Paštas" value={this.state.email} onChange={this.handleChangeEmail}/>
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicPassword">
-                                            <Form.Control type="password" placeholder="Slaptažodis" value={this.state.password} onChange={this.handleChangePassword}/>
-                                        </Form.Group>
-                                        <Form.Group controlId="formBasicCheckbox">
-                                            <Form.Check type="checkbox" label="Prisiminti mane" />
-                                        </Form.Group>
-                                        
-                                        <button type="submit" value="Submit"  className="btn btn-success">Prisijungti</button>
-                                    </Form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                </NonAuthRoute>
+                <NonAuthRoute path="/login" exact component={Login} />
             </Switch>
+          </div>
         </div>
-    </div>
+        </AuthContext.Provider>
       </Router>
 
   );}
