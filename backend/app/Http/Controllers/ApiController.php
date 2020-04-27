@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Message;
 use App\Role;
+use App\Service;
 use File;
+
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiController extends Controller
 {
@@ -26,7 +31,7 @@ class ApiController extends Controller
 				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 				'password' => ['required', 'string', 'min:8'],
 			]);
-            $secret = env('GOOGLE_RECAPTCHA_SECRET');
+			$secret = env('GOOGLE_RECAPTCHA_SECRET');
             $captchaId = $request->input('recaptcha');
             $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
 
@@ -60,11 +65,16 @@ class ApiController extends Controller
 		$token = auth()->attempt($creds);
 		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
 			return response()->json(['error' => 'Duomenys neteisingi']);
-		}
+        } 
+        $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
+        if (count($banned) > 0) {
+            return response()->json(['error' => 'Šis vartotojas užblokuotas']);
+        }
 
         $userId = auth()->user()->id; //Autentikuoto vartotojo id
+        $userRole = auth()->user()->role; //Autentikuoto vartotojo id
 		//jei duomenys teisingi, login tokena duoda
-		return response()->json(['token' => $token, 'userID' => $userId]);
+		return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole]);
 	}
 	public function tokenRefresh()
 	{
@@ -106,6 +116,158 @@ class ApiController extends Controller
                 User::where('id', auth()->user()->id)->update(['foto' => $filename]);
                 return response()->json(["file" => $filename],200);
             }
+    }
+    public function freelancersList() {
+        $users = User::select('*')
+        ->where('role',3)
+        ->get();
+        
+        $freelancers = [];
+        foreach($users as $user) {
+            $services = Service::select('services.id','service', 'description', 'price_per_hour')
+            ->join('users','users.id','=','services.user_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
+            ->join('skill','skill.id','=','user_skill.skill_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $info = [
+                'info' => $user,
+                'portfolio' => [
+                    'skills' => $skills,
+                    'services' => $services
+                ]
+            ];
+            $freelancers[] = $info;
+            $data = $this->paginate($freelancers);
+        }
+        return response()->json($data, 200);
+    }
+    public function search(Request $request) {
+        $searchQuery = $request->input("service");
+        $skillQuery = $request->input("skill");
+        $city = $request->input("city");
+
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+        ->distinct()
+        ->where('role',3)
+        ->get();
+        if($request->has('service') && !$request->has('skill') && !$request->has('city')){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        } if(!$request->has('service') && $request->has('skill') && !$request->has('city')) {
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->where('role',3)
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->get();
+        } if (!$request->has('service') && !$request->has('skill') && $request->has('city')){
+            $users = User::select('*')
+            ->where('role',3)
+            ->where('location','LIKE','%'.$city.'%')
+            ->get();
+        } if ($request->has('service') && $request->has('skill') && !$request->has('city')){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        } if ($request->has('service') && !$request->has('skill') && $request->has('city')){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('users.location','LIKE','%'.$city.'%')
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        } if (!$request->has('service') && $request->has('skill') && $request->has('city')){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->where('role',3)
+            ->where('users.location','LIKE','%'.$city.'%')
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->get();
+        } if ($request->has("skill") && $request->has("city") && $request->has("service") ){
+            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+            ->distinct()
+            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('services', 'services.user_id','users.id')
+            ->where('role',3)
+            ->where('users.location','LIKE','%'.$city.'%')
+            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
+            ->where('services.service','LIKE','%'.$searchQuery.'%')
+            ->get();
+        }
+        
+        $freelancers = [];
+        foreach($users as $user) {
+            $services = Service::select('services.id','service', 'description', 'price_per_hour')
+            ->join('users','users.id','=','services.user_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $skills = DB::table('user_skill')
+            ->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
+            ->join('skill','skill.id','=','user_skill.skill_id')
+            ->where('user_id',$user->id)
+            ->get();
+            $info = [
+                'info' => $user,
+                'portfolio' => [
+                    'skills' => $skills,
+                    'services' => $services
+                ]
+            ];
+                $freelancers[] = $info;
+                $data = $this->paginate($freelancers);
+        }
+        $data = $this->paginate($freelancers);
+        return response()->json($data, 200);
+    }
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+    public function usersList() {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at')
+        ->get();
+        return response()->json($users, 200);
+    }
+    public function bannedUsersList() {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'baned', 'deleted')
+        ->join('ban_delete_users', 'users.id', 'ban_delete_users.user_id')
+        ->get();
+        return response()->json($users, 200);
+    }
+    public function test(){
+        $users = User::find(5)->skills();
+        return response()->json($users, 200);
     }
 
 }

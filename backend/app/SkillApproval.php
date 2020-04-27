@@ -11,8 +11,8 @@ class SkillApproval extends Model
         'user_id','skill_id','approved'
     ];
 
-    /*public function users()
+    public function users()
     {
-        return $this->belongsToMany('App\User','role_users','role_id','user_id');
-    }*/
+        return $this->belongsToMany(Skill::class, 'user_skill', 'skill_id', 'user_id');
+    }
 }

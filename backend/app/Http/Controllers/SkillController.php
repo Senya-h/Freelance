@@ -75,31 +75,19 @@ class SkillController extends Controller
         return response()->json(["message" => "Skill istrintas"]);
 
     }
-    public function addSkill(Request $request)
-    {
-        /*try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti'], 401);
-        }*/
-        $validation = Validator::make($request->all(),[
-            'skillName' => ['required', 'string', 'max:255', 'unique:skill'],
-        ]);
-        if ($validation->fails()) {
-            return response()->json(["error" => $validation->errors()]);
-        } else {
-            $skill = new Skill;
-            $skill->skillName = $request->skillName;
-            $skill->save();
-            return response()->json(["SkillName"=>$skill->skillName]);
-        }
-    }
+    
     public function skillsList() {
         $skills = Skill::all();
         return response()->json($skills,200);
     }
     public function skillDelete(Skill $skill) {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
         $skill->delete();
         return response()->json(["message"=>"Ištrinta"],200);
     }
+    
 }

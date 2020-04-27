@@ -47,12 +47,12 @@ const Navbar = () => {
             navbar.current.classList.remove(classes.scrolled, classes.sleep);
         }
     } 
-    if (offsetTop > 350 ) {
+    if (offsetTop > 175 ) {
         if ( !navbar.current.classList.contains(classes.awake) ) {
             navbar.current.classList.add(classes.awake);	
         } 
     }
-    if (offsetTop < 350 ) {
+    if (offsetTop < 175 ) {
         if (navbar.current.classList.contains(classes.awake) ) {
             navbar.current.classList.remove(classes.awake);
             navbar.current.classList.add(classes.sleep);
@@ -62,14 +62,14 @@ const Navbar = () => {
     
     window.addEventListener("scroll", debounce(handleScroll));
 
-    const {removeAuthTokens, authTokens} = useAuth()
+    const {removeAuthData, authData} = useAuth()
 
     const logOut = () => {
-        removeAuthTokens()
+        removeAuthData()
     }
 
     let loginArea = null;
-    if(authTokens) {
+    if(authData) {
         loginArea = (
             <>
                 <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
@@ -119,17 +119,17 @@ const Navbar = () => {
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/jobs' activeClassName={classes['active']}>
-                                Browse Jobs
-                            </NavLink>
-                        </li>
-                        <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/candidates' activeClassName={classes['active']}>
-                                Candidates
+                                Freelanceriai
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
                                 Kontaktai
+                            </NavLink>
+                        </li>
+                        <li className={cx('nav-item', classes['nav-item'])}>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                                Pranešimai
                             </NavLink>
                         </li>
                         { loginArea }

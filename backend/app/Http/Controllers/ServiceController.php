@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Gate;
 
 class ServiceController extends Controller
 {
+    public function list() {
+        $services = Service::select('services.id as id','services.service','services.description','services.price_per_hour','users.name','services.user_id')
+                ->join('users', 'users.id', 'services.user_id')
+                ->get();
+        return response()->json($services, 200);
+    }
     public function create(Request $request)
     {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
