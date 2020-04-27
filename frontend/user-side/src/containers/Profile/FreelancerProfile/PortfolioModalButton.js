@@ -7,12 +7,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import FormGroup from '@material-ui/core/FormGroup';
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Box from '@material-ui/core/Box';
 import {makeStyles} from '@material-ui/core/styles';
 import {useFormik} from 'formik';
 import axios from '../../../axios';
 import TextField from '@material-ui/core/TextField';
 
-import {object as yupObject, string as yupString, number as yupNumber} from 'yup';
+import {object as yupObject, string as yupString} from 'yup';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,6 +29,7 @@ const PortfolioModalButton = (props) => {
     const classes = useStyles();
 
     const handleOpen = () => {
+        formik.resetForm();
         setOpen(true);
     }
 
@@ -84,7 +86,8 @@ const PortfolioModalButton = (props) => {
                         <FormGroup>
                             <TextField label="Aprašymas" multiline rows={3} variant='outlined' {...formik.getFieldProps('description')} />
                         </FormGroup>
-                        {formik.values.localFile?<img style={{width: '300px'}} src={formik.values.localFile} alt="portfolio" />:null}
+                        <Box display="flex" alignItems="end" flexDirection="column">
+                        {formik.values.localFile?<img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile} alt="portfolio" />:null}
                         <Button variant='contained' component='label' color='primary'>
                             Pridėti nuotrauką
                             <input type='file' style={{display: 'none'}} name="file" onChange={(e) => {
@@ -94,9 +97,10 @@ const PortfolioModalButton = (props) => {
                                 }
                             }}/>
                         </Button>
+                        </Box>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="primary" onClick={handleClose}>
+                        <Button color="primary" type='button' onClick={handleClose}>
                             Atšaukti
                         </Button>
                         <Button color="primary" type='submit'>

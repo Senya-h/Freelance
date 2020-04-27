@@ -10,16 +10,40 @@ use App\User;
 use App\RoleUser;
 use App\SkillUser;
 use App\Skill;
+use App\Service;
+use App\PortfolioWorks;
 use App\AdminServiceApprove;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    public function adminLogin(Request $request)
+	{
+		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
+		$token = auth()->attempt($creds);
+		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
+			return response()->json(['error' => 'Duomenys neteisingi']);
+        } 
+        $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
+        if (count($banned) > 0) {
+            return response()->json(['error' => 'Šis vartotojas užblokuotas']);
+        }
+        $userRole = auth()->user()->role; //Autentikuoto vartotojo id
+        if ($userRole === 1){
+            //Autentikuoto vartotojo id
+		    //jei duomenys teisingi, login tokena duoda
+            $userId = auth()->user()->id;
+            return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole, 'role' => 'Admin']);
+        } else {
+            return response()->json(['error' => 'Neturite teisės']);
+        }
+
+	}
     //Blokuoti trinti user
     public function create(Request $request,$id)
     {
-        if($request->user()->authorizeRoles('Admin')){
+        if(auth()->user()->authorizeRoles('Admin')){
             if($request->input('baned') == 1){
             return BanDeleteUser::create([
                 'user_id' => $id,
@@ -37,7 +61,12 @@ class AdminController extends Controller
                 $user = User::find($id);
                 $user->delete();
             }
+<<<<<<< HEAD
             return response()->json(["message" => "Vartotojas pašalintas"], 200);
+=======
+        } else {
+            return response()->json(['error'=>"Neturite teisės"],500);
+>>>>>>> a0f3c06b977b7e397ad6ec1536abfdc85b1ce84c
         }
     }
 
@@ -122,5 +151,51 @@ class AdminController extends Controller
             ]);
             return response()->json(["message" => request('format')." formatas pridėtas"]);
         }
+    }
+
+    public function addSkill(Request $request)
+    {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+            $validation = Validator::make($request->all(),[
+                'skillName' => ['required', 'string', 'max:255', 'unique:skill'],
+            ]);
+            if ($validation->fails()) {
+                return response()->json(["error" => $validation->errors()]);
+            } else {
+                $skill = new Skill;
+                $skill->skillName = $request->skillName;
+                $skill->save();
+                return response()->json(["SkillName"=>$skill->skillName]);
+            }
+    }
+    public function serviceDelete(Service $service, Request $request) {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $service->delete();
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Paslauga sekmingai ištrinta"], 200);
+    }
+    public function workDelete(Request $request, PortfolioWorks $work) {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $work->delete();
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Darbas sekmingai ištrintas"], 200);
     }
 }

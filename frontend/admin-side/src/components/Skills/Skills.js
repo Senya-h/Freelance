@@ -1,30 +1,59 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Skills.css';
 import axios from '../../axios';
+import DeleteModal from '../DeleteModal';
+import {Button} from 'react-bootstrap';
+import load from '../../img/loading.gif';
 
 class Skills extends Component{
+    _isMounted = false
     constructor() {
         super()
         this.state = {
             skills: [],
             skillName: "",
-            error: ""
+            error: "",
+            modalShow:false,
+            skillID: "",
+            modalSkillName: "",
+            token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
+            loading: true,
+            refetch: false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeskillName = this.handleChangeskillName.bind(this);
     }
-
     handleChangeskillName(event){
         this.setState({skillName: event.target.value})
     }
 
     componentDidMount(){
+        this._isMounted = true;
         axios.get(`/skills`)
             .then(data => {
-                this.setState({
-                    skills: data.data
-                })
+                if(this._isMounted) {
+                    this.setState({
+                        skills: data.data,
+                        loading: false
+                    })
+                }
             })
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+    componentDidUpdate(prevProps){
+        if(this.state.refetch == true) {
+            axios.get(`/skills`)
+                .then(data => {
+                    this.setState({
+                        skills: data.data,
+                        loading: false,
+                        refetch: false
+                    })
+                    
+                })
+        }
     }
 
     handleSubmit(event){
@@ -32,11 +61,13 @@ class Skills extends Component{
         if(document.getElementById('exampleInput').value == ""){
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neįvestas joks tekstas</div>"
         }else{
-            axios.post("/skill_add", {
-                skillName: this.state.skillName
-            }).then(res => {
+            axios.post("/skill_add", {skillName: this.state.skillName}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.state.token,
+                }}
+            ).then(res => {
                 this.setState({error: res.data})
-                this.componentDidMount()
                 if(this.state.error['error']) {
                     if(this.state.error['error']['skillName'] == "The skill name may not be greater than 255 characters.") {
                         document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdžio pavadinimas per ilgas. Daugiausiai gali būt 255 simboliai!</div>"
@@ -46,20 +77,45 @@ class Skills extends Component{
                 } else {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Įgūdis pridėtas</div>"
                     this.mainInput.value = "";
+                    this.setState({refetch: true,
+                                    loading: true});
                 }
-            })
+            }).catch(error => {
+                console.log(error.response)
+          })
             
         }
 
     }
     
-    delete = (id) => {
-        axios.delete(`/skill/delete/${id}`)
-        .then(data => {
-            document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdis ištrintas</div>"
-            this.componentDidMount()
-        })
+    modalOpen = (id, name) => {
+        this.setState({
+            modalShow:true,
+            skillID:id,
+            modalSkillName: name
+    })
     }
+    modalClose = () => {
+            this.setState({
+                modalShow:false
+            })
+        }
+    
+        delete = (id) => {
+            axios.delete(`/skill/delete/${this.state.skillID}`, {
+                headers: {
+                        'Authorization': this.state.token,
+                        'Content-Type': 'multipart/form-data'
+                    }
+            }).then(res => {
+                document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Įgūdis ištrintas</div>"
+                this.setState({refetch:true,
+                                loading: true})
+            }
+            )
+            
+            this.modalClose();
+        }
 
     render(){
         
@@ -68,11 +124,28 @@ class Skills extends Component{
         <tr key={skill.id}>
         <th scope="row">{skill.id}</th>
         <td>{skill.skillName}</td>
-        <td><button className="btn btn-danger" onClick={() => this.delete(skill.id)}>x</button></td>
+        <td><Button variant="danger" onClick={() => this.modalOpen(skill.id, skill.skillName)}>
+            Pašalinti
+        </Button></td>
         </tr>
+        
         ));
+        if(this.state.loading) {
+            return(
+                <img className="loading" src={load} alt="loading..." />
+            )
+        }
         return(
             <main>
+                
+                <DeleteModal
+                    method = {() => this.delete(this.state.skillID)}
+                    show={this.state.modalShow}
+                    onHide={this.modalClose}
+                    text={`Ar tikrai norite ištrinti šį įgūdį? ( ${this.state.modalSkillName} )`}
+                    token={this.state.token}
+                    btn={"Ištrinti"}
+                />
                 <div className="main">
                     <div className="main-content">
                         <div className="container-fluid">
@@ -86,6 +159,7 @@ class Skills extends Component{
                                 <button type="submit" value="Submit"  className="btn btn-success">Pateikti</button>
                             </form>
                             <hr/>
+                            
                             <h3>Visi Įgūdžiai:</h3>
                             <table className="table">
                                 <thead>
@@ -104,6 +178,7 @@ class Skills extends Component{
                 </div>
             </main>
         )
+        
     }
 }
 export default Skills;

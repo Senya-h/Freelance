@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+
+export const baseURL = 'http://localhost';
+
+//URL for api
 const instance = axios.create({
-    baseURL: 'http://freelance.test/api'
+    baseURL: baseURL + '/api',
 });
+
 
 export default instance;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit'
 import Button from '@material-ui/core/Button';
@@ -24,16 +24,16 @@ const SkillModalButton = (props) => {
     const handleClose = () => {
         setOpen(false);
     }
-    let checkedSkills = props.skills.map(skill => {
-        return skill.id;
-    })
 
+    const [checkedSkills, setCheckedSkills] = useState(props.skills.map(skill => {
+        return skill.id.toString();
+    }));
+    
     const formik = useFormik({
         initialValues: {
-            skills_id: []
+            skills_id: [...checkedSkills]
         },
         onSubmit: values => {
-            console.log("Siunciami skillai: ", values.skills_id);
             //Submitting user's skills to the server
             axios.post('/skill', values.skills_id, {
                 headers: {
@@ -41,22 +41,28 @@ const SkillModalButton = (props) => {
                 }
             }).then(res => {
                 if(!res.error && res.status === 200) {
+                    handleClose();
                     const newSkills = [];
                     props.allSkills.forEach(skill => {
                         values.skills_id.forEach(newSkillId => {
-                            if(skill.id === newSkillId) {
+                            if(skill.id.toString() === newSkillId) {
                                 newSkills.push({id: skill.id, skill: skill.skillName, approved: 0, comment: ""});
                             }
                         })
                     })
                     console.log("Nauji skillsai: ", newSkills);
                     props.setSkills([...newSkills]);
-                    handleClose();
                 }
                 console.log(res);
             })
         }
     })
+
+    useEffect(() => {
+        setCheckedSkills(props.skills.map(skill => {
+            return skill.id.toString();
+        }));
+    }, [props.skills])
 
     return (
         <>
@@ -69,13 +75,15 @@ const SkillModalButton = (props) => {
                 <form onSubmit={formik.handleSubmit}>
                     <DialogContent>
                         <FormGroup>
-                            {props.allSkills.map(skill => (               
+                            {props.allSkills.map(skill => { 
+                                return (              
                                 <FormControlLabel
-                                key={skill.id} 
-                                control={<Checkbox checked={checkedSkills.includes(skill.id)} color="primary" name="[skills_id]" onChange={formik.handleChange} value={skill.id}/>}
-                                label={skill.skillName}
+                                    key={skill.id} 
+                                    control={<Checkbox checked={formik.values.skills_id.includes(skill.id.toString()) || false} color="primary" name="[skills_id]" onChange={formik.handleChange} value={skill.id}/>}
+                                    label={skill.skillName}
                                 />
-                            ))}
+                                )
+                            })}
 
                         </FormGroup>
                     </DialogContent>

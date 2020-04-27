@@ -16,17 +16,84 @@ class PortfolioController extends Controller
     /*User INFO */
     public function aboutUser(User $user, $id) {
         //role pagal kuria iesko kokiai grupei priklauso vartotojas
-        $role_id = User::select('role')->where('users.id',$id)->get()[0]->role;
+        $role_id = User::select('role')
+        ->where('users.id',$id)
+        ->get()[0]->role;
+
         //pagrindine vartotojo informacija
-        $usr = User::select('id','name', 'email', 'foto', 'location')->where('users.id',$id)->get();
+        $usr = User::select('id','name', 'email', 'foto', 'location')
+        ->where('users.id',$id)
+        ->get();
+
         //role
-        $role = DB::table('role_users')->select('role')->join('roles','roles.id','=','role_users.role_id')->where('user_id',$id)->get();
+        $role = DB::table('role_users')
+        ->select('role')
+        ->join('roles','roles.id','=','role_users.role_id')
+        ->where('user_id',$id)
+        ->get();
+
         //services
-        $services = Service::select('services.id','service', 'description', 'price_per_hour')->join('users','users.id','=','services.user_id')->where('user_id',$id)->get();
+        $services = Service::select('services.id','service', 'description', 'price_per_hour')
+        ->join('users','users.id','=','services.user_id')
+        ->where('user_id',$id)
+        ->get();
+
         //darbai
-        $works = PortfolioWorks::select('portfolio_works.id','title', 'description', 'filePath')->join('users','users.id','=','portfolio_works.user_id')->where('user_id',$id)->get();
+        $works = PortfolioWorks::select('portfolio_works.id','title', 'description', 'filePath')
+        ->join('users','users.id','=','portfolio_works.user_id')
+        ->where('user_id',$id)
+        ->get();
+
         //skills
-        $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')->join('skill','skill.id','=','user_skill.skill_id')->where('user_id',$id)->get();
+        $skills = DB::table('user_skill')
+        ->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
+        ->join('skill','skill.id','=','user_skill.skill_id')
+        ->where('user_id',$id)
+        ->get();
+        
+        $darbai = [];
+        foreach ($works as $work) {
+            $workApprv = DB::table('admin_work_approves')->select('*')->where('work_id',$work->id)->get();
+            if(count($workApprv) > 0) {
+                $darbai[] = [
+                    'id' => $work->id,
+                    'title' => $work->title,
+                    'description' => $work->description,
+                    'filePath' => $work->filePath,
+                    'approved' => 1
+                ];
+            } else {
+                $darbai[] = [
+                    'id' => $work->id,
+                    'title' => $work->title,
+                    'description' => $work->description,
+                    'filePath' => $work->filePath,
+                    'approved' => 0
+                ];
+            }
+        }
+
+        $paslaugos = [];
+        foreach ($services as $service) {
+            $workApprv = DB::table('admin_service_approves')->select('*')->where('service_id',$service->id)->get();
+            if(count($workApprv) > 0) {
+                $paslaugos[] = [
+                    'id' => $service->id,
+                    'title' => $service->service,
+                    'description' => $service->description,
+                    'price_per_hour' => $service->price_per_hour,
+                    'approved' => 1
+                ];
+            } else {
+                $paslaugos[] = [
+                    'id' => $service->id,
+                    'title' => $service->service,
+                    'description' => $service->description,
+                    'price_per_hour' => $service->price_per_hour,
+                    'approved' => 0
+                ];
+            }
+        }
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
@@ -37,8 +104,8 @@ class PortfolioController extends Controller
                     'roles' => $role,
             ],
                 'portfolio' => [
-                    'services' => $services, //Paslaugos
-                    'works' => $works, //Atlikti darbai
+                    'services' => $paslaugos, //Paslaugos
+                    'works' => $darbai, //Atlikti darbai
                     'skills' => $skills //Atlikti darbai
                 ]
             ];

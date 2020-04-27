@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Form from './Form/Form';
+import Form from './Form';
 import cx from 'classnames';
 import classes from './SearchBox.module.scss';
 

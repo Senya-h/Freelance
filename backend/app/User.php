@@ -39,6 +39,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany('App\Skill','skill_users','user_id','skill_id');
     }
+    public function skill()
+    {
+        return $this->belongsToMany('App\Skill','user_skill','user_id','skill_id');
+    }
 
     public function bandeleteusers()
     {
