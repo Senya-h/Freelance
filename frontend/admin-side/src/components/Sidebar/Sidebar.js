@@ -1,18 +1,18 @@
-import React, {Component, useHistory} from 'react';
+import React, {Component} from 'react';
 import './Sidebar.css';
 import {NavLink} from "react-router-dom";
 import decode from 'jwt-decode';
+import {useAuth} from '../../context/auth';
 
-class Sidebar extends Component{
-    constructor(props) {
-        super(props)
+const Sidebar = (props) => {
+    const {authData, removeAuthData} = useAuth();
+
+    const logout = () => {
+        removeAuthData();
     }
-    logout = () => {
-        localStorage.removeItem('login')
-    }
-    render() {
-        let links;
-    if(this.props.isLoggedIn()) {
+
+    let links;
+    if(authData) {
         links = (
             <>
             <li><NavLink exact to="/" className="nav-link"><i className="fa fa-home"></i>
@@ -25,7 +25,7 @@ class Sidebar extends Component{
                 <span>Portfolio</span></NavLink></li>
             <li><NavLink exact to="/vartotojai" className="nav-link"><i className="fa fa-users"></i>
                 <span>Vartotojai</span></NavLink></li>
-            <li><NavLink exact to="/logout" className="nav-link" onClick={this.logout}><i className="fa fa-database"></i>
+            <li><NavLink exact to="/login" className="nav-link" onClick={logout}><i className="fa fa-database"></i>
                 <span>Atsijungti</span></NavLink></li>
             </>
         )
@@ -37,7 +37,8 @@ class Sidebar extends Component{
             </>
         )
     }
-        return(
+
+    return(
         <div className="Sidebar">
             <div id="sidebar-nav" className="sidebar">
                 <div className="sidebar-scroll">
@@ -48,9 +49,8 @@ class Sidebar extends Component{
                     </nav>
                 </div>
             </div>
-     </div>
+        </div>
     )
-    } 
 }
 
 export default Sidebar;

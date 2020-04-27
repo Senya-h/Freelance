@@ -1,49 +1,43 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import './login.scss';
 import axios from '../../axios';
 
-class Login extends Component{
-    constructor() {
-        super()
-        this.state = {
-            email: "",
-            password: "",
-            error: ""
-        }
-        this.handleChangeEmail = this.handleChangeEmail.bind(this)
-        this.handleChangePassword = this.handleChangePassword.bind(this)
-        this.handleOnSubmit = this.handleOnSubmit.bind(this)
+import { useAuth } from '../../context/auth';
+const Login = (props) => {
+    const {authData, setAuthData} = useAuth();
+
+    const [loginInfo, setLoginInfo] = useState({
+        email: '',
+        password: '',
+        error: ''
+    });
+
+    const handleChangeEmail = (event) => {
+        setLoginInfo({...loginInfo, email: event.target.value})
     }
-    
-    handleChangeEmail(event){
-        this.setState({email: event.target.value})
+    const handleChangePassword = (event) => {
+        setLoginInfo({...loginInfo, password: event.target.value})
     }
-    handleChangePassword(event){
-        this.setState({password: event.target.value})
-    }
-    handleOnSubmit(event) {
+
+    const handleOnSubmit = (event) => {
         event.preventDefault();
         const values = {
-                email: this.state.email,
-                password: this.state.password
+                email: loginInfo.email,
+                password: loginInfo.password
         }
         axios.post("/login", values
             ).then(data => {
                 console.log(data)
                 if(data.data.token) {
-                    localStorage.setItem('login', 
-                    JSON.stringify({
-                        token:data.data.token,
-                        id: data.data.userID})
-                        );
+                    setAuthData(data.data);
+                    props.history.push('/');
                 } else {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+data.data.error+"</div>"
                 }
             })
             
     }
-    render() {
         
     return(
         <div className="Login">
@@ -53,12 +47,12 @@ class Login extends Component{
                         <h1>Prisijungimas</h1>
                         <div className="loginForm container w-50">
                             <div className="error"></div>
-                            <Form onSubmit={this.handleOnSubmit}> 
+                            <Form onSubmit={handleOnSubmit}> 
                                 <Form.Group controlId="formBasicEmail">
-                                    <Form.Control type="email" placeholder="El.Paštas" value={this.state.email} onChange={this.handleChangeEmail}/>
+                                    <Form.Control type="email" placeholder="El.Paštas" value={loginInfo.email} onChange={handleChangeEmail}/>
                                 </Form.Group>
                                 <Form.Group controlId="formBasicPassword">
-                                    <Form.Control type="password" placeholder="Slaptažodis" value={this.state.password} onChange={this.handleChangePassword}/>
+                                    <Form.Control type="password" placeholder="Slaptažodis" value={loginInfo.password} onChange={handleChangePassword}/>
                                 </Form.Group>
                                 <Form.Group controlId="formBasicCheckbox">
                                     <Form.Check type="checkbox" label="Prisiminti mane" />
@@ -71,7 +65,7 @@ class Login extends Component{
                 </div>
             </div>
         </div>
-    )}
+    )
 }
 
 export default Login;
