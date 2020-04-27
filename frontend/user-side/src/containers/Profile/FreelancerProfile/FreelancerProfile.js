@@ -31,18 +31,22 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#eee',     
     },
     profileImage: {
-        width: '300px',
+        position: 'relative',
+        width: '225px',
+        height: '225px',
         margin: '0 auto',
         '& > img': {
             width: '100%',
             height: '100%',
-            objectFit: 'cover'
+            objectFit: 'cover',
+            borderRadius: '50%',
+
         },
     },
     imageAddIcon: {
-        position: 'relative',
-        top: '-80px',
-        left: '250px',
+        position: 'absolute',
+        top: '170px',
+        left: '150px',
     },
     userInfoArea: {
         order: 2,
