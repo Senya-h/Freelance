@@ -10,7 +10,9 @@ use App\User;
 use App\Message;
 use App\Role;
 use App\Service;
+use App\PortfolioWorks;
 use File;
+use Carbon\Carbon;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -242,7 +244,7 @@ class ApiController extends Controller
         $data = $this->paginate($freelancers);
         return response()->json($data, 200);
     }
-    public function paginate($items, $perPage = 1, $page = null, $options = [])
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
@@ -293,6 +295,21 @@ class ApiController extends Controller
 		} else {
 			return response()->json(200);
 		}
+    }
+    public function statistics() {
+        $allUsers = count(User::all());
+        $allServices = count(Service::all());
+        $allWorks = count(PortfolioWorks::all());
+        $allBanned = count(DB::table('ban_delete_users')->select('*')->where('baned',1)->get());
+        $allThisDayUsers = count(User::select('*')->where('created_at','LIKE',Carbon::now()->format('Y-m-d').'%')->get());
+        $statistic = [
+            'users' => $allUsers,
+            'services' => $allServices,
+            'works' => $allWorks,
+            'banned' => $allBanned,
+            'thisDayUsers' => $allThisDayUsers
+        ];
+        return response()->json($statistic, 200);
     }
 
 }

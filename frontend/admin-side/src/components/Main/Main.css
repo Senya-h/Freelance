@@ -1,0 +1,25 @@
+.stats {
+    width: 60%;
+    margin: 0 auto !important;
+}
+.stat {
+    border: 2px solid rgb(94, 167, 27);
+    margin: 30px;
+    height: 150px;
+    border-radius: 15%;
+}
+.stat:hover {
+    transition: 1s;
+    background-color: rgba(95, 167, 27, 0.294);
+}
+p {
+    margin-bottom: 5px !important;
+}
+.numb {
+    font-size: 50px;
+    color: rgb(26, 102, 77);
+}
+.text {
+    font-size: 20px;
+    color: rgb(88, 44, 44);
+}
