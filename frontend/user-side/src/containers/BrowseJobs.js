@@ -192,7 +192,7 @@ const BrowseJobs = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/jobs${item.page === 1 ? '': `?page=${item.page}`}`}
+                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
                             {...item}
                         />
                     )}
