@@ -51,6 +51,49 @@ class PortfolioController extends Controller
         ->where('user_id',$id)
         ->get();
         
+        $darbai = [];
+        foreach ($works as $work) {
+            $workApprv = DB::table('admin_work_approves')->select('*')->where('work_id',$work->id)->get();
+            if(count($workApprv) > 0) {
+                $darbai[] = [
+                    'id' => $work->id,
+                    'title' => $work->title,
+                    'description' => $work->description,
+                    'filePath' => $work->filePath,
+                    'approved' => 1
+                ];
+            } else {
+                $darbai[] = [
+                    'id' => $work->id,
+                    'title' => $work->title,
+                    'description' => $work->description,
+                    'filePath' => $work->filePath,
+                    'approved' => 0
+                ];
+            }
+        }
+
+        $paslaugos = [];
+        foreach ($services as $service) {
+            $workApprv = DB::table('admin_service_approves')->select('*')->where('service_id',$service->id)->get();
+            if(count($workApprv) > 0) {
+                $paslaugos[] = [
+                    'id' => $service->id,
+                    'title' => $service->service,
+                    'description' => $service->description,
+                    'price_per_hour' => $service->price_per_hour,
+                    'approved' => 1
+                ];
+            } else {
+                $paslaugos[] = [
+                    'id' => $service->id,
+                    'title' => $service->service,
+                    'description' => $service->description,
+                    'price_per_hour' => $service->price_per_hour,
+                    'approved' => 0
+                ];
+            }
+        }
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
@@ -61,8 +104,8 @@ class PortfolioController extends Controller
                     'roles' => $role,
             ],
                 'portfolio' => [
-                    'services' => $services, //Paslaugos
-                    'works' => $works, //Atlikti darbai
+                    'services' => $paslaugos, //Paslaugos
+                    'works' => $darbai, //Atlikti darbai
                     'skills' => $skills //Atlikti darbai
                 ]
             ];

@@ -26,6 +26,9 @@ Route::post('login','ApiController@login');
 Route::get('new_token', 'ApiController@tokenRefresh');
 Route::post('verify_login/{id}', 'ApiController@verifyFirstLogin');
 
+//Admin login
+Route::post('login/admin','AdminController@adminLogin');
+
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
@@ -66,7 +69,8 @@ Route::get('skill&id={id}/admin/list', 'AdminController@aboutskillApproval');  /
 Route::post('skill&id={skill_id}/user&id={user_id}','AdminController@skillApproval');  //Skill patvirtinimas
 //Admin service delete
 Route::delete('admin/delete/service&id={service}', 'AdminController@serviceDelete'); // id=serviceID Paslaugos ištrynimas
-Route::delete('admin/delete/work&id={work}', 'AdminController@workDelete'); // id=serviceID Paslaugos ištrynimas
+//Admin darbo delete
+Route::delete('admin/delete/work&id={work}', 'AdminController@workDelete'); // id=serviceID Darbo ištrynimas
 
 //Message
 Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Išsiųstos
