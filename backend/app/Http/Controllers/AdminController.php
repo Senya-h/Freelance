@@ -37,6 +37,7 @@ class AdminController extends Controller
                 $user = User::find($id);
                 $user->delete();
             }
+            return response()->json(["message" => "Vartotojas pašalintas"], 200);
         }
     }
 

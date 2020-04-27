@@ -52,7 +52,7 @@ Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store
 
 //Admin
 Route::post('user&id={id}/ban/delete', 'AdminController@create'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
-Route::delete('user&id={id}/remove', 'AdminController@destroy');  //Pasalinti ban/delete pagal user id
+Route::delete('user&id={id}/remove', 'AdminController@destroy');  //Pasalinti user pagal user id
 //Admin work approvals
 Route::get('work&id={id}/list', 'AdminController@aboutWorkApproval');  //Patvirtintas darbas pagal darbo id
 Route::post('work&id={id}/approve', 'AdminController@workApproval');  //Freelancer darbu patvirtinimas
