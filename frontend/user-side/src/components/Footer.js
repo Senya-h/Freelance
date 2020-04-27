@@ -8,7 +8,11 @@ import Button from '@material-ui/core/Button';
 import MailIcon from '@material-ui/icons/Mail';
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from '@material-ui/core/styles'
+import Alert from '@material-ui/lab/Alert';
 
+import {useFormik} from 'formik';
+import axios from '../axios';
+import {string as yupString, object as yupObject} from 'yup';
 
 const useStyles = makeStyles(theme => ({
     footer: {
@@ -25,10 +29,7 @@ const useStyles = makeStyles(theme => ({
             paddingBottom: theme.spacing(10)
         },
         [theme.breakpoints.up("md")]: {
-            paddingTop: theme.spacing(10),
-            paddingLeft: theme.spacing(10),
-            paddingRight: theme.spacing(10),
-            paddingBottom: theme.spacing(10)
+            padding: theme.spacing(6),
         }
     },
     whiteBg: {
@@ -44,29 +45,73 @@ const useStyles = makeStyles(theme => ({
 
 const Footer = () => {
     const classes = useStyles();
+    let alertMessage = null;
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            message: ''
+        },
+        validationSchema: yupObject({
+            email: yupString().email("Neteisingas el. pašto adresas").required("Privalomas laukelis")
+        }),
+        onSubmit: values => {
+            axios.post('/', values)
+                .then(res => {
+                    if(!res.data.error && res.status === 200) {
+                        alertMessage = <Alert severity="success">Žinutė išsiųsta!</Alert>;
+                    } else {
+                        alertMessage = <Alert severity="error">Žinutės išsiųsti nepavyko!</Alert>;
+                    }
+                })
+                .catch(err => {
+                    alertMessage = <Alert severity="error">Žinutės išsiųsti nepavyko!</Alert>;
+                })
+        }
+    })
     return (
         <footer className={classes.footer}>
             <Grid container spacing={5}>
                 <Grid item xs={12} md={4}>
-                    <Box display="flex" flexDirection="column">
-                        <Box mb={1}>
-                            <TextField
-                                variant="outlined"
-                                multiline
-                                placeholder="Susisiekite su mumis"
-                                inputProps={{ "aria-label": "Susisiekite su mumis" }}
-                                InputProps={{
-                                    className: classes.whiteBg
-                                }}
-                                rows={4}
-                                fullWidth
-                                required
-                            />
+                    <form onSubmit={formik.handleSubmit} autoComplete="off">
+                        <Box display="flex" flexDirection="column">
+                            <Box mb={1}>
+                                <Box mb={1}>
+                                    <TextField
+                                        variant="outlined"
+                                        placeholder="El. paštas"
+                                        inputProps={{ "aria-label": "Susisiekite su mumis" }}
+                                        InputProps={{
+                                            className: classes.whiteBg
+                                        }}
+                                        fullWidth
+                                        {...formik.getFieldProps('email')}
+                                    />
+                                    {formik.errors.email ? (
+                                        <div className='text-danger'>{formik.errors.email}</div>
+                                        ) : null
+                                    }
+                                </Box>
+
+                                <TextField
+                                    variant="outlined"
+                                    multiline
+                                    placeholder="Susisiekite su mumis"
+                                    inputProps={{ "aria-label": "Susisiekite su mumis" }}
+                                    InputProps={{
+                                        className: classes.whiteBg
+                                    }}
+                                    rows={4}
+                                    fullWidth
+                                    {...formik.getFieldProps('message')}
+                                />
+                            </Box>
+                            <Button type='submit' color='secondary' variant='outlined' >
+                                Siųsti žinutę
+                            </Button>
+                            {console.log(alertMessage)}
+                            {alertMessage}
                         </Box>
-                        <Button type='submit' color='secondary' variant='outlined' >
-                            Siųsti žinutę
-                        </Button>
-                    </Box>
+                    </form>
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <Box
