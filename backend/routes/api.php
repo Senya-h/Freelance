@@ -93,3 +93,9 @@ Route::post('skill/{id}', 'SkillController@delete');
 
 //addSkill i skill lentele ideda skilus
 Route::post('skill_add','SkillController@addSkill');
+
+//adds comments to comments table which should be desplayed in porftiolios table
+Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
+Route::post('comment','CommentsController@create');
+Route::put('comment/{comment}','CommentsController@update');
+Route::delete('comment/{id}','CommentsController@delete');
