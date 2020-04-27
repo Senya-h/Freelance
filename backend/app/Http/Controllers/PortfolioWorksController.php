@@ -16,6 +16,7 @@ class PortfolioWorksController extends Controller
                 ->join('users', 'users.id', 'portfolio_works.user_id')
                 ->orderBy('portfolio_works.created_at', 'desc')
                 ->get();
+        $newWork = [];
         foreach ($works as $work) {
             $approved = DB::table('admin_work_approves')->select('work_id')->where('work_id',$work->id)->where('approved',1)->get();
             if(count($approved) > 0) {
