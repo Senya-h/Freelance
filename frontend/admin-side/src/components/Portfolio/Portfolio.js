@@ -107,16 +107,21 @@ class Portfolio extends Component{
 render() {
     const worksList = this.state.works.map(work => ( 
         <Card key={work.id} className="col-lg-4" style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={`${baseURL}/storage/${work.filePath}`} />
+        <Card.Img variant="top" className="imgMax" src={`${baseURL}/storage/${work.filePath}`} />
         <Card.Body>
             <Card.Title>{work.title}</Card.Title>
             <Card.Text>
             Aprašymas: {work.description}
             </Card.Text>
             <div className="row">
+                { work.approved === 0 ? (
                 <div className="col-6">
                     <Button variant="success" onClick={() => this.approveModalOpen(work.id, work.title)}>Patvirtinti</Button>
-                </div>
+                </div> ) : (
+                <div className="col-6">
+                    <Button variant="secondary" disabled>Patvirtintas</Button>
+                </div> 
+                )}
                 <div className="col-6">
                     <Button variant="danger" onClick={() => this.deleteModalOpen(work.id, work.title)}>Ištrinti</Button>
                 </div>
