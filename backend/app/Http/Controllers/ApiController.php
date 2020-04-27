@@ -65,7 +65,7 @@ class ApiController extends Controller
 		$token = auth()->attempt($creds);
 		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
 			return response()->json(['error' => 'Duomenys neteisingi']);
-        } 
+        }
         $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
         if (count($banned) > 0) {
             return response()->json(['error' => 'Šis vartotojas užblokuotas']);
@@ -121,7 +121,7 @@ class ApiController extends Controller
         $users = User::select('*')
         ->where('role',3)
         ->get();
-        
+
         $freelancers = [];
         foreach($users as $user) {
             $services = Service::select('services.id','service', 'description', 'price_per_hour')
@@ -213,7 +213,7 @@ class ApiController extends Controller
             ->where('services.service','LIKE','%'.$searchQuery.'%')
             ->get();
         }
-        
+
         $freelancers = [];
         foreach($users as $user) {
             $services = Service::select('services.id','service', 'description', 'price_per_hour')
@@ -238,7 +238,7 @@ class ApiController extends Controller
         $data = $this->paginate($freelancers);
         return response()->json($data, 200);
     }
-    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    public function paginate($items, $perPage = 1, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
