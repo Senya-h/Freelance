@@ -46,13 +46,13 @@ const Sidebar = (props) => {
         if(wrapp === 0) {
             btn = (
                 <>
-                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(1)}>Meniu</Button>
+                <Button variant="outline-dark" className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(1)}>Meniu</Button>
                 </>
             )
         } else if (wrapp === 1) {
             btn = (
             <>
-                <Button className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(0)}>Meniu</Button>
+                <Button variant="outline-dark" className={`menuWrapper ${wrapper.menuWrapper}`} onClick={() => setWrapp(0)}>Meniu</Button>
             </>
             )
         }
