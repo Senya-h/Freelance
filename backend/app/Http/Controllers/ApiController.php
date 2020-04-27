@@ -250,8 +250,22 @@ class ApiController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at')
+        $allUsers = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at')
         ->get();
+        $users = [];
+        foreach($allUsers as $user) {
+            $ban = DB::table('ban_delete_users')->select('user_id')->where('user_id',$user->id)->where('baned',1)->get();
+            if(count($ban) == 0) {
+                $users[] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'location' => $user->location,
+                    'created_at' => $user->created_at,
+                ];
+            }
+                
+        }
         return response()->json($users, 200);
     }
     public function bannedUsersList() {
@@ -263,10 +277,6 @@ class ApiController extends Controller
         $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'baned', 'deleted')
         ->join('ban_delete_users', 'users.id', 'ban_delete_users.user_id')
         ->get();
-        return response()->json($users, 200);
-    }
-    public function test(){
-        $users = User::find(5)->skills();
         return response()->json($users, 200);
     }
 

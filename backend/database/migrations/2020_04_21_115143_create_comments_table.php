@@ -16,11 +16,12 @@ class CreateCommentsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('receiver_id');
+            $table->integer('rating');
             $table->longText('comment');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
