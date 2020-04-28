@@ -10,7 +10,9 @@ use App\User;
 use App\Message;
 use App\Role;
 use App\Service;
+use App\PortfolioWorks;
 use File;
+use Carbon\Carbon;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -64,11 +66,15 @@ class ApiController extends Controller
 		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
 		$token = auth()->attempt($creds);
 		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
-			return response()->json(['error' => 'Duomenys neteisingi']);
-        }
+			return response()->json(['error' => [
+                'invalidCredentials' => 1,
+            ]]);
+        } 
         $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
         if (count($banned) > 0) {
-            return response()->json(['error' => 'Šis vartotojas užblokuotas']);
+            return response()->json(['error' => [
+                'banned' => 1
+            ]]);
         }
 
         $userId = auth()->user()->id; //Autentikuoto vartotojo id
@@ -238,7 +244,7 @@ class ApiController extends Controller
         $data = $this->paginate($freelancers);
         return response()->json($data, 200);
     }
-    public function paginate($items, $perPage = 1, $page = null, $options = [])
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
@@ -278,6 +284,32 @@ class ApiController extends Controller
         ->join('ban_delete_users', 'users.id', 'ban_delete_users.user_id')
         ->get();
         return response()->json($users, 200);
+    }
+    public function refreshBannedToken() {
+        
+        $checkBan = DB::table('ban_delete_users')->select('*')->where('user_id',auth()->user()->id)->where('baned',1)->get();
+        if(count($checkBan) > 0) {
+            $token = auth()->refresh();
+            return response()->json(['banned' => 1]);
+                
+		} else {
+			return response()->json(200);
+		}
+    }
+    public function statistics() {
+        $allUsers = count(User::all());
+        $allServices = count(Service::all());
+        $allWorks = count(PortfolioWorks::all());
+        $allBanned = count(DB::table('ban_delete_users')->select('*')->where('baned',1)->get());
+        $allThisDayUsers = count(User::select('*')->where('created_at','LIKE',Carbon::now()->format('Y-m-d').'%')->get());
+        $statistic = [
+            'users' => $allUsers,
+            'services' => $allServices,
+            'works' => $allWorks,
+            'banned' => $allBanned,
+            'thisDayUsers' => $allThisDayUsers
+        ];
+        return response()->json($statistic, 200);
     }
 
 }
