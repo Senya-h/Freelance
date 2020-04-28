@@ -152,7 +152,7 @@ render() {
                             userID={this.state.userID}
                             show={this.state.deleteModalShow}
                             onHide={this.deleteModalClose}
-                            text={`Ar tikrai norite ištrinti šį vartotoją? ( ${this.state.modalUserName} )`}
+                            text={`Jeigu ištrinsite vartotoją bus pašalinti visi įrašai susiję su vartotoju negrįžtamai. Ar tikrai norite ištrinti šį vartotoją? ( ${this.state.modalUserName} )`}
                             token={this.state.token}
                         />
                         <UserBanModal

@@ -8,6 +8,7 @@ import Portfolio from "../Portfolio/Portfolio";
 import Users from "../Users/Users";
 import BannedUsers from "../Users/BannedUsers";
 import Login from "../Login/Login";
+import Formats from "../Formats/Formats";
 import decode from 'jwt-decode';
 import{
     BrowserRouter as Router,
@@ -89,6 +90,7 @@ const NonAuthRoute = ({ component: Component, ...rest }) => (
                 <AuthRoute path="/igudziai" exact component={Skills}/>
                 <AuthRoute path="/paslaugos" exact component={Services}/>
                 <AuthRoute path="/portfolio" exact component={Portfolio}/>
+                <AuthRoute path="/formats" exact component={Formats}/>
                 <AuthRoute path="/vartotojai" exact component={Users}/>
                 <AuthRoute path="/banned" exact component={BannedUsers}/>
                 <NonAuthRoute path="/login" exact component={Login} />
