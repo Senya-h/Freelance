@@ -15,10 +15,10 @@ class CommentTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\Comments');
-        for($i = 0; $i < 20; $i++) {
+        for($i = 0; $i < 150; $i++) {
            $fakeComment = New Comments([
-                'user_id' => $faker->numberBetween($min = 1, $max = 20),
-                'receiver_id' => $faker->numberBetween($min = 1, $max = 20),
+                'user_id' => $faker->numberBetween($min = 1, $max = 150),
+                'receiver_id' => $faker->numberBetween($min = 1, $max = 150),
                 'rating' => $faker->numberBetween($min = 1, $max = 5),
                 'comment' => $faker->sentence($nbWords = 6, $variableNbWords = true),
                 'created_at' => \Carbon\Carbon::now(),

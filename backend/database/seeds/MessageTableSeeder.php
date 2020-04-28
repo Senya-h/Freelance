@@ -15,10 +15,10 @@ class MessageTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\Messages');
-        for($i = 0; $i < 20; $i++) {
+        for($i = 0; $i < 200; $i++) {
            $fakeMessage = New Message([
-                'senders_id' => $faker->numberBetween($min = 1, $max = 20),
-                'receivers_id' => $faker->numberBetween($min = 1, $max = 20),
+                'senders_id' => $faker->numberBetween($min = 1, $max = 150),
+                'receivers_id' => $faker->numberBetween($min = 1, $max = 150),
                 'message' => $faker->sentence($nbWords = 6, $variableNbWords = true),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()

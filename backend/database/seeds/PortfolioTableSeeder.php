@@ -13,12 +13,12 @@ class PortfolioTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\PortfolioWorks');
-        for($i = 0; $i < 20; $i++) {
+        for($i = 0; $i < 200; $i++) {
            $fakePortfolio = New PortfolioWorks([
-                'title' => $faker->word,
-                'filePath' => $faker->word,
+                'title' => ucfirst($faker->word),
+                'filePath' => 'portfolioWorks/default.jpg',
                 'description' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                'user_id' => $faker->numberBetween($min = 1, $max = 20),
+                'user_id' => $faker->numberBetween($min = 2, $max = 150),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]);

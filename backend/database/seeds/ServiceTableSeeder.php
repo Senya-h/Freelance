@@ -13,12 +13,12 @@ class ServiceTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('App\Service');
-        for($i = 0; $i < 20; $i++) {
+        for($i = 0; $i < 200; $i++) {
            $fakeService = New Service([
-                'service' => $faker->word,
+                'service' => ucfirst($faker->word),
                 'price_per_hour' => $faker->numberBetween($min = 1, $max = 100),
                 'description' => $faker->sentence($nbWords = 6, $variableNbWords = true),
-                'user_id' => $faker->numberBetween($min = 1, $max = 20),
+                'user_id' => $faker->numberBetween($min = 2, $max = 150),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]);

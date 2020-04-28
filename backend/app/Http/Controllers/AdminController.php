@@ -93,6 +93,7 @@ class AdminController extends Controller
             return AdminWorkApprove::create([
                 'work_id' => $id,
                 'approved' => $request->input('approved'),
+                'user_id' => auth()->user()->id
             ]);
         }
     }
@@ -108,6 +109,7 @@ class AdminController extends Controller
             return AdminServiceApprove::create([
                 'service_id' => $id,
                 'approved' => $request->input('approved'),
+                'user_id' => auth()->user()->id
             ]);
         }
     }

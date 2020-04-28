@@ -7,6 +7,7 @@ use App\Message;
 use App\Role;
 use App\Rating;
 use App\Service;
+use App\Comments;
 use App\PortfolioWorks;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -50,7 +51,11 @@ class PortfolioController extends Controller
         ->join('skill','skill.id','=','skill_users.skill_id')
         ->where('user_id',$id)
         ->get();
-        
+
+        $comments = Comments::select('comments.id as id', 'comments.comment', 'comments.rating', 'comments.user_id', 'comments.receiver_id')
+        ->join('users','users.id','=','comments.user_id')
+        ->where('receiver_id',$id)
+        ->get();
         $darbai = [];
         foreach ($works as $work) {
             $workApprv = DB::table('admin_work_approves')->select('*')->where('work_id',$work->id)->get();
@@ -102,6 +107,7 @@ class PortfolioController extends Controller
                     'foto' => $usr[0]['foto'],
                     'location' => $usr[0]['location'],
                     'roles' => $role,
+                    'comments' => $comments
             ],
                 'portfolio' => [
                     'services' => $paslaugos, //Paslaugos
