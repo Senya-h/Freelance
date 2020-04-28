@@ -21,12 +21,27 @@ import HeroWrap from './hoc/HeroWrap';
 import {AuthContext} from './context/auth';
 
 import Cookies from 'js-cookie';
+import axios from './axios';
 
 const App = () => {  
   const authCookie = Cookies.get('access_token');
 
   const existingTokens = authCookie? JSON.parse(authCookie): undefined;
   const [authData, setAuthData] = useState(existingTokens);
+
+  if(authData) {
+    axios.get('/checkJWT', {
+      headers: {
+        'Authorization': 'Bearer ' + authData.token
+      }
+    })
+      .then(res => {
+        if(res.data.banned) {
+          removeTokens();
+        }
+      })
+  }
+
 
   const setTokens = (data) => {
     Cookies.set('access_token', data);
