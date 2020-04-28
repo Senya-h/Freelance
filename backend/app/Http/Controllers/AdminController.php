@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 use App\BanDeleteUser;
 use App\AdminWorkApprove;
 use App\User;
+use App\Role;
 use App\RoleUser;
 use App\SkillUser;
+use App\Comments;
+use App\Message;
 use App\Skill;
+use App\Rating;
 use App\Service;
 use App\PortfolioWorks;
 use App\AdminServiceApprove;
@@ -61,6 +65,14 @@ class AdminController extends Controller
                 $role_user->delete();
                 $skill_user = skillUser::where('user_id',$id);
                 $skill_user->delete();
+                $comment_user = Comments::where('user_id',$id)->orWhere('receiver_id',$id);
+                $comment_user->delete();
+                $message_user = Message::where('senders_id',$id)->orWhere('receivers_id',$id);
+                $message_user->delete();
+                $service_user = Service::where('user_id',$id);
+                $service_user->delete();
+                $portfolioWork_user = PortfolioWorks::where('user_id',$id);
+                $portfolioWork_user->delete();
                 $user = User::find($id);
                 $user->delete();
                 return response()->json(['message'=>"Klientas sėkmingai ištrintas"],200);
@@ -100,6 +112,40 @@ class AdminController extends Controller
         }
     }
 
+    //Rolės pridejimas
+    public function store(Request $request, $role_id, $user_id)
+    {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $role = Role::where('id', $role_id)->first();
+            $user = User::where('id', $user_id)->first();
+            $role->users()->attach($user);
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Role sekmingai prideta",200]);
+    }
+    
+    //Rolės nuemimas nuo user
+    public function deleteRole(Request $request, $role_id, $user_id){
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $role = Role::where('id', $role_id)->first();
+            $user = User::where('id', $user_id)->first();
+            $role->users()->detach($user);
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Role sekmingai pašalinta",200]);
+    }
 
     //Formato pridėjimas(Admin gali pridėt formatą portfolio darbam)
 

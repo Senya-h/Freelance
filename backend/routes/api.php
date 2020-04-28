@@ -53,7 +53,6 @@ Route::post('format', 'AdminController@addFormat');
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
 Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu user sarašas pagal user id
-Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
 
 //Admin
 Route::post('user&id={id}/ban/delete', 'AdminController@destroy'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
@@ -67,9 +66,12 @@ Route::post('service&id={id}/approve', 'AdminController@ServiceApproval');  //Pa
 Route::delete('admin/delete/service&id={service}', 'AdminController@serviceDelete'); // id=serviceID Paslaugos ištrynimas
 //Admin darbo delete
 Route::delete('admin/delete/work&id={work}', 'AdminController@workDelete'); // id=serviceID Darbo ištrynimas
-//Skill delete
-Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete pagal skill=id
+//Admin skill delete
+Route::delete('skill/delete/{skill}', 'AdminController@skillDelete'); // Skill delete pagal skill=id
 Route::post('skill_add','AdminController@addSkill'); // Prideti skill
+//Admin roel pridejimas
+Route::post('add/role&id={role_id}/user&id={user_id}', 'AdminController@store'); //Prideti role useriui
+Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
 Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Išsiųstos

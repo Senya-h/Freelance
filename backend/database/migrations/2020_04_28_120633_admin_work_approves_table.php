@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRatingsTable extends Migration
+class AdminWorkApprovesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ratings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('admin_work_approves', function (Blueprint $table) {
+            $table->id();
+            $table->integer('work_id')->unique();
             $table->integer('user_id');
-            $table->longtext('message');
-            $table->integer('rating');
-            $table->integer('profolio_id');
+            $table->boolean('approved');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateRatingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ratings');
+        Schema::dropIfExists('admin_work_approves');
     }
 }
