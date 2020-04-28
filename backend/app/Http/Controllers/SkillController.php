@@ -31,7 +31,6 @@ class SkillController extends Controller
                 $skill->skill_id = $skillArr[$i];
                 $skill->approved = 0;
                 $skill->save();
-
         }
 
 

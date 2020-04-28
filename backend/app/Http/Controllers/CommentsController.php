@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comments;
 use App\Skill;
+use App\User;
 use App\SkillApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,20 @@ class CommentsController extends Controller
         $comment->receiver_id = $request->receiver_id;
         $comment->rating = $request->rating;
         $comment->save();
-        return response()->json(["message" => "Pakomentuota"], 200);
+
+        $user = User::select('name', 'foto')
+            ->where('users.id', $comment->user_id)
+            ->get();
+        $comRes = [
+            'id' => $comment->id,
+            'comment' => $comment->comment,
+            'user_id' => $comment->user_id,
+            'receiver_id' => $comment->receiver_id,
+            'rating' => $comment->rating,
+            'name' => $user[0]->name,
+            'foto' => $user[0]->foto,
+        ];
+        return response()->json($comRes, 200);
     }
 
     public function update(Request $request, Comments $comment)

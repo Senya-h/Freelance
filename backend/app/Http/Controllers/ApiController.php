@@ -138,14 +138,16 @@ class ApiController extends Controller
             ->join('skill','skill.id','=','skill_users.skill_id')
             ->where('user_id',$user->id)
             ->get();
-            $info = [
-                'info' => $user,
-                'portfolio' => [
-                    'skills' => $skills,
-                    'services' => $services
-                ]
-            ];
-            $freelancers[] = $info;
+            $ban = DB::table('ban_delete_users')->select('user_id')->where('user_id',$user->id)->where('baned',1)->get();
+            if(count($ban) == 0) {
+                $freelancers[] = [
+                    'info' => $user,
+                    'portfolio' => [
+                        'skills' => $skills,
+                        'services' => $services
+                    ]
+                ];
+            }
             $data = $this->paginate($freelancers);
         }
         return response()->json($data, 200);
@@ -231,14 +233,16 @@ class ApiController extends Controller
             ->join('skill','skill.id','=','skill_users.skill_id')
             ->where('user_id',$user->id)
             ->get();
-            $info = [
-                'info' => $user,
-                'portfolio' => [
-                    'skills' => $skills,
-                    'services' => $services
-                ]
-            ];
-                $freelancers[] = $info;
+            $ban = DB::table('ban_delete_users')->select('user_id')->where('user_id',$user->id)->where('baned',1)->get();
+            if(count($ban) == 0) {
+                $freelancers[] = [
+                    'info' => $user,
+                    'portfolio' => [
+                        'skills' => $skills,
+                        'services' => $services
+                    ]
+                ];
+            }
                 $data = $this->paginate($freelancers);
         }
         $data = $this->paginate($freelancers);

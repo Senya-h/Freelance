@@ -29,15 +29,24 @@ class JobOfferController extends Controller
             if ($validation->fails()) {
                 return response()->json(["error" => $validation->errors()]);
             } else {
-                $job = JobOffer::create([
+                JobOffer::create([
                     'title' => request('title'),
                     'description' => request('description'),
                     'salary' => request('salary'),
                     'user_id' => auth()->user()->id
                 ]);
+                $skillsArr = $request->input('skills');
+                $job = [
+                    'title' => $request->input('title'),
+                    'description' => $request->input('description'),
+                    'salary' => $request->input('salary'),
+                    'user_id' => auth()->user()->id,
+                    'skills_id' => $skillsArr,
+                ];
                 return response()->json($job, 201);
             }
     }
+
     public function update($id, Request $request) {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
@@ -58,6 +67,7 @@ class JobOfferController extends Controller
 
         return response()->json(["message" => "Pasiūlymas sekmingai atnaujintas"], 200);
     }
+
     public function destroy($id, Request $request) {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();
