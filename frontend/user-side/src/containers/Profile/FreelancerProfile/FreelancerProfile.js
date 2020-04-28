@@ -135,6 +135,7 @@ const FreelancerProfile = (props) => {
     const [services, setServices] = useState([]);
     const [skills, setSkills] = useState([]);
     const [works, setWorks] = useState([]);
+    const [comments, setComments] = useState([]);
 
     const [allSkills, setAllSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
@@ -160,7 +161,7 @@ const FreelancerProfile = (props) => {
                     location: info.location, 
                     photo: info.foto? info.foto: DEFAULT_PHOTO
                 });
-
+                setComments(info.comments);
                 setWorks(portfolio.works);
                 setSkills(portfolio.skills);
                 setServices(portfolio.services);
@@ -290,8 +291,12 @@ const FreelancerProfile = (props) => {
                         </Grid>
 
                         <Grid item className={classes.mobile}>
-                            <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal />: null}</h3>
-                            <Comments />
+                            <h3>
+                                Atsiliepimai 
+                                {console.log(authData.token, profileUserID)}
+                                {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} profileUserID={profileUserID}/>: null}
+                            </h3>
+                            <Comments allComments={comments} setComments={setComments}/>
                         </Grid>
                     </Grid>
                         
@@ -311,8 +316,8 @@ const FreelancerProfile = (props) => {
                             </div>
                         </Grid>
                         <Grid item className={classes.desktop}>
-                            <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal />: null}</h3>
-                            <Comments />
+                            <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} profileUserID={profileUserID} />: null}</h3>
+                            <Comments allComments={comments} setComments={setComments} />
                         </Grid>
                     </Grid>
                 </Grid>
