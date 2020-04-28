@@ -16,6 +16,7 @@ class CreateAdminServiceApprovesTable extends Migration
         Schema::create('admin_service_approves', function (Blueprint $table) {
             $table->id();
             $table->integer('service_id')->unique();
+            $table->integer('user_id');
             $table->boolean('approved');
             $table->timestamps();
         });

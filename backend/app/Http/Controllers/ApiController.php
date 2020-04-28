@@ -134,8 +134,8 @@ class ApiController extends Controller
             ->join('users','users.id','=','services.user_id')
             ->where('user_id',$user->id)
             ->get();
-            $skills = DB::table('user_skill')->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
-            ->join('skill','skill.id','=','user_skill.skill_id')
+            $skills = DB::table('skill_users')->select('skill.id','skill.skillName as skill', 'skill_users.approved')
+            ->join('skill','skill.id','=','skill_users.skill_id')
             ->where('user_id',$user->id)
             ->get();
             $info = [
@@ -169,8 +169,8 @@ class ApiController extends Controller
         } if(!$request->has('service') && $request->has('skill') && !$request->has('city')) {
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
-            ->join('user_skill', 'user_skill.user_id','users.id')
-            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('skill_users', 'skill_users.user_id','users.id')
+            ->join('skill', 'skill.id','skill_users.skill_id')
             ->where('role',3)
             ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
             ->get();
@@ -182,8 +182,8 @@ class ApiController extends Controller
         } if ($request->has('service') && $request->has('skill') && !$request->has('city')){
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
-            ->join('user_skill', 'user_skill.user_id','users.id')
-            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('skill_users', 'skill_users.user_id','users.id')
+            ->join('skill', 'skill.id','skill_users.skill_id')
             ->join('services', 'services.user_id','users.id')
             ->where('role',3)
             ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
@@ -192,7 +192,7 @@ class ApiController extends Controller
         } if ($request->has('service') && !$request->has('skill') && $request->has('city')){
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
-            ->join('user_skill', 'user_skill.user_id','users.id')
+            ->join('skill_users', 'skill_users.user_id','users.id')
             ->join('services', 'services.user_id','users.id')
             ->where('role',3)
             ->where('users.location','LIKE','%'.$city.'%')
@@ -201,8 +201,8 @@ class ApiController extends Controller
         } if (!$request->has('service') && $request->has('skill') && $request->has('city')){
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
-            ->join('user_skill', 'user_skill.user_id','users.id')
-            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('skill_users', 'skill_users.user_id','users.id')
+            ->join('skill', 'skill.id','skill_users.skill_id')
             ->where('role',3)
             ->where('users.location','LIKE','%'.$city.'%')
             ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
@@ -210,8 +210,8 @@ class ApiController extends Controller
         } if ($request->has("skill") && $request->has("city") && $request->has("service") ){
             $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
             ->distinct()
-            ->join('user_skill', 'user_skill.user_id','users.id')
-            ->join('skill', 'skill.id','user_skill.skill_id')
+            ->join('skill_users', 'skill_users.user_id','users.id')
+            ->join('skill', 'skill.id','skill_users.skill_id')
             ->join('services', 'services.user_id','users.id')
             ->where('role',3)
             ->where('users.location','LIKE','%'.$city.'%')
@@ -226,9 +226,9 @@ class ApiController extends Controller
             ->join('users','users.id','=','services.user_id')
             ->where('user_id',$user->id)
             ->get();
-            $skills = DB::table('user_skill')
-            ->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
-            ->join('skill','skill.id','=','user_skill.skill_id')
+            $skills = DB::table('skill_users')
+            ->select('skill.id','skill.skillName as skill', 'skill_users.approved')
+            ->join('skill','skill.id','=','skill_users.skill_id')
             ->where('user_id',$user->id)
             ->get();
             $info = [

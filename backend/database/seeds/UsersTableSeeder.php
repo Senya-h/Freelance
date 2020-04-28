@@ -40,7 +40,6 @@ class UsersTableSeeder extends Seeder
             ]);
                 $fakeUser->save();
                 $fakeUser->roles()->sync(3,false); 
-        }
-            
+        }       
     }
 }

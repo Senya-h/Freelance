@@ -45,9 +45,9 @@ class PortfolioController extends Controller
         ->get();
 
         //skills
-        $skills = DB::table('user_skill')
-        ->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
-        ->join('skill','skill.id','=','user_skill.skill_id')
+        $skills = DB::table('skill_users')
+        ->select('skill.id','skill.skillName as skill', 'skill_users.approved')
+        ->join('skill','skill.id','=','skill_users.skill_id')
         ->where('user_id',$id)
         ->get();
         

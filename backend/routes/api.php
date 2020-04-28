@@ -53,7 +53,6 @@ Route::post('format', 'AdminController@addFormat');
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
 Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu user sarašas pagal user id
-Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
 
 //Admin
 Route::post('user&id={id}/ban/delete', 'AdminController@destroy'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)

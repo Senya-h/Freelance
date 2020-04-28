@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserSkillTable extends Migration
+class AdminWorkApprovesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateUserSkillTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_skill', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('admin_work_approves', function (Blueprint $table) {
+            $table->id();
+            $table->integer('work_id')->unique();
             $table->integer('user_id');
-            $table->integer('skill_id');
             $table->boolean('approved');
-            $table->text('comment');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateUserSkillTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_skill');
+        Schema::dropIfExists('admin_work_approves');
     }
 }

@@ -6,7 +6,6 @@ use App\Comments;
 use App\PortfolioWorks;
 use Illuminate\Http\Request;
 use App\Skill;
-use App\SkillApproval;
 use App\SkillUser;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -15,15 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class SkillController extends Controller
 {
-    public function index()
-    {
-        return DB::table("users")
-            ->join('user_skill','user_skill.user_id','users.id')
-            ->join('skill','skill.id','user_skill.skill_id')
-            ->get();
 
-    }
-    public function create(Request $request, SkillApproval $skillas)
+    public function create(Request $request, SkillUser $skillas)
     {
         try {
             $user = auth()->userOrFail();
@@ -32,13 +24,12 @@ class SkillController extends Controller
         }
         $skillArr = $request->all();
         $loopLenght = count($skillArr);
-        SkillApproval::where('user_id',auth()->user()->id)->delete();
+        SkillUser::where('user_id',auth()->user()->id)->delete();
         for ($i = 0; $i < $loopLenght; $i++){
-                $skill = new SkillApproval;
+                $skill = new SkillUser;
                 $skill->user_id = auth()->user()->id;
                 $skill->skill_id = $skillArr[$i];
                 $skill->approved = 0;
-                $skill->comment = '';
                 $skill->save();
 
         }

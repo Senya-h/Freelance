@@ -15,14 +15,4 @@ class RoleUserController extends Controller
             return response()->json(RoleUser::select('*')->where('user_id',$id)->get(),200);
         }
     }
-
-    public function store(Request $request, $role_id, $user_id)
-    {
-        if($request->user()->authorizeRoles('Admin')){
-            $role = Role::where('id', $role_id)->first();
-            $user = User::where('id', $user_id)->first();
-            $role->users()->attach($user);
-            return response()->json(["message" => "Role sekmingai prideta",200]);
-        }
-    }
 }
