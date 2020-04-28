@@ -19,6 +19,8 @@ class CreateServicesTable extends Migration
             $table->string('description');
             $table->float('price_per_hour');
             $table->integer('user_id');
+            $table->boolean('verified')->nullable();
+            $table->boolean('user_verified_id')->nullable();
             $table->timestamps();
         });
     }

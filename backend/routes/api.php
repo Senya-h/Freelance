@@ -56,21 +56,20 @@ Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu use
 Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
 
 //Admin
-Route::post('user&id={id}/ban/delete', 'AdminController@create'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
-Route::delete('user&id={id}/remove', 'AdminController@destroy');  //Pasalinti user pagal user id
+Route::post('user&id={id}/ban/delete', 'AdminController@destroy'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
 //Admin work approvals
 Route::get('work&id={id}/list', 'AdminController@aboutWorkApproval');  //Patvirtintas darbas pagal darbo id
 Route::post('work&id={id}/approve', 'AdminController@workApproval');  //Freelancer darbu patvirtinimas
 //Admin service approvals
 Route::get('service&id={id}/list', 'AdminController@aboutServiceApproval');  //Patvirtinta paslauga pagal paslaugos id
 Route::post('service&id={id}/approve', 'AdminController@ServiceApproval');  //Paslaugos patvirtinimas
-//Admin skill approvals
-Route::get('skill&id={id}/admin/list', 'AdminController@aboutskillApproval');  //Patvirtinas skill pagal skill id
-Route::post('skill&id={skill_id}/user&id={user_id}','AdminController@skillApproval');  //Skill patvirtinimas
 //Admin service delete
 Route::delete('admin/delete/service&id={service}', 'AdminController@serviceDelete'); // id=serviceID Paslaugos ištrynimas
 //Admin darbo delete
 Route::delete('admin/delete/work&id={work}', 'AdminController@workDelete'); // id=serviceID Darbo ištrynimas
+//Skill delete
+Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete pagal skill=id
+Route::post('skill_add','AdminController@addSkill'); // Prideti skill
 
 //Message
 Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Išsiųstos
@@ -83,25 +82,11 @@ Route::get('all/rating', 'RatingController@aboutRating');
 Route::post('rating', 'RatingController@create');
 Route::delete('rating/delete/{rating}', 'RatingController@destroy');
 
-
-//index parodo pagal id userius isveda user visus duomenys
-Route::get('skills/{id}', 'SkillController@index');
+//Admin skill approvals
+Route::get('skill&id={id}/list', 'SkillController@aboutskillApproval');  //Patvirtintas skill pagal skill id
+Route::post('skill&id={skill_id}/user&id={user_id}','SkillController@skillApproval');  //Skill patvirtinimas
 Route::get('skills', 'SkillController@skillsList'); // Skillu listas
-Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
-
-//create sukuria i table user_skill pagal "user_id" ir "skill_id"
-Route::post('skill', 'SkillController@create');
-
-//update atnaujina pagal id cia atnaujinti riekia "approved" ir "comment"
-//approved 1 = patvirtinta 0 = nepatvirtinas skillas
-//comment yra patvirtinimuo comentaras
-Route::put('skill/{skill}', 'SkillController@update');
-
-//delete cia pagal id istrina is table user_skill irasa
-Route::post('skill/{id}', 'SkillController@delete');
-
-//addSkill i skill lentele ideda skilus(Admin f-cija)
-Route::post('skill_add','AdminController@addSkill');
+Route::post('skill/{id}', 'SkillController@delete'); // Delete us skill_user relation
 
 //Vartotojų sąrašas
 Route::get('users','ApiController@usersList');

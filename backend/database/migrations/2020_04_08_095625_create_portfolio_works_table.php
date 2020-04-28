@@ -19,6 +19,8 @@ class CreatePortfolioWorksTable extends Migration
             $table->string('description');
             $table->string('filePath');
             $table->integer('user_id');
+            $table->boolean('verified')->nullable();
+            $table->boolean('user_verified_id')->nullable();
             $table->timestamps();
         });
     }
