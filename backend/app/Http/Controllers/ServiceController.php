@@ -28,7 +28,8 @@ class ServiceController extends Controller
             'user_id' => auth()->user()->id,
         ]);
     }
-    public function update($id, Request $request, Service $service) {
+    public function update($id, Request $request, Service $serv) {
+        $service = Service::select('*')->where('id', $id)->get()[0];
         if (Gate::allows('authorization', $service)) {
             try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
                 $user = auth()->userOrFail();

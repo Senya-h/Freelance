@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 use App\BanDeleteUser;
 use App\AdminWorkApprove;
 use App\User;
+use App\Role;
 use App\RoleUser;
 use App\SkillUser;
+use App\Comments;
+use App\Message;
 use App\Skill;
+use App\Rating;
 use App\Service;
 use App\PortfolioWorks;
 use App\AdminServiceApprove;
@@ -41,7 +45,7 @@ class AdminController extends Controller
 
 	}
     //Blokuoti trinti user
-    public function create(Request $request,$id)
+    public function destroy(Request $request,$id)
     {
         if(auth()->user()->authorizeRoles('Admin')){
             if($request->input('baned') == 1){
@@ -50,6 +54,7 @@ class AdminController extends Controller
                 'baned' => $request->input('baned'),
                 'deleted' => $request->input('deleted'),
             ]);
+            return response()->json(['message'=>"Klientas sėkmingai užbloguotas"],200);
             }else if($request->input('deleted') == 1){
                 BanDeleteUser::create([
                     'user_id' => $id,
@@ -58,21 +63,22 @@ class AdminController extends Controller
                 ]);
                 $role_user = RoleUser::where('user_id', $id);
                 $role_user->delete();
+                $skill_user = skillUser::where('user_id',$id);
+                $skill_user->delete();
+                $comment_user = Comments::where('user_id',$id)->orWhere('receiver_id',$id);
+                $comment_user->delete();
+                $message_user = Message::where('senders_id',$id)->orWhere('receivers_id',$id);
+                $message_user->delete();
+                $service_user = Service::where('user_id',$id);
+                $service_user->delete();
+                $portfolioWork_user = PortfolioWorks::where('user_id',$id);
+                $portfolioWork_user->delete();
                 $user = User::find($id);
                 $user->delete();
+                return response()->json(['message'=>"Klientas sėkmingai ištrintas"],200);
             }
         } else {
             return response()->json(['error'=>"Neturite teisės"],500);
-        }
-    }
-
-    //Šalinti blokuotu user saraša
-    public function destroy(Request $request, $id)
-    {
-        if($request->user()->authorizeRoles('Admin')){
-            $BanDeleteUser = BanDeleteUser::where('user_id', $id);
-            $BanDeleteUser->delete();
-            return response()->json(["message" => "Vartotojas atnaujintas"], 200);
         }
     }
 
@@ -106,26 +112,39 @@ class AdminController extends Controller
         }
     }
 
-    // Skillu patvirtinimai
-    public function aboutSkillUser($id)
+    //Rolės pridejimas
+    public function store(Request $request, $role_id, $user_id)
     {
-        if($request->user()->authorizeRoles('Admin')){
-            return response()->json(SkillUser::select('*')->where('user_id',$id)->get(),200);
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-    }
-
-    public function SkillApproval(Request $request, $skill_id, $user_id)
-    {
         if($request->user()->authorizeRoles('Admin')){
-            $skill = Skill::where('id', $skill_id)->first();
+            $role = Role::where('id', $role_id)->first();
             $user = User::where('id', $user_id)->first();
-            $skill->skillusers()->sync($user);
-            $validatedData = $request->validate([
-                'approved' => 'required'
-            ]);
-            SkillUser::where('user_id', $user_id)->where('skill_id', $skill_id)->update(['approved' => $request->input('approved')]);
-            return response()->json(["message" => "Skilas sekmingai patvirtintas",200]);
+            $role->users()->attach($user);
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
+        return response()->json(["message" => "Role sekmingai prideta",200]);
+    }
+    
+    //Rolės nuemimas nuo user
+    public function deleteRole(Request $request, $role_id, $user_id){
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if($request->user()->authorizeRoles('Admin')){
+            $role = Role::where('id', $role_id)->first();
+            $user = User::where('id', $user_id)->first();
+            $role->users()->detach($user);
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Role sekmingai pašalinta",200]);
     }
 
     //Formato pridėjimas(Admin gali pridėt formatą portfolio darbam)
@@ -168,6 +187,17 @@ class AdminController extends Controller
                 return response()->json(["SkillName"=>$skill->skillName]);
             }
     }
+
+    public function skillDelete(Skill $skill) {
+        try {
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        $skill->delete();
+        return response()->json(["message"=>"Ištrinta"],200);
+    }
+
     public function serviceDelete(Service $service, Request $request) {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
             $user = auth()->userOrFail();

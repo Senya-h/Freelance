@@ -38,12 +38,12 @@ Route::post('photo-upload', 'ApiController@userPhotoUpload');
 //Services
 Route::get('services','ServiceController@list'); // Visos paslaugos
 Route::post('service', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
-Route::put('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
+Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
 Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas
 //Portfolio Works
 Route::get('works','PortfolioWorksController@list'); // Visi darbai
 Route::post('work', 'PortfolioWorksController@create'); // Portfolio darbų pridėjimas(Vartotojas gali pridėti daugiau nei vieną darbą)
-Route::put('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
+Route::post('update/work&id={id}', 'PortfolioWorksController@update'); // id=workID Darbas gali būt redaguojama
 Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // id=workID Darbo ištrynimas
 
 //Formato pridėjimas į DB
@@ -56,21 +56,23 @@ Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu use
 Route::post('add/role&id={role_id}/user&id={user_id}', 'RoleUserController@store'); //Prideti role useriui
 
 //Admin
-Route::post('user&id={id}/ban/delete', 'AdminController@create'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
-Route::delete('user&id={id}/remove', 'AdminController@destroy');  //Pasalinti ban/delete pagal user id
+Route::post('user&id={id}/ban/delete', 'AdminController@destroy'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
 //Admin work approvals
 Route::get('work&id={id}/list', 'AdminController@aboutWorkApproval');  //Patvirtintas darbas pagal darbo id
 Route::post('work&id={id}/approve', 'AdminController@workApproval');  //Freelancer darbu patvirtinimas
 //Admin service approvals
 Route::get('service&id={id}/list', 'AdminController@aboutServiceApproval');  //Patvirtinta paslauga pagal paslaugos id
 Route::post('service&id={id}/approve', 'AdminController@ServiceApproval');  //Paslaugos patvirtinimas
-//Admin skill approvals
-Route::get('skill&id={id}/admin/list', 'AdminController@aboutskillApproval');  //Patvirtinas skill pagal skill id
-Route::post('skill&id={skill_id}/user&id={user_id}','AdminController@skillApproval');  //Skill patvirtinimas
 //Admin service delete
 Route::delete('admin/delete/service&id={service}', 'AdminController@serviceDelete'); // id=serviceID Paslaugos ištrynimas
 //Admin darbo delete
 Route::delete('admin/delete/work&id={work}', 'AdminController@workDelete'); // id=serviceID Darbo ištrynimas
+//Admin skill delete
+Route::delete('skill/delete/{skill}', 'AdminController@skillDelete'); // Skill delete pagal skill=id
+Route::post('skill_add','AdminController@addSkill'); // Prideti skill
+//Admin roel pridejimas
+Route::post('add/role&id={role_id}/user&id={user_id}', 'AdminController@store'); //Prideti role useriui
+Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
 Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Išsiųstos
@@ -78,29 +80,14 @@ Route::put('message/notification/{senders_id}', 'MessageController@notifi'); //P
 Route::post('message', 'MessageController@create'); //Išsiuntus žinute atsiranda info notifications table,notifible_id colum tai siuntejo_id, data colum tai gavejio_id ir vardas
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 
-//Rating
-Route::get('all/rating', 'RatingController@aboutRating');
-Route::post('rating', 'RatingController@create');
-Route::delete('rating/delete/{rating}', 'RatingController@destroy');
-
-
 //index parodo pagal id userius isveda user visus duomenys
-Route::get('skills/{id}', 'SkillController@index');
+Route::get('skill&id={id}/list', 'SkillController@aboutskillApproval');  //Patvirtintas skill pagal skill id
+Route::post('skill&id={skill_id}/user&id={user_id}','SkillController@skillApproval');  //Skill patvirtinimas
 Route::get('skills', 'SkillController@skillsList'); // Skillu listas
 Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
 
 //create sukuria i table user_skill pagal "user_id" ir "skill_id"
 Route::post('skill', 'SkillController@create');
-
-//update atnaujina pagal id cia atnaujinti riekia "approved" ir "comment"
-//approved 1 = patvirtinta 0 = nepatvirtinas skillas
-//comment yra patvirtinimuo comentaras
-Route::put('skill/{skill}', 'SkillController@update');
-
-//delete cia pagal id istrina is table user_skill irasa
-Route::post('skill/{id}', 'SkillController@delete');
-
-//addSkill i skill lentele ideda skilus(Admin f-cija)
 Route::post('skill_add','AdminController@addSkill');
 
 //Vartotojų sąrašas
@@ -120,3 +107,10 @@ Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
 Route::post('comment','CommentsController@create');
 Route::put('comment/{comment}','CommentsController@update');
 Route::delete('comment/{id}','CommentsController@delete');
+
+//Klientų darbų pasiūlymai
+
+Route::get('offers-list', 'JobOfferController@list'); // Pasiūlymų sąrašas
+Route::post('joboffer','JobOfferController@create'); //Sukurti paslaugą
+Route::put('joboffer/update/{id}','JobOfferController@update'); //Atnaujinti paslaugą
+Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti paslaugą

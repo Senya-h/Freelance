@@ -85,25 +85,26 @@ class PortfolioWorksController extends Controller
         foreach ($formats as $str){
             $string .=  $str->format.',';
         }
+        $work = PortfolioWorks::select('*')->where('id',$id)->get()[0];
+        $validation = Validator::make($request->all(),[
+            'title' => 'required|max:255',
+            'description' => 'required|max:255',
+            'filePath'  => 'mimes"'.$string.'|required'
+        ]);
         if (Gate::allows('authorization', $work)) {
-            $validatedData = $request->validate([
-                'title' => 'required',
-                'description' => 'required',
-                'filePath' => 'mimes:'.$string.'|required',
-            ]);
             if ($request->hasFile('filePath')) {
                 $file = PortfolioWorks::select('filePath')->where('id', '=', $id)->get();
                 File::delete('../storage/app/public/' . $file[0]['filePath']);
                 $path = $request->file('filePath')->store('public/portfolioWorks');
                 $filename = str_replace('public/', "", $path);
-                PortfolioWorks::where('id', $id)->update(['filePath' => $filename]);
+                $updated = PortfolioWorks::where('id', $id)->update(['filePath' => $filename]);
             }
-            PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
+            $updated = PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
         } else if (Gate::denies('authorization', $work)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
+        return response()->json(["message" => "Darbas sėkmingai atnaujintas"], 201);
 
-        return response()->json(["message" => "Darbas sekmingai atnaujintas"], 200);
     }
     public function destroy(Request $request, PortfolioWorks $work) {
         try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą

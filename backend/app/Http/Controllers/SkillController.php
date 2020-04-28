@@ -7,6 +7,7 @@ use App\PortfolioWorks;
 use Illuminate\Http\Request;
 use App\Skill;
 use App\SkillApproval;
+use App\SkillUser;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use App\User;
@@ -45,36 +46,6 @@ class SkillController extends Controller
 
         return response()->json(["message" => "Skill pridėtas"]);
     }
-
-    public function update(Request $request,SkillApproval $skill)
-    {
-        try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti'], 401);
-        }
-        $skill->approved = $request->approved;
-        $skill->comment = $request->comment;
-        $skill->save();
-
-        return response()->json(["message" => "Skill atnaujintas"]);
-    }
-
-    public function delete(SkillApproval $id)
-    {
-        try {
-            $user = auth()->userOrFail();
-        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti'], 401);
-        }
-        if (Gate::allows('authorization', $id)) {
-            $id->delete();
-        } else if (Gate::denies('authorization', $id)) {
-            return response()->json(["error" => "Jūs neturite teisės"], 403);
-        }
-        return response()->json(["message" => "Skill istrintas"]);
-
-    }
     
     public function skillsList() {
         $skills = Skill::all();
@@ -88,6 +59,22 @@ class SkillController extends Controller
         }
         $skill->delete();
         return response()->json(["message"=>"Ištrinta"],200);
+    }
+    public function aboutSkillUser($id)
+        {
+            return response()->json(SkillUser::select('*')->where('user_id',$id)->get(),200);
+        }
+
+    public function SkillApproval(Request $request, $skill_id, $user_id)
+    {
+        $skill = Skill::where('id', $skill_id)->first();
+        $user = User::where('id', $user_id)->first();
+        $skill->users()->attach($user);
+        $validatedData = $request->validate([
+            'approved' => 'required'
+        ]);
+        SkillUser::where('user_id', $user_id)->where('skill_id', $skill_id)->update(['approved' => $request->input('approved')]);
+        return response()->json(["message" => "Skilas sekmingai patvirtintas",200]);
     }
     
 }
