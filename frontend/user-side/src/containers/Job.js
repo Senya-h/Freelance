@@ -112,7 +112,7 @@ const PORTFOLIO_TYPES = {
     }
 }
 
-const FreelancerProfile = (props) => {
+const Job = (props) => {
     //Get logged in user information
     let { authData } = useAuth();
     const {id} = useParams();
@@ -139,6 +139,7 @@ const FreelancerProfile = (props) => {
 
     const [allSkills, setAllSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [isMobile, setMobile] = useState(false);
 
     const [deleteModalInfo, setDeleteModalInfo] = useState({
         open: false,
@@ -321,10 +322,9 @@ const FreelancerProfile = (props) => {
                 </Grid>
 
             
-            {visitingUserID === profileUserID && <ConfirmDeleteModal token={authData.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />}
             </div>)}
         </>
     )
 }
 
-export default FreelancerProfile;
+export default Job;

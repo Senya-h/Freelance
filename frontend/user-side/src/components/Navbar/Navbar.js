@@ -69,21 +69,50 @@ const Navbar = () => {
     }
 
     let loginArea = null;
+    // if it's a freelancer
     if(authData) {
-        loginArea = (
-            <>
-                <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                    <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
-                         Profilis
-                    </NavLink>
-                </li>
-                <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                    <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
-                        Atsijungti
-                    </Link>
-                </li>
-            </>
-        )
+        if(authData.userRole === 3) {
+            loginArea = (
+                <>
+                    <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
+                             Profilis
+                        </NavLink>
+                    </li>
+                    <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
+                        <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
+                            Atsijungti
+                        </Link>
+                    </li>
+                </>
+            )
+        } else if(authData.userRole === 2) {
+            loginArea = (
+                <>
+                    <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/new-offer' activeClassName={classes['active']}>
+                             Sukurti skelbimą
+                        </NavLink>
+                    </li>
+                    <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/my-jobs' activeClassName={classes['active']}>
+                             Mano Skelbimai
+                        </NavLink>
+                    </li>
+                    <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
+                             Profilis
+                        </NavLink>
+                    </li>
+                    <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
+                        <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
+                            Atsijungti
+                        </Link>
+                    </li>
+                </>
+            )
+        }
+
     } else {
         loginArea = (
             <>
@@ -119,6 +148,11 @@ const Navbar = () => {
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/jobs' activeClassName={classes['active']}>
+                                Skelbimai
+                            </NavLink>
+                        </li>
+                        <li className={cx('nav-item', classes['nav-item'])}>
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/freelancers' activeClassName={classes['active']}>
                                 Freelanceriai
                             </NavLink>
                         </li>

@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const BrowseJobs = (props) => {
+const Freelancers = (props) => {
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
     const [skillNames, setSkillNames] = useState(['Kraunama...']);
@@ -107,7 +107,7 @@ const BrowseJobs = (props) => {
             const service = values.service;
             const skill = values.skill;
             const city = values.city;
-            props.history.push(`/jobs?service=${service}&skill=${skill}&city=${city}`);
+            props.history.push(`/freelancers?service=${service}&skill=${skill}&city=${city}`);
 
         }
     })
@@ -192,7 +192,7 @@ const BrowseJobs = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
+                            to={`/freelancers?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
                             {...item}
                         />
                     )}
@@ -203,4 +203,4 @@ const BrowseJobs = (props) => {
     )
 }
 
-export default BrowseJobs
+export default Freelancers;

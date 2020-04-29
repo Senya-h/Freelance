@@ -39,7 +39,7 @@ const ServceModalButton = (props) => {
         initialValues: {
             service: '',
             description: '',
-            price_per_hour: 0.00
+            price_per_hour: ''
         },
         validationSchema: yupObject({
             service: yupString().required("Privalomas laukelis"),
@@ -112,6 +112,7 @@ const ServceModalButton = (props) => {
                         label="Valandos kaina"
                         name="price_per_hour"
                         type="number"
+                        placeholder="0"
                         {...formik.getFieldProps('price_per_hour')}
                     />
                     {formik.touched.price_per_hour && formik.errors.price_per_hour ? (
