@@ -16,12 +16,29 @@ class RemoveRole extends Component{
             modalRole: "",
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
             loading: false,
+            refetch: false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
     }
     handleChangeEmail(event){
         this.setState({email: event.target.value})
+    }
+    componentDidUpdate(prevProps){
+        if(this.state.refetch == true) {
+            axios.post("/user/roles", {email: this.state.email}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.state.token,
+                }}
+            ).then(res => {
+                console.log(this.state.refetch)
+                this.setState({
+                    roles: res.data[0],
+                    refetch: false
+                })
+            })
+        }
     }
 
     handleSubmit(event){
@@ -37,7 +54,8 @@ class RemoveRole extends Component{
             ).then(res => {
                 console.log(res)
                 this.setState({
-                    roles: res.data[0]
+                    roles: res.data[0],
+                    refetch: false
                 })
             }).catch(error => {
                 console.log(error.response)
@@ -71,6 +89,9 @@ class RemoveRole extends Component{
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+res.data.error+"</div>"
                 } else {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Rolė atimta</div>"
+                    this.setState({
+                        refetch: true
+                    })
                 }
             }
             )
