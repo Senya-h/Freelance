@@ -9,6 +9,8 @@ import Users from "../Users/Users";
 import BannedUsers from "../Users/BannedUsers";
 import Login from "../Login/Login";
 import Formats from "../Formats/Formats";
+import GiveRole from "../GiveRole/GiveRole";
+import RemoveRole from "../RemoveRole/RemoveRole";
 import decode from 'jwt-decode';
 import{
     BrowserRouter as Router,
@@ -17,6 +19,7 @@ import{
     Redirect
 } from "react-router-dom";
 import {AuthContext} from '../../context/auth';
+import axios from '../../axios';
 
 class App extends Component{
     constructor(props, context) {
@@ -30,7 +33,25 @@ class App extends Component{
           authData: this.auth? JSON.parse(this.auth): undefined,
       }
 
-    }
+          if(this.state.authData) {
+          console.log(this.state.authData.token);
+              axios.get(`/checkJWT`, {
+                headers: {
+                        'Authorization': 'Bearer ' + this.state.authData.token,
+                        }
+                })
+                    .then(data => {
+                      if(data.data !== 200) {
+                        console.log('banned')
+                        localStorage.removeItem('login')
+                        window.location.reload();
+                      } else {
+                        console.log(data.data)
+                      }
+                    })
+            }
+          }
+          
 
     setTokens = (data) => {
       localStorage.setItem('login', JSON.stringify(data));
@@ -93,6 +114,8 @@ const NonAuthRoute = ({ component: Component, ...rest }) => (
                 <AuthRoute path="/formats" exact component={Formats}/>
                 <AuthRoute path="/vartotojai" exact component={Users}/>
                 <AuthRoute path="/banned" exact component={BannedUsers}/>
+                <AuthRoute path="/give-role" exact component={GiveRole}/>
+                <AuthRoute path="/remove-role" exact component={RemoveRole}/>
                 <NonAuthRoute path="/login" exact component={Login} />
             </Switch>
           </div>

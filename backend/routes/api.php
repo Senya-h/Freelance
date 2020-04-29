@@ -56,6 +56,8 @@ Route::get('role/user&id={id}', 'RoleUserController@aboutRoleUser'); //Roliu use
 
 //Admin
 Route::post('user&id={id}/ban/delete', 'AdminController@destroy'); //Admin delete arba ban pagal user id (input = bool True=1, Flase=0)
+//Admin unban
+Route::delete('user&id={id}/remove', 'AdminController@unban');
 //Admin work approvals
 Route::get('work&id={id}/list', 'AdminController@aboutWorkApproval');  //Patvirtintas darbas pagal darbo id
 Route::post('work&id={id}/approve', 'AdminController@workApproval');  //Freelancer darbu patvirtinimas
@@ -70,7 +72,7 @@ Route::delete('admin/delete/work&id={work}', 'AdminController@workDelete'); // i
 Route::delete('skill/delete/{skill}', 'AdminController@skillDelete'); // Skill delete pagal skill=id
 Route::post('skill_add','AdminController@addSkill'); // Prideti skill
 //Admin roel pridejimas
-Route::post('add/role&id={role_id}/user&id={user_id}', 'AdminController@store'); //Prideti role useriui
+Route::post('add/role&id={role_id}', 'AdminController@store'); //Prideti role useriui
 Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
@@ -106,6 +108,9 @@ Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
 Route::post('comment','CommentsController@create');
 Route::put('comment/{comment}','CommentsController@update');
 Route::delete('comment/{id}','CommentsController@delete');
+
+//Userio info su role
+Route::post('user/roles','AdminController@findUserWithRoles');
 
 //Klientų darbų pasiūlymai
 

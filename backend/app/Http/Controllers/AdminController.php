@@ -34,13 +34,13 @@ class AdminController extends Controller
             return response()->json(['error' => 'Šis vartotojas užblokuotas']);
         }
         $userRole = auth()->user()->role; //Autentikuoto vartotojo id
-        if ($userRole === 1){
+        if(auth()->user()->authorizeRoles('Admin')){
             //Autentikuoto vartotojo id
 		    //jei duomenys teisingi, login tokena duoda
             $userId = auth()->user()->id;
             return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole, 'role' => 'Admin']);
         } else {
-            return response()->json(['error' => 'Neturite teisės']);
+            return response()->json(['error' => 'Neturite teisės', 'role' => auth()->user()]);
         }
 
 	}
@@ -82,6 +82,18 @@ class AdminController extends Controller
         }
     }
 
+    public function unban(Request $request, $id)
+    {
+        $BanDeleteUser = BanDeleteUser::where('user_id', $id);
+        $BanDeleteUser->delete();
+        return response()->json(null, 204);
+        if($request->user()->authorizeRoles('Admin')){
+            $BanDeleteUser = BanDeleteUser::where('user_id', $id);
+            $BanDeleteUser->delete();
+            return response()->json(["message" => "Vartotojas atnaujintas"], 200);
+        }
+    }
+
     // Darbu patvirtinimai
     public function aboutWorkApproval(Request $request, $id){
         return response()->json(AdminWorkApprove::select('*')->where('work_id',$id)->get(),200);
@@ -115,7 +127,7 @@ class AdminController extends Controller
     }
 
     //Rolės pridejimas
-    public function store(Request $request, $role_id, $user_id)
+    public function store(Request $request, $role_id)
     {
         try {
             $user = auth()->userOrFail();
@@ -123,9 +135,10 @@ class AdminController extends Controller
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         if($request->user()->authorizeRoles('Admin')){
-            $role = Role::where('id', $role_id)->first();
-            $user = User::where('id', $user_id)->first();
-            $role->users()->attach($user);
+                $user = User::select('id')->where('email',$request->input('email'))->get();
+                $usrID = $user[0]->id;
+                $role = Role::where('id', $role_id)->first();
+                $role->users()->attach($usrID);
         } else {
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
@@ -140,9 +153,9 @@ class AdminController extends Controller
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         if($request->user()->authorizeRoles('Admin')){
-            $role = Role::where('id', $role_id)->first();
-            $user = User::where('id', $user_id)->first();
-            $role->users()->detach($user);
+                $role = Role::where('id', $role_id)->first();
+                $user = User::where('id', $user_id)->first();
+                $role->users()->detach($user);
         } else {
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
@@ -225,5 +238,35 @@ class AdminController extends Controller
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
         return response()->json(["message" => "Darbas sekmingai ištrintas"], 200);
+    }
+    public function findUserWithRoles(Request $request) {
+        try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
+            $user = auth()->userOrFail();
+        } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if(auth()->user()->authorizeRoles('Admin')){
+            $info = [];
+            if ($request->has('email')) {
+                $user = User::select('id','name','email','foto')
+                    ->where('email',$request->input('email'))
+                    ->get();
+                $roles = DB::table('role_users')
+                    ->select('user_id', 'role_id', 'roles.role')
+                    ->join('roles','roles.id','role_users.role_id')
+                    ->where('user_id',$user[0]->id)
+                    ->get();
+                if(count($user) > 0) {
+                    $info[] = [
+                        'id' => $user[0]->id,
+                        'name' => $user[0]->name,
+                        'email' => $user[0]->email,
+                        'foto' => $user[0]->foto,
+                        'roles' => $roles
+                    ];
+                }
+            }
+            return response()->json($info, 200);
+        }
     }
 }
