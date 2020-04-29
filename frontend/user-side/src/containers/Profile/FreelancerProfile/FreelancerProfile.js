@@ -224,7 +224,7 @@ const FreelancerProfile = (props) => {
                         {/* Paslaugos, servisai */}
                         <Grid item xs={12}>              
                         <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
-                        {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID}/>: null}
+                        {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
                         <div>
                             <h4>
                                 Siūlomos paslaugos
@@ -293,7 +293,6 @@ const FreelancerProfile = (props) => {
                         <Grid item className={classes.mobile}>
                             <h3>
                                 Atsiliepimai 
-                                {console.log(authData.token, profileUserID)}
                                 {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} profileUserID={profileUserID}/>: null}
                             </h3>
                             <Comments allComments={comments} setComments={setComments}/>
