@@ -25,9 +25,10 @@ const CitySelect = (props) => {
         classes={{
             option: classes.option,
         }}
-        value={props.value || null}
-        autoHighlight
+        value={props.value}
+        inputValue={props.value || null}
         autoSelect
+        autoHighlight
         getOptionLabel={(option) => option}
         renderOption={(option) => option}
         name={props.name}
@@ -36,7 +37,6 @@ const CitySelect = (props) => {
             <TextField
             {...params}
             label={props.label}
-            value={props.value || null}
             name={props.name}
             variant="outlined"
             inputProps={{

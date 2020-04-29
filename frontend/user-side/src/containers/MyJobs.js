@@ -40,6 +40,14 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '20px',
         backgroundColor: '#fff',
         padding: '10px'
+    },
+    noResults: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        fontSize: '30px',
+        minHeight: '250px',
+        backgroundColor: '#fff'
     }
 }))
 
@@ -160,7 +168,7 @@ const MyJobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={classes.mainGrid}>
+        <Grid container spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
                     <Grid key={job.info.id} item xs={12}>
@@ -175,6 +183,7 @@ const MyJobs = (props) => {
                     </Grid>
                 )
             }): <Grid item>Rezultatų nerasta</Grid>}
+            {pageCount > 1 && 
             <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination
                     page={parseInt(currentPage, 10)}
@@ -192,6 +201,7 @@ const MyJobs = (props) => {
                     )}
                 />
             </Grid>
+            }
         </Grid>)}
         </>
     )

@@ -92,7 +92,8 @@ const Jobs = (props) => {
                     for(let i in res.data.data) {
                         arr.push(res.data.data[i]);
                     }
-                    setJobs(res.data);
+                    console.log(arr);
+                    setJobs(arr);
                     setPageCount(res.data.last_page);
                     setCurrentPage(parseInt(res.data.current_page), 10);
                 }

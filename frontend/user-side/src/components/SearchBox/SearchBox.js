@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
-import Form from './Form';
+import React, {useState, useEffect} from 'react';
+import FindJobForm from './FindJobForm';
+import FindFreelancerForm from './FindFreelancerForm';
 import cx from 'classnames';
 import classes from './SearchBox.module.scss';
+import axios from '../../axios';
 
 const FIND_A_JOB = "FIND_A_JOB";
 const FIND_A_CANDIDATE = 'FIND_A_CANDIDATE';
@@ -10,14 +12,23 @@ const SearchBox = () => {
 
     //state for holding the name of an active tab
     const [activeTab, setTab] = useState(FIND_A_JOB)
+    const [skillNames, setSkillNames] = useState([]);
     
     //sets tab name on click
     const handleOpenTab = (tab) => {
         setTab(tab);
     }
 
+    useEffect(() => {
+        axios.get('/skills')
+            .then(res => {
+                console.log(res);
+                setSkillNames(res.data.map(skill => skill.skillName));
+            })
+    },[]);
+
     return (
-        <div className={cx(classes["ftco-search"], "my-md-5")}>
+        <div className={`${classes["ftco-search"]} my-md-5`}>
             <div className="row">
                 <div className="col-md-12">
                     <div className={cx("nav text-center", classes["nav-pills"])} role="tablist">
@@ -33,14 +44,17 @@ const SearchBox = () => {
                             className={cx(classes["nav-link"], activeTab === FIND_A_CANDIDATE? classes["active"]: "")}
                             role="tab" 
                         >
-                            Rask kandidatą
+                            Rask freelancerį
                         </button>
                     </div>
                 </div>
                 <div className={cx("col-md-12", classes["tab-wrap"])}>
                     <div className={cx(classes["tab-content"], "p-4")}>
-                        {activeTab === FIND_A_JOB ? <Form placeholder="pvz. Grafikos, Žiniatinklio programuotojas"/> :
-                        <Form placeholder="pvz. Adamas Skotas" /> }
+                        {activeTab === FIND_A_JOB ? 
+                            <FindJobForm skillNames={skillNames} />
+                            :
+                            <FindFreelancerForm skillNames={skillNames} /> 
+                        }
                     </div>
                 </div>
             </div>

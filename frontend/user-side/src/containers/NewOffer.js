@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { useAuth } from '../context/auth';
 import SkillModalButton from '././Profile/FreelancerProfile/SkillModalButton';
 
-import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -52,8 +51,7 @@ const NewOffer = (props) => {
         title: '',
         description: '',
         salary: '',
-        user_id: '',
-        skills_id: []
+        skills: []
     };
 
     const validationSchema = Yup.object({
