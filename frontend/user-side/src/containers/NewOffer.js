@@ -65,13 +65,16 @@ const NewOffer = (props) => {
     const handleSubmit = values => {  
         console.log(values);
         
-        axios.post('/new-offer', values)
+        axios.post('/joboffer', values, {
+            headers: {
+                'Authorization': 'Bearer ' + authData.token
+            }
+        })
             .then(res => {
                 console.log(res);
                 if(!res.data.error && res.status === 201) {
                     props.history.push({
-                        pathname: '/login',
-                        state: {registrationSuccesful: true}
+                        pathname: '/',
                     });
                 }
             })

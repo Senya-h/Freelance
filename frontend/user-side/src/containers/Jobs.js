@@ -40,6 +40,14 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '20px',
         backgroundColor: '#fff',
         padding: '10px'
+    },
+    noResults: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        fontSize: '30px',
+        minHeight: '250px',
+        backgroundColor: '#fff'
     }
 }))
 
@@ -75,23 +83,23 @@ const Jobs = (props) => {
         urlParams += city? `city=${city}&`: '';
 
 
-        axios.get(``)
+        axios.get(`offers-list`)
             .then(res => {
                 setLoading(false);
-
-                if(!res.error && res.status === 200) {
+                console.log(res);
+                if(!res.data.error && res.status === 200) {
                     let arr = [];
                     for(let i in res.data.data) {
                         arr.push(res.data.data[i]);
                     }
-                    setJobs(arr);
+                    setJobs(res.data);
                     setPageCount(res.data.last_page);
                     setCurrentPage(parseInt(res.data.current_page), 10);
                 }
             })
             .catch(err => {
                 setLoading(false);
-
+                console.log(err);
             })
         }, [props.location.search, props.history]);
 
@@ -111,7 +119,6 @@ const Jobs = (props) => {
 
         }
     })
-
     return (
         <>
         <div className={classes.form} role="tabpanel">
@@ -121,7 +128,6 @@ const Jobs = (props) => {
                         <TextField autoComplete="off" value={formik.values.service} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        {console.log(skillNames)}
                         <Autocomplete
                             width="100%"
                             options={skillNames}
@@ -160,21 +166,22 @@ const Jobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={classes.mainGrid}>
+        <Grid container spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
-                    <Grid key={job.info.id} item xs={12}>
+                    <Grid key={job.id} item xs={12}>
                         <Grid container item className="p-4 bg-white">
-                            <Grid item className="img" style={{backgroundImage: job.info.foto? `url('${baseURL}/storage/${job.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid>
+                            {/* <Grid item className="img" style={{backgroundImage: job.info.foto? `url('${baseURL}/storage/${job.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid> */}
                             <Grid item className="text pl-md-4">
-                                <span className="location mb-0">{job.info.location}</span>
-                                <h2 className={classes.name}>JOB TITLE</h2>                                
-                                <Button className={classes.linkButton} component={Link} to={`/job/${job.info.id}`} variant='contained' color='primary'>Daugiau</Button>
+                                {/* <span className="location mb-0">{job.info.location}</span> */}
+                                <h2 className={classes.name}>{job.title}</h2>                                
+                                <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>
                         </Grid>
                     </Grid>
                 )
-            }): <Grid item>Rezultatų nerasta</Grid>}
+            }): <Grid item >Rezultatų nerasta</Grid>}
+            {pageCount > 1 && 
             <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination
                     page={parseInt(currentPage, 10)}
@@ -192,6 +199,7 @@ const Jobs = (props) => {
                     )}
                 />
             </Grid>
+            }           
         </Grid>)}
         </>
     )

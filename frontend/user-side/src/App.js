@@ -16,6 +16,7 @@ import Messages from './containers/Messages';
 import Footer from './components/Footer';
 import NewOffer from './containers/NewOffer';
 import Jobs from './containers/Jobs';
+import Job from './containers/Job';
 import MyJobs from './containers/MyJobs';
 
 import ScrollToTop from './components/ScrollToTop';
@@ -42,6 +43,9 @@ const App = () => {
         if(res.data.banned) {
           removeTokens();
         }
+      })
+      .catch(err => {
+          removeTokens();
       })
   }
 
@@ -74,6 +78,7 @@ const App = () => {
             <Route path='/client/:id' component={ClientProfile} />
 
             <Route path='/jobs' component={Jobs} />
+            <Route path='/job/:id' component={Job} />
             <Route path='/freelancers' component={Freelancers} />
             <Route path='/messages' component={Messages} />
             <Route path='/new-offer' component={NewOffer} />

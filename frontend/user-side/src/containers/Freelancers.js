@@ -40,6 +40,14 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '20px',
         backgroundColor: '#fff',
         padding: '10px'
+    },
+    noResults: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        fontSize: '30px',
+        minHeight: '250px',
+        backgroundColor: '#fff'
     }
 }))
 
@@ -160,7 +168,7 @@ const Freelancers = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={classes.mainGrid}>
+        <Grid container spacing={5} className={`${classes.mainGrid} ${freelancers.length? null: classes.noResults}`}>
             {freelancers.length? freelancers.map(freelancer => {
                 const services = freelancer.portfolio.services.map(service => <span key={service.id}>{service.service} , </span>)
                 const skills = freelancer.portfolio.skills.map(skill => <span key={skill.id}>{skill.skill}, </span>)
@@ -181,6 +189,7 @@ const Freelancers = (props) => {
                     </Grid>
                 )
             }): <Grid item>Rezultatų nerasta</Grid>}
+            {pageCount > 1 &&
             <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination
                     page={parseInt(currentPage, 10)}
@@ -198,6 +207,7 @@ const Freelancers = (props) => {
                     )}
                 />
             </Grid>
+            }
         </Grid>)}
         </>
     )

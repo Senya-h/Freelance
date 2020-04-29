@@ -58,7 +58,6 @@ const AddCommentModal = (props) => {
         }),
         onSubmit: values => {
             console.log(values);
-            console.log('props: ', props);
             axios.post('comment', {...values, receiver_id: props.profileUserID}, {
                 headers: {
                     'Authorization': 'Bearer ' + props.token,
@@ -66,9 +65,8 @@ const AddCommentModal = (props) => {
             }).then(res => {
                 if(!res.error && res.status === 200) {
                     handleClose();
-                    // props.setComments([...allComments, res.data])
+                    props.setComments([res.data, ...props.allComments])
                 }
-                console.log(res);
             })
             .catch(err => {
                 console.log(err);
