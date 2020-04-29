@@ -120,3 +120,8 @@ Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
 Route::post('comment','CommentsController@create');
 Route::put('comment/{comment}','CommentsController@update');
 Route::delete('comment/{id}','CommentsController@delete');
+
+Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
+Route::post('project','ProjectApprovalController@create');
+Route::put('project/{project}','ProjectApprovalController@update');
+Route::delete('project/{id}','ProjectApprovalController@delete');
