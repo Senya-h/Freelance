@@ -52,6 +52,9 @@ const SkillModalButton = (props) => {
                     })
                     console.log("Nauji skillsai: ", newSkills);
                     props.setSkills([...newSkills]);
+                    if(props.setFieldValue) {
+                        props.setFieldValue('skills_id', newSkills.map(skill => skill.id));
+                    }
                 }
                 console.log(res);
             })
@@ -71,7 +74,7 @@ const SkillModalButton = (props) => {
             </IconButton> 
 
             <Dialog open={open} onClose={handleClose} fullWidth>                          
-                <DialogTitle>Tavo gebėjimai</DialogTitle>
+                <DialogTitle>Gebėjimai</DialogTitle>
                 <form onSubmit={formik.handleSubmit}>
                     <DialogContent>
                         <FormGroup>

@@ -77,14 +77,21 @@ const Login = (props) => {
                 if(res.status === 200 && !res.data.error) {
                     setAuthData(res.data);     
                     props.history.push({referer});
+                } else if(res.data.error) {
+                    if(res.data.error.banned) {
+                        alertMessage = <Alert severity="error">Ši paskyra užblokuota!</Alert>;
+                    } else if(res.data.error.invalidCredentials) {
+                        alertMessage = <Alert severity="error">Neteisingi prisijungimo duomenys!</Alert>;
+                    }
                 } else {
-                    alertMessage = <Alert severity="error">{res.data.error}</Alert>;
-                    setSubmitting(false);
-                }       
+                    alertMessage = <Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>;
+                } 
+                setSubmitting(false);
+
             })
             .catch(err => {
                 setSubmitting(false);
-                console.log(err);
+                alertMessage = <Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>;
             })
     };
 

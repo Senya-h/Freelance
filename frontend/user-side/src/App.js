@@ -11,9 +11,12 @@ import Register from  './containers/Register';
 import Login from './containers/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
-import BrowseJobs from './containers/BrowseJobs';
+import Freelancers from './containers/Freelancers';
 import Messages from './containers/Messages';
 import Footer from './components/Footer';
+import NewOffer from './containers/NewOffer';
+import Jobs from './containers/Jobs';
+import MyJobs from './containers/MyJobs';
 
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopIcon from './components/ScrollToTopIcon';
@@ -21,12 +24,27 @@ import HeroWrap from './hoc/HeroWrap';
 import {AuthContext} from './context/auth';
 
 import Cookies from 'js-cookie';
+import axios from './axios';
 
 const App = () => {  
   const authCookie = Cookies.get('access_token');
 
   const existingTokens = authCookie? JSON.parse(authCookie): undefined;
   const [authData, setAuthData] = useState(existingTokens);
+
+  if(authData) {
+    axios.get('/checkJWT', {
+      headers: {
+        'Authorization': 'Bearer ' + authData.token
+      }
+    })
+      .then(res => {
+        if(res.data.banned) {
+          removeTokens();
+        }
+      })
+  }
+
 
   const setTokens = (data) => {
     Cookies.set('access_token', data);
@@ -55,8 +73,11 @@ const App = () => {
             <Route path='/freelancer/:id' component={FreelancerProfile} />
             <Route path='/client/:id' component={ClientProfile} />
 
-            <Route path='/jobs' component={BrowseJobs} />
+            <Route path='/jobs' component={Jobs} />
+            <Route path='/freelancers' component={Freelancers} />
             <Route path='/messages' component={Messages} />
+            <Route path='/new-offer' component={NewOffer} />
+            <Route path='/my-jobs' component={MyJobs} />
             <Route component={PageNotFound} />
           </Switch>
         </ScrollToTop>

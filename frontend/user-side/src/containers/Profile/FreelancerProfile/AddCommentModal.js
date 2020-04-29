@@ -39,6 +39,8 @@ const AddCommentModal = (props) => {
     const handleOpen = () => {
         formik.setFieldValue('rating', 3);
         formik.setFieldValue('comment', '');
+        console.log(props);
+
         setOpen(true);
     }
 
@@ -52,23 +54,19 @@ const AddCommentModal = (props) => {
             comment: ''
         },
         validationSchema: yupObject({
-            rating: yupString().min(0).max(5),
+            rating: yupString().min(1).max(5),
         }),
         onSubmit: values => {
             console.log(values);
-
-            axios.post('', values, {
+            console.log('props: ', props);
+            axios.post('comment', {...values, receiver_id: props.profileUserID}, {
                 headers: {
                     'Authorization': 'Bearer ' + props.token,
                 }
             }).then(res => {
-                if(!res.error && res.status === 201) {
+                if(!res.error && res.status === 200) {
                     handleClose();
-                    props.setServices([...props.services, {
-                        service: values.service, 
-                        description: values.description, 
-                        price_per_hour: values.price_per_hour
-                    }])
+                    // props.setComments([...allComments, res.data])
                 }
                 console.log(res);
             })

@@ -109,7 +109,6 @@ const Footer = () => {
                             <Button type='submit' color='secondary' variant='outlined' >
                                 Siųsti žinutę
                             </Button>
-                            {console.log(alertMessage)}
                             {alertMessage}
                         </Box>
                     </form>

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rating extends Model
+class JobOffer extends Model
 {
     protected $fillable = [
-        'user_id','message','rating','profolio_id'
+        'title', 'description', 'salary', 'user_id'
     ];
 }

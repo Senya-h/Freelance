@@ -7,6 +7,7 @@ use App\Message;
 use App\Role;
 use App\Rating;
 use App\Service;
+use App\Comments;
 use App\PortfolioWorks;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -45,12 +46,32 @@ class PortfolioController extends Controller
         ->get();
 
         //skills
-        $skills = DB::table('user_skill')
-        ->select('skill.id','skill.skillName as skill', 'user_skill.approved', 'user_skill.comment')
-        ->join('skill','skill.id','=','user_skill.skill_id')
+        $skills = DB::table('skill_users')
+        ->select('skill.id','skill.skillName as skill', 'skill_users.approved')
+        ->join('skill','skill.id','=','skill_users.skill_id')
         ->where('user_id',$id)
         ->get();
-        
+
+        $allComments = Comments::select('comments.id as id', 'comments.comment', 'comments.rating', 'comments.user_id', 'comments.receiver_id')
+        ->join('users','users.id','=','comments.user_id')
+        ->where('receiver_id',$id)
+        ->orderBy('comments.created_at','DESC')
+        ->get();
+        $comments = [];
+        foreach ($allComments as $com) {
+            $userCom = User::select('name', 'foto')
+                ->where('id',$com->user_id)
+                ->get();
+            $comments[] = [
+                'id' => $com->id,
+                'comment' => $com->comment,
+                'rating' => $com->rating,
+                'user_id' => $com->user_id,
+                'receiver_id' => $com->receiver_id,
+                'name' => $userCom[0]->name,
+                'userPhoto' => $userCom[0]->foto
+            ];
+        }
         $darbai = [];
         foreach ($works as $work) {
             $workApprv = DB::table('admin_work_approves')->select('*')->where('work_id',$work->id)->get();
@@ -94,14 +115,26 @@ class PortfolioController extends Controller
                 ];
             }
         }
+        $ratings = Comments::select('rating')->where('receiver_id',$id)->get();
+        $ratingArr = [];
+        for ($i = 0; $i<count($ratings); $i++) {
+            $ratingArr[] = $ratings[$i]->rating;
+        }
+        $ratingAvg = 0;
+        if (count($ratings) > 0) {
+            $ratingAvg = array_sum($ratingArr)/count($ratings);
+        }
+        
         if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
                     'name' => $usr[0]['name'],
+                    'ratingAverage' => round($ratingAvg, 2),
                     'email' => $usr[0]['email'],
                     'foto' => $usr[0]['foto'],
                     'location' => $usr[0]['location'],
                     'roles' => $role,
+                    'comments' => $comments
             ],
                 'portfolio' => [
                     'services' => $paslaugos, //Paslaugos

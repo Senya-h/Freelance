@@ -4,6 +4,7 @@ import axios, {baseURL} from '../../axios';
 import {Button, Card} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 import DeleteModal from '../DeleteModal';
+import {Link} from "react-router-dom";
 
 class Portfolio extends Component{
     _isMounted = false
@@ -142,6 +143,7 @@ render() {
                 <div className="main-content">
                     <div className="container-fluid">
                         <h1>Portfolio Darbai</h1>
+                        <Link to="/formats" className="text-muted">Formatų pridėjimas</Link>
                         <div className="error"></div>
                             <DeleteModal
                                 method = {() => this.delete(this.state.workID)}
