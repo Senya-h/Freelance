@@ -19,12 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
+Route::get('emailCheck&email={email}', 'AuthController@checkEmail');
 //Registration/Login
-Route::post('register','ApiController@register');
-Route::post('login','ApiController@login');
-Route::get('new_token', 'ApiController@tokenRefresh');
-Route::post('verify_login/{id}', 'ApiController@verifyFirstLogin');
+Route::post('register','AuthController@register');
+Route::post('login','AuthController@login');
+Route::get('new_token', 'AuthController@tokenRefresh');
+Route::post('verify_login/{id}', 'AuthController@verifyFirstLogin');
 
 //Admin login
 Route::post('login/admin','AdminController@adminLogin');
@@ -98,9 +98,9 @@ Route::get('banned','ApiController@bannedUsersList');
 //Freelancerių sąrašas
 Route::get('freelancers','ApiController@freelancersList');
 //Freelancerių paieška
-Route::get('search','ApiController@search');
+Route::get('search','SearchController@freelancerSearch');
 //Tikrina ar useris nėra užblokuotas
-Route::get('checkJWT','ApiController@refreshBannedToken');
+Route::get('checkJWT','AuthController@refreshBannedToken');
 //Tikrina ar useris nėra užblokuotas
 Route::get('statistics','ApiController@statistics');
 
@@ -124,7 +124,7 @@ Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti
 
 Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
 Route::post('project','ProjectApprovalController@create');
-Route::put('project/{project}','ProjectApprovalController@update');
+Route::post('project/{project}','ProjectApprovalController@update');
 Route::delete('project/{id}','ProjectApprovalController@delete');
 
 //Contact form
