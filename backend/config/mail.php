@@ -74,8 +74,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'from@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@freelance.lt'),
+        'name' => env('MAIL_FROM_NAME', 'Workify'),
     ],
 
     /*
