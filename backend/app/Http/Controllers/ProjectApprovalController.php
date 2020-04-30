@@ -68,7 +68,6 @@ class ProjectApprovalController extends Controller
         ]);
 
 
-
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);
         } if ($request->has('file')) {
@@ -77,7 +76,6 @@ class ProjectApprovalController extends Controller
             Storage::disk('public')->delete($deletefile);
             $path = $request->file('file')->store('public/ProjectImages');
             $filename = str_replace('public/', "", $path);
-            $project = new ProjectApproval;
             $project->file = $filename;
             $project->comment = $request->comment;
             $project->approved = $request->approved;
