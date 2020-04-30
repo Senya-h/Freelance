@@ -77,7 +77,7 @@ Route::post('add/role&id={role_id}', 'AdminController@store'); //Prideti role us
 Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
-Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1) 
+Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1)
 Route::post('message{id}', 'MessageController@create'); //Išsiusti žinute
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 
@@ -124,7 +124,7 @@ Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti
 
 Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
 Route::post('project','ProjectApprovalController@create');
-Route::put('project/{project}','ProjectApprovalController@update');
+Route::post('project/{project}','ProjectApprovalController@update');
 Route::delete('project/{id}','ProjectApprovalController@delete');
 
 //Contact form
