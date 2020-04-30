@@ -62,6 +62,9 @@ class JobOfferController extends Controller
                     ->join('skill','skill.id','job_offer_skill.skill_id')
                     ->where('offer_id', $offer->id)
                     ->get();
+            if(count($skills) === 0) {
+                $skills = [];
+            }
             $offers[] = [
                 'id' => $offer->id,
                 'title' => $offer->title,
