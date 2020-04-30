@@ -40,10 +40,18 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '20px',
         backgroundColor: '#fff',
         padding: '10px'
+    },
+    noResults: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        fontSize: '30px',
+        minHeight: '250px',
+        backgroundColor: '#fff'
     }
 }))
 
-const BrowseJobs = (props) => {
+const Freelancers = (props) => {
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
     const [skillNames, setSkillNames] = useState(['Kraunama...']);
@@ -107,7 +115,7 @@ const BrowseJobs = (props) => {
             const service = values.service;
             const skill = values.skill;
             const city = values.city;
-            props.history.push(`/jobs?service=${service}&skill=${skill}&city=${city}`);
+            props.history.push(`/freelancers?service=${service}&skill=${skill}&city=${city}`);
 
         }
     })
@@ -160,7 +168,7 @@ const BrowseJobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={classes.mainGrid}>
+        <Grid container spacing={5} className={`${classes.mainGrid} ${freelancers.length? null: classes.noResults}`}>
             {freelancers.length? freelancers.map(freelancer => {
                 const services = freelancer.portfolio.services.map(service => <span key={service.id}>{service.service} , </span>)
                 const skills = freelancer.portfolio.skills.map(skill => <span key={skill.id}>{skill.skill}, </span>)
@@ -181,6 +189,7 @@ const BrowseJobs = (props) => {
                     </Grid>
                 )
             }): <Grid item>Rezultatų nerasta</Grid>}
+            {pageCount > 1 &&
             <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination
                     page={parseInt(currentPage, 10)}
@@ -192,15 +201,16 @@ const BrowseJobs = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
+                            to={`/freelancers?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
                             {...item}
                         />
                     )}
                 />
             </Grid>
+            }
         </Grid>)}
         </>
     )
 }
 
-export default BrowseJobs
+export default Freelancers;

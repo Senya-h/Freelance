@@ -115,6 +115,14 @@ Route::post('user/roles','AdminController@findUserWithRoles');
 //Klientų darbų pasiūlymai
 
 Route::get('offers-list', 'JobOfferController@list'); // Pasiūlymų sąrašas
+Route::get('myoffers','JobOfferController@myOffers'); //Mano skelbimai
+Route::get('joboffer/{id}','JobOfferController@singleOffer'); //Vienas pasiūlymas
 Route::post('joboffer','JobOfferController@create'); //Sukurti paslaugą
 Route::put('joboffer/update/{id}','JobOfferController@update'); //Atnaujinti paslaugą
 Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti paslaugą
+
+
+Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
+Route::post('project','ProjectApprovalController@create');
+Route::put('project/{project}','ProjectApprovalController@update');
+Route::delete('project/{id}','ProjectApprovalController@delete');

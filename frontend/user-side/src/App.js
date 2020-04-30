@@ -11,9 +11,13 @@ import Register from  './containers/Register';
 import Login from './containers/Login';
 import RemindPassword from './containers/RemindPassword/RemindPassword';
 import ForgotChangePassword from './containers/RemindPassword/ForgotChangePassword';
-import BrowseJobs from './containers/BrowseJobs';
+import Freelancers from './containers/Freelancers';
 import Messages from './containers/Messages';
 import Footer from './components/Footer';
+import NewOffer from './containers/NewOffer';
+import Jobs from './containers/Jobs';
+import Job from './containers/Job';
+import MyJobs from './containers/MyJobs';
 
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopIcon from './components/ScrollToTopIcon';
@@ -39,6 +43,9 @@ const App = () => {
         if(res.data.banned) {
           removeTokens();
         }
+      })
+      .catch(err => {
+          removeTokens();
       })
   }
 
@@ -70,8 +77,12 @@ const App = () => {
             <Route path='/freelancer/:id' component={FreelancerProfile} />
             <Route path='/client/:id' component={ClientProfile} />
 
-            <Route path='/jobs' component={BrowseJobs} />
+            <Route path='/jobs' component={Jobs} />
+            <Route path='/job/:id' component={Job} />
+            <Route path='/freelancers' component={Freelancers} />
             <Route path='/messages' component={Messages} />
+            <Route path='/new-offer' component={NewOffer} />
+            <Route path='/my-jobs' component={MyJobs} />
             <Route component={PageNotFound} />
           </Switch>
         </ScrollToTop>

@@ -139,7 +139,6 @@ const FreelancerProfile = (props) => {
 
     const [allSkills, setAllSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
-    const [isMobile, setMobile] = useState(false);
 
     const [deleteModalInfo, setDeleteModalInfo] = useState({
         open: false,
@@ -159,7 +158,9 @@ const FreelancerProfile = (props) => {
                 setUserInfo({
                     name: info.name, 
                     location: info.location, 
-                    photo: info.foto? info.foto: DEFAULT_PHOTO
+                    photo: info.foto? info.foto: DEFAULT_PHOTO,
+                    email: info.email,
+                    ratingAverage: info.ratingAverage
                 });
                 setComments(info.comments);
                 setWorks(portfolio.works);
@@ -223,7 +224,7 @@ const FreelancerProfile = (props) => {
                     <Grid className={classes.userInfoArea} container item xs={12} md={8}>
                         {/* Paslaugos, servisai */}
                         <Grid item xs={12}>              
-                        <h2>{userInfo.name} <Rating name='read-only' precision={0.25} value={4.5} readOnly /> </h2>
+                        <h2>{userInfo.name} {userInfo.ratingAverage >= 1 && <Rating name='read-only' precision={0.25} value={userInfo.ratingAverage} readOnly />} </h2>
                         {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
                         <div>
                             <h4>
@@ -293,7 +294,7 @@ const FreelancerProfile = (props) => {
                         <Grid item className={classes.mobile}>
                             <h3>
                                 Atsiliepimai 
-                                {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} profileUserID={profileUserID}/>: null}
+                                {visitingUserID !== profileUserID && authData?<AddCommentModal allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID}/>: null}
                             </h3>
                             <Comments allComments={comments} setComments={setComments}/>
                         </Grid>
@@ -315,7 +316,9 @@ const FreelancerProfile = (props) => {
                             </div>
                         </Grid>
                         <Grid item className={classes.desktop}>
-                            <h3>Atsiliepimai {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} profileUserID={profileUserID} />: null}</h3>
+                            <h3>Atsiliepimai 
+                                {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} allComments={comments} setComments={setComments} profileUserID={profileUserID} />: null}
+                            </h3>
                             <Comments allComments={comments} setComments={setComments} />
                         </Grid>
                     </Grid>

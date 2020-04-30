@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import Autocomplete from '../../../Autocomplete';
-import cities from '../../../cities';
+import React from 'react';
+import Autocomplete from '../../Autocomplete';
+import cities from '../../cities';
 import {withRouter} from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 
 import {useFormik} from 'formik';
 
-import axios from '../../../axios';
+import axios from '../../axios';
 
 const useStyles = makeStyles(theme => ({
     submitBtn: {
@@ -21,9 +21,8 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Form = (props) => {
+const FindFreelancerForm = (props) => {
     const classes = useStyles();
-    const [skillNames, setSkillNames] = useState([]);
 
     const formik = useFormik({
         initialValues: {
@@ -37,21 +36,13 @@ const Form = (props) => {
                 .then(res => {
                     console.log(res);
                     props.history.push({
-                        pathname: '/jobs',
+                        pathname: '/freelancers',
                         search: `?service=${values.service}&skill=${values.skill}&city=${values.city}`
                     });
                 })
             console.log(props);
         }
     });
-
-    useEffect(() => {
-        axios.get('/skills')
-            .then(res => {
-                console.log(res);
-                setSkillNames(res.data.map(skill => skill.skillName));
-            })
-    },[]);
 
     return (
         <div role="tabpanel">
@@ -63,7 +54,7 @@ const Form = (props) => {
                     <Grid item xs={12} md={3}>
                         <Autocomplete
                             width="100%"
-                            options={skillNames}
+                            options={props.skillNames}
                             name="skill"
                             label="Gebėjimas"
                             change={(e, value) => {
@@ -91,4 +82,4 @@ const Form = (props) => {
     )
 };
 
-export default withRouter(Form);
+export default withRouter(FindFreelancerForm);

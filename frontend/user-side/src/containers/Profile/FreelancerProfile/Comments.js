@@ -25,7 +25,7 @@ const Comments = (props) => {
     return (
         <div className={classes.scrollableComments}>
             {props.allComments.map(comment => (
-                <div>
+                <div key={comment.id}>
                     <p className={classes.commentName}>{comment.user_id}<Rating name='read-only' precision={0.25} value={comment.rating} readOnly /> </p>
                     <p>{comment.comment}</p>
                 </div>
