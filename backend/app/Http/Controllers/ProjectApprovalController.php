@@ -67,25 +67,30 @@ class ProjectApprovalController extends Controller
             'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+
+
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);
-        } elseif ($request->hasFile('file')) {
-            $file = ProjectApproval::select('file')->where('id', '=')->get();
-            File::delete('../storage/app/public/ProjectImages/' . $file[0]['file']);
+        } if ($request->has('file')) {
+
+            $deletefile = $project->file;
+            Storage::disk('public')->delete($deletefile);
             $path = $request->file('file')->store('public/ProjectImages');
             $filename = str_replace('public/', "", $path);
-            ProjectApproval::where('id')->update(['file' => $filename]);
+            $project = new ProjectApproval;
             $project->file = $filename;
             $project->comment = $request->comment;
             $project->approved = $request->approved;
+            $project->work_id = $request->work_id;
             $project->save();
         } else {
             $project->comment = $request->comment;
             $project->approved = $request->approved;
+            $project->work_id = $request->work_id;
             $project->save();
         }
 
-        return response()->json(["message" => "Projectas atnaujintas"]);
+        return response()->json($project);
     }
 
     public function delete(ProjectApproval $id)
