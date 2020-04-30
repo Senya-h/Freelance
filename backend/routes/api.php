@@ -98,7 +98,7 @@ Route::get('banned','ApiController@bannedUsersList');
 //Freelancerių sąrašas
 Route::get('freelancers','ApiController@freelancersList');
 //Freelancerių paieška
-Route::get('search','SearchController@freelancerSearch');
+Route::get('search','SearchController@freelancersSearch');
 //Tikrina ar useris nėra užblokuotas
 Route::get('checkJWT','AuthController@refreshBannedToken');
 //Tikrina ar useris nėra užblokuotas
@@ -112,6 +112,15 @@ Route::delete('comment/{id}','CommentsController@delete');
 //Userio info su role
 Route::post('user/roles','AdminController@findUserWithRoles');
 
+Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
+Route::post('project','ProjectApprovalController@create');
+Route::post('project/{project}','ProjectApprovalController@update');
+Route::delete('project/{id}','ProjectApprovalController@delete');
+
+//Contact form
+Route::get('send-mail', 'MailSendController@mailsend');
+
+//Client Side
 //Klientų darbų pasiūlymai
 
 Route::get('offers-list', 'JobOfferController@list'); // Pasiūlymų sąrašas
@@ -121,11 +130,4 @@ Route::post('joboffer','JobOfferController@create'); //Sukurti paslaugą
 Route::put('joboffer/update/{id}','JobOfferController@update'); //Atnaujinti paslaugą
 Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti paslaugą
 
-
-Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
-Route::post('project','ProjectApprovalController@create');
-Route::post('project/{project}','ProjectApprovalController@update');
-Route::delete('project/{id}','ProjectApprovalController@delete');
-
-//Contact form
-Route::get('send-mail', 'MailSendController@mailsend');
+Route::get('search/clients', 'SearchController@clientsSearch');
