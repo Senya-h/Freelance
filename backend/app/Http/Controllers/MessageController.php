@@ -12,18 +12,10 @@ class MessageController extends Controller
 {
     public function fromMsg($senders_id,$receivers_id)
     {
-        $user = User::findOrFail($senders_id);     
-        $user->notifications->where('notifiable_id', $senders_id)->markAsRead();
+        Message::where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->update(['notification_read' => 1]);
         return response()->json(Message::select('*')->where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->get(),200);
     }
 
-
-    public function notifi($senders_id)
-    {
-        $user = User::findOrFail($senders_id);     
-        $user->notifications->where('notifiable_id', $senders_id)->markAsRead();
-        return response()->json(["message" => "Notification atnaujintas"], 201);
-    }
 
     public function create(Request $request)
     {
@@ -32,8 +24,6 @@ class MessageController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $receiver = User::findOrFail($user->id);
-        $receiver->notify(new privateMessage(User::findOrFail($request->input('receivers_id'))));
         return Message::create([
             'senders_id' => auth()->user()->id,
             'receivers_id' => $request->input('receivers_id'),

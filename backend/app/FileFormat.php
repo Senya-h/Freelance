@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class FileFormat extends Model
 {
     protected $fillable = [
-        'senders_id','receivers_id','message','notification_read'
+        'format'
     ];
 }

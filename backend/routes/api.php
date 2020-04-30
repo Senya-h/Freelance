@@ -49,6 +49,7 @@ Route::delete('delete/work&id={work}', 'PortfolioWorksController@destroy'); // i
 //Formato pridėjimas į DB
 Route::get('format-list', 'AdminController@formatList');
 Route::post('format', 'AdminController@addFormat');
+Route::delete('format/delete&id={id}', 'AdminController@deleteFormat');
 
 //Roles
 Route::get('role', 'RoleController@aboutRole'); //Roliu sarašas
@@ -76,9 +77,8 @@ Route::post('add/role&id={role_id}', 'AdminController@store'); //Prideti role us
 Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
-Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Išsiųstos
-Route::put('message/notification/{senders_id}', 'MessageController@notifi'); //Pažymeti,kad visi notification peržiurėti pagal senders_id,tai notifiable_id
-Route::post('message', 'MessageController@create'); //Išsiuntus žinute atsiranda info notifications table,notifible_id colum tai siuntejo_id, data colum tai gavejio_id ir vardas
+Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1) 
+Route::post('message{id}', 'MessageController@create'); //Išsiusti žinute
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 
 //index parodo pagal id userius isveda user visus duomenys

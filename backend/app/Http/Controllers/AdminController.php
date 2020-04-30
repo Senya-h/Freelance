@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use File;
 use App\BanDeleteUser;
 use App\AdminWorkApprove;
 use App\User;
@@ -11,6 +12,7 @@ use App\Role;
 use App\RoleUser;
 use App\SkillUser;
 use App\Comments;
+use App\FileFormat;
 use App\Message;
 use App\Skill;
 use App\Rating;
@@ -71,6 +73,8 @@ class AdminController extends Controller
                 $message_user->delete();
                 $service_user = Service::where('user_id',$id);
                 $service_user->delete();
+                $file = PortfolioWorks::select('filePath')->where('user_id', '=', $id)->get();
+                File::delete('../storage/app/public/' . $file['filePath']);
                 $portfolioWork_user = PortfolioWorks::where('user_id',$id);
                 $portfolioWork_user->delete();
                 $user = User::find($id);
@@ -181,6 +185,20 @@ class AdminController extends Controller
             ]);
             return response()->json(["message" => request('format')." formatas pridėtas"]);
         }
+    }
+
+    public function deleteFormat(Request $request,FileFormat $id) {
+        try {
+            $user = auth()->userOrFail();
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        }
+        if(auth()->user()->authorizeRoles('Admin')){
+            $id->delete();
+        } else {
+            return response()->json(["error" => "Jūs neturite teisės"], 403);
+        }
+        return response()->json(["message" => "Formatas pašalinta",200]);
     }
 
     public function addSkill(Request $request)
