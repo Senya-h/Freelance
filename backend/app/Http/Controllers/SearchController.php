@@ -116,6 +116,16 @@ class SearchController extends Controller
         $data = $this->paginate($freelancers);
         return response()->json($data, 200);
     }
+    public function freelancerSearch(Request $request) {
+        $searchQuery = $request->input("offer");
+        $skillQuery = $request->input("skill");
+        $city = $request->input("city");
+
+        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
+        ->distinct()
+        ->where('role',2)
+        ->get();
+    }
     public function paginate($items, $perPage = 20, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);

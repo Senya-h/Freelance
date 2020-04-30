@@ -138,15 +138,37 @@ class AdminController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
+        
         if($request->user()->authorizeRoles('Admin')){
-                $user = User::select('id')->where('email',$request->input('email'))->get();
-                $usrID = $user[0]->id;
+           /*if(auth()->user()->authorizeRoles($hasRole)) {
+                return response()->json(["error" => "Tokios pačios rolės duoti negalima"], 403);
+            }*/
+                $user = User::select('*')->where('email',$request->input('email'))->first();
+                $usrID = $user->id;
+
+                $hasRole = DB::table('role_users')
+                ->select('role_id')
+                ->join('roles', 'role_users.role_id', 'roles.id')
+                ->where('role_users.user_id', $usrID)
+                ->get();
+                $roles = [];
+                foreach($hasRole as $role) {
+                    $roles[] = $role->role_id;
+                }
+                if(in_array((int)$role_id, $roles)) {
+                    return response()->json(["error" => "Tokios pačios rolės duoti negalima"]);
+                } else if ($user->role == 2 && $role_id == 3 || $user->role == 3 && $role_id == 2) {
+                    return response()->json(["error" => "Vartotojas gali būti tik arba freelanceris arba klientas"]);
+                } 
+                if($role_id != 1) {
+                    User::where('id',$usrID)->update(['role'=>$role_id]);
+                }
                 $role = Role::where('id', $role_id)->first();
                 $role->users()->attach($usrID);
         } else {
-            return response()->json(["error" => "Jūs neturite teisės"], 403);
+            return response()->json(["error" => "Jūs neturite teisės "], 403);
         }
-        return response()->json(["message" => "Role sekmingai prideta",200]);
+        return response()->json(["message" => "Role sekmingai prideta ".auth()->user()->role."==".$role_id,200]);
     }
     
     //Rolės nuemimas nuo user
@@ -157,6 +179,9 @@ class AdminController extends Controller
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
         if($request->user()->authorizeRoles('Admin')){
+            if($role_id == 2 || $role_id == 3) {
+                User::where('id',$user_id)->update(['role'=>0]);
+            }
                 $role = Role::where('id', $role_id)->first();
                 $user = User::where('id', $user_id)->first();
                 $role->users()->detach($user);

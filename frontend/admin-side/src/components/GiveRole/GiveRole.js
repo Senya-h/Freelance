@@ -51,6 +51,7 @@ class GiveRole extends Component{
                     'Content-Type': 'application/json',
                 }}
             ).then(res => {
+                console.log(res.data)
                 if(res.data.error) {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+res.data.error+"</div>"
                 } else {
