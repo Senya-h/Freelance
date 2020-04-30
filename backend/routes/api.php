@@ -126,3 +126,6 @@ Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
 Route::post('project','ProjectApprovalController@create');
 Route::put('project/{project}','ProjectApprovalController@update');
 Route::delete('project/{id}','ProjectApprovalController@delete');
+
+//Contact form
+Route::get('send-mail', 'MailSendController@mailsend');
