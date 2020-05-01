@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner';
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
@@ -15,8 +16,7 @@ import axios, {baseURL} from '../axios';
 
 import Autocomplete from '../Autocomplete';
 import cities from '../cities';
-
-import TextField from '@material-ui/core/TextField';
+import {useAuth} from '../context/auth';
 
 const useStyles = makeStyles(theme => ({
     name: {
@@ -60,7 +60,8 @@ const MyJobs = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [jobs, setJobs] = useState([]);
-    
+
+    const {authData} = useAuth();
     
     useEffect(() => {
         axios.get('/skills')
@@ -83,10 +84,14 @@ const MyJobs = (props) => {
         urlParams += city? `city=${city}&`: '';
 
 
-        axios.get(``)
+        axios.get(`/myoffers`, {
+            headers: {
+                'Authorization': 'Bearer ' + authData.token
+            }
+        })
             .then(res => {
                 setLoading(false);
-
+                console.log(res);
                 if(!res.error && res.status === 200) {
                     let arr = [];
                     for(let i in res.data.data) {
@@ -171,13 +176,13 @@ const MyJobs = (props) => {
         <Grid container spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
-                    <Grid key={job.info.id} item xs={12}>
+                    <Grid key={job.id} item xs={12}>
                         <Grid container item className="p-4 bg-white">
-                            <Grid item className="img" style={{backgroundImage: job.info.foto? `url('${baseURL}/storage/${job.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid>
+                            {/* <Grid item className="img" style={{backgroundImage: job.info.foto? `url('${baseURL}/storage/${job.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid> */}
                             <Grid item className="text pl-md-4">
-                                <span className="location mb-0">{job.info.location}</span>
-                                <h2 className={classes.name}>JOB TITLE</h2>                                
-                                <Button className={classes.linkButton} component={Link} to={`/job/${job.info.id}`} variant='contained' color='primary'>Daugiau</Button>
+                                <span className="location mb-0">{job.location}</span>
+                                <h2 className={classes.name}>{job.title}</h2>                                
+                                <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>
                         </Grid>
                     </Grid>

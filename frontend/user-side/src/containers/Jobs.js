@@ -73,24 +73,24 @@ const Jobs = (props) => {
         setLoading(true);
         const query = new URLSearchParams(props.location.search);
         const page = query.get('page') || '1';
-        const service = query.get('service') || '';
+        const title = query.get('title') || '';
         const skill = query.get('skill') || '';
         const city = query.get('city') || '';
 
         let urlParams = page !== '1'? `page=${page}&`: '';
         urlParams += skill? `skill=${skill}&`: '';
-        urlParams += service? `service=${service}&`: '';
+        urlParams += title? `title=${title}&`: '';
         urlParams += city? `city=${city}&`: '';
 
 
-        axios.get(`offers-list`)
+        axios.get(`search/clients?${urlParams}`)
             .then(res => {
                 setLoading(false);
                 console.log(res);
                 if(!res.data.error && res.status === 200) {
                     let arr = [];
                     for(let i in res.data.data) {
-                        arr.push(res.data.data[i]);
+                        arr.push(res.data.data[i].offers);
                     }
                     console.log(arr);
                     setJobs(arr);
@@ -105,18 +105,18 @@ const Jobs = (props) => {
         }, [props.location.search, props.history]);
 
     const query = new URLSearchParams(props.location.search);
-    const service = query.get('service') || '';
+    const title = query.get('title') || '';
     const skill = query.get('skill') || '';
     const city = query.get('city') || '';
 
     const formik = useFormik({
-        initialValues: {service, skill, city},
+        initialValues: {title, skill, city},
         onSubmit: values => {          
             setCurrentPage(1);
-            const service = values.service;
+            const title = values.title;
             const skill = values.skill;
             const city = values.city;
-            props.history.push(`/jobs?service=${service}&skill=${skill}&city=${city}`);
+            props.history.push(`/jobs?title=${title}&skill=${skill}&city=${city}`);
 
         }
     })
@@ -126,7 +126,7 @@ const Jobs = (props) => {
             <form autoComplete='chrome-off' onSubmit={formik.handleSubmit} className="search-job">
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={3}>
-                        <TextField autoComplete="off" value={formik.values.service} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
+                        <TextField autoComplete="off" value={formik.values.title} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('title')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <Autocomplete
@@ -194,7 +194,7 @@ const Jobs = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
+                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&title=${title}&skill=${skill}&city=${city}`}
                             {...item}
                         />
                     )}

@@ -46,8 +46,6 @@ const Footer = () => {
     const setAlert = (severity, message) => {
         setAlertMessage(<Alert className={classes.alert} severity={severity}>{message}</Alert>);
     }
-
-    console.log("PRIES RENDERINIMA");
     
     return (
         <footer className={classes.footer}>

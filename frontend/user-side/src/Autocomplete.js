@@ -25,7 +25,7 @@ const CitySelect = (props) => {
         classes={{
             option: classes.option,
         }}
-        value={props.value}
+        value={props.value || null}
         inputValue={props.value || null}
         autoSelect
         autoHighlight

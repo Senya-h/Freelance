@@ -72,7 +72,7 @@ const NewOffer = (props) => {
                 console.log(res);
                 if(!res.data.error && res.status === 201) {
                     props.history.push({
-                        pathname: '/',
+                        pathname: '/my-jobs',
                     });
                 }
             })
