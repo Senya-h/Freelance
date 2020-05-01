@@ -31,16 +31,10 @@ const FindFreelancerForm = (props) => {
             city: ''
         },
         onSubmit: values => {
-            console.log("SUBMIT", values);
-            axios.get('/search', {service: values.service, skill: values.skill})
-                .then(res => {
-                    console.log(res);
-                    props.history.push({
-                        pathname: '/freelancers',
-                        search: `?service=${values.service}&skill=${values.skill}&city=${values.city}`
-                    });
-                })
-            console.log(props);
+            props.history.push({
+                pathname: '/freelancers',
+                search: `?service=${values.service}&skill=${values.skill}&city=${values.city}`
+            });
         }
     });
 
