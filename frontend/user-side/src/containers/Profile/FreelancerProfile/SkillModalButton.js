@@ -53,7 +53,7 @@ const SkillModalButton = (props) => {
                     console.log("Nauji skillsai: ", newSkills);
                     props.setSkills([...newSkills]);
                     if(props.setFieldValue) {
-                        props.setFieldValue('skills_id', newSkills.map(skill => skill.id));
+                        props.setFieldValue('skills', newSkills.map(skill => skill.id));
                     }
                 }
                 console.log(res);

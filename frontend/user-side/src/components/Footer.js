@@ -55,8 +55,9 @@ const Footer = () => {
             email: yupString().email("Neteisingas el. pašto adresas").required("Privalomas laukelis")
         }),
         onSubmit: values => {
-            axios.post('/', values)
+            axios.get(`/send-mail?from=${values.email}&body=${values.message}`)
                 .then(res => {
+                    console.log(res, values);
                     if(!res.data.error && res.status === 200) {
                         alertMessage = <Alert severity="success">Žinutė išsiųsta!</Alert>;
                         formik.resetForm();
