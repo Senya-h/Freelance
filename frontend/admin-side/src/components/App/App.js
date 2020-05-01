@@ -34,7 +34,6 @@ class App extends Component{
       }
 
           if(this.state.authData) {
-          console.log(this.state.authData.token);
               axios.get(`/checkJWT`, {
                 headers: {
                         'Authorization': 'Bearer ' + this.state.authData.token,
@@ -42,11 +41,8 @@ class App extends Component{
                 })
                     .then(data => {
                       if(data.data !== 200) {
-                        console.log('banned')
                         localStorage.removeItem('login')
                         window.location.reload();
-                      } else {
-                        console.log(data.data)
                       }
                     })
             }
@@ -114,8 +110,8 @@ const NonAuthRoute = ({ component: Component, ...rest }) => (
                 <AuthRoute path="/formats" exact component={Formats}/>
                 <AuthRoute path="/vartotojai" exact component={Users}/>
                 <AuthRoute path="/banned" exact component={BannedUsers}/>
-                <AuthRoute path="/give-role" exact component={GiveRole}/>
-                <AuthRoute path="/remove-role" exact component={RemoveRole}/>
+                <AuthRoute path="/role" exact component={GiveRole}/>
+                <AuthRoute path="/role/remove" exact component={RemoveRole}/>
                 <NonAuthRoute path="/login" exact component={Login} />
             </Switch>
           </div>

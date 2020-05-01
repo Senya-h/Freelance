@@ -102,7 +102,7 @@ class Skills extends Component{
         }
     
         delete = (id) => {
-            axios.delete(`/format/delete/${this.state.formatID}`, {
+            axios.delete(`/format/delete&id=${this.state.formatID}`, {
                 headers: {
                         'Authorization': this.state.token,
                         'Content-Type': 'multipart/form-data'

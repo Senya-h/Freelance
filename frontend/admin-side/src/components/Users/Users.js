@@ -42,7 +42,7 @@ class Users extends Component{
     componentWillUnmount() {
         this._isMounted = false;
       }
-      componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps){
         if(this.state.refetch == true) {
             axios.get(`/users`, {
                 headers: {
@@ -57,7 +57,7 @@ class Users extends Component{
                     })
                     
                 })
-        }
+            }
     }
     deleteModalOpen = (id, name) => {
         this.setState({

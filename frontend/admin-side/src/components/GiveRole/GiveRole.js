@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from '../../axios';
 import load from '../../img/loading.gif';
-import {Form, Button, Col, Row} from 'react-bootstrap';
+import {Form, Button} from 'react-bootstrap';
 import {
     Link
 } from "react-router-dom";
@@ -16,12 +16,12 @@ class GiveRole extends Component{
             userEmail: '',
             loading: false,
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
+            suggestions: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeRole = this.handleChangeRole.bind(this);
         this.handleChangeUserEmail = this.handleChangeUserEmail.bind(this);
     }
-    
     handleChangeRole(event){
         this.setState({role: event.target.value})
     }
@@ -62,6 +62,7 @@ class GiveRole extends Component{
             })
         }
     }
+
     
 render() {
     const options = this.state.roles.map(role => ( 
