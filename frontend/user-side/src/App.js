@@ -1,4 +1,7 @@
 import React, {useState} from 'react';
+import PrivateRoute from './PrivateRoute';
+import RoleRoute from './RoleRoute';
+
 import Navbar from './components/Navbar/Navbar';
 import FreelancerProfile from './containers/Profile/FreelancerProfile/FreelancerProfile';
 import ClientProfile from './containers/Profile/ClientProfile/ClientProfile';
@@ -26,6 +29,7 @@ import {AuthContext} from './context/auth';
 
 import Cookies from 'js-cookie';
 import axios from './axios';
+
 
 const App = () => {  
   const authCookie = Cookies.get('access_token');
@@ -80,9 +84,9 @@ const App = () => {
             <Route path='/jobs' component={Jobs} />
             <Route path='/job/:id' component={Job} />
             <Route path='/freelancers' component={Freelancers} />
-            <Route path='/messages' component={Messages} />
-            <Route path='/new-offer' component={NewOffer} />
-            <Route path='/my-jobs' component={MyJobs} />
+            <PrivateRoute path='/messages' component={Messages} />
+            <RoleRoute role={2} path='/new-offer' component={NewOffer} />
+            <RoleRoute role={2} path='/my-jobs' component={MyJobs} />
             <Route component={PageNotFound} />
           </Switch>
         </ScrollToTop>

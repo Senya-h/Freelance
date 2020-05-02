@@ -14,7 +14,6 @@ const Profile = () => {
         return <Redirect to='/' />
     }
 
-    authData.role = 2;
     const profile = authData.userRole === 2 ? ClientProfile: FreelancerProfile;
 
     return profile();

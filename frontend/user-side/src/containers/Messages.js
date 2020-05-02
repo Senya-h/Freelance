@@ -54,7 +54,7 @@ const Messages = () => {
                         {messages.map((message, index) => (
                             <TableRow key={index}>
                                 <TableCell><Link>Pavadinimas</Link></TableCell>
-                                <TableCell><Link to={`/profile`}>Durnius</Link></TableCell>
+                                <TableCell><Link to={`/profile`}>Katukas</Link></TableCell>
                                 <TableCell>2020</TableCell>
                             </TableRow>
                         ))}
