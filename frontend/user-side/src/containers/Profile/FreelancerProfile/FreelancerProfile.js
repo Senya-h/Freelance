@@ -13,12 +13,14 @@ import {makeStyles} from '@material-ui/core';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import EditIcon from '@material-ui/icons/Edit'
 
-import Portfolio from './Portfolio/Portfolio';
-import ServiceModalButton from './ServiceModalButton';
+import Portfolio from './Portfolio';
+import OpenDialogButton from './OpenDialogButton';
 import SkillModalButton from './SkillModalButton';
 import PortfolioModalButton from './PortfolioModalButton';
 import PhotoModalButton from './PhotoModalButton';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
+import ServiceForm from './ServiceForm';
+
 import Comments from './Comments';
 import AddCommentModal from './AddCommentModal';
 
@@ -229,12 +231,17 @@ const FreelancerProfile = (props) => {
                         <div>
                             <h4>
                                 Siūlomos paslaugos
-                                {visitingUserID === profileUserID? <ServiceModalButton services={services} setServices={setServices} token={authData.token}/>: null}             
+                                {visitingUserID === profileUserID? 
+                                <OpenDialogButton type="add" title="Pridėti paslaugą">
+                                    <ServiceForm services={services} setServices={setServices} token={authData.token} />
+                                </OpenDialogButton>
+                                : null}             
                             </h4>
                             <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
                                 {services.map(service => (
                                     <li key={service.id} className={classes.service}>
-                                        <h5>{service.service}</h5>
+                                        {console.log(service)}
+                                        <h5>{service.title}</h5>
                                         <p>{service.description}</p>
                                         <p>Užmokestis: <strong>{service.price_per_hour} €/h</strong></p>
                                         {visitingUserID === profileUserID ? (
@@ -242,9 +249,9 @@ const FreelancerProfile = (props) => {
                                         <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(service.id, PORTFOLIO_TYPES.SERVICE.name)}>
                                             <RemoveCircleIcon classes={{colorPrimary: classes.red}} color='primary' />
                                         </IconButton>
-                                        <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                                            <EditIcon color='primary' />
-                                        </IconButton>
+                                        <OpenDialogButton type="edit" title="Redaguoti paslaugą">
+                                            <ServiceForm serviceToEdit={service} services={services} setServices={setServices} token={authData.token} />
+                                        </OpenDialogButton>
                                         </>
                                         ): null}
                                     </li>
