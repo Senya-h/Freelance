@@ -19,6 +19,7 @@ import PhotoModalButton from './PhotoModalButton';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import ServiceForm from './ServiceForm';
 import SkillForm from './SkillForm';
+import CommentForm from './CommentForm';
 
 import Comments from './Comments';
 import AddCommentModal from './AddCommentModal';
@@ -81,6 +82,9 @@ const useStyles = makeStyles(theme => ({
         display: 'none',
         [theme.breakpoints.up('md')]: {
             display: 'block'
+        },
+        '& h3 span': {
+            marginRight: theme.spacing(1)
         }
     },
     mobile: {
@@ -89,12 +93,15 @@ const useStyles = makeStyles(theme => ({
         overflowY: 'scroll',
         [theme.breakpoints.up('md')]: {
             display: 'none'
+        },
+        '& h3 span': {
+            marginRight: theme.spacing(1)
         }
     },
     iconBg: {
         backgroundColor: '#fff',
         borderRadius: '50%'
-    }
+    },
 }));
 
 const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
@@ -246,7 +253,7 @@ const FreelancerProfile = (props) => {
                                         {visitingUserID === profileUserID ? (
                                         <>
                                         <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(service.id, PORTFOLIO_TYPES.SERVICE.name)}>
-                                            <RemoveCircleIcon classes={{colorPrimary: classes.red}} color='primary' />
+                                            <RemoveCircleIcon classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                                         </IconButton>
                                         <OpenDialogButton type="edit" title="Redaguoti paslaugą">
                                             <ServiceForm serviceToEdit={service} services={services} setServices={setServices} token={authData.token} />
@@ -305,10 +312,13 @@ const FreelancerProfile = (props) => {
 
                         <Grid item className={classes.mobile}>
                             <h3>
-                                Atsiliepimai 
-                                {visitingUserID !== profileUserID && authData?<AddCommentModal allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID}/>: null}
+                                <span>Atsiliepimai</span> 
+                                {visitingUserID !== profileUserID && authData?
+                                <AddCommentModal allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
+                                    <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
+                                </AddCommentModal>: null}
                             </h3>
-                            <Comments allComments={comments} setComments={setComments}/>
+                            <Comments allComments={comments} setComments={setComments} visitingUserID={visitingUserID}/>
                         </Grid>
                     </Grid>
                         
@@ -328,10 +338,14 @@ const FreelancerProfile = (props) => {
                             </div>
                         </Grid>
                         <Grid item className={classes.desktop}>
-                            <h3>Atsiliepimai 
-                                {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} allComments={comments} setComments={setComments} profileUserID={profileUserID} />: null}
+                            <h3>
+                                <span>Atsiliepimai</span> 
+                                {visitingUserID !== profileUserID && authData?
+                                <AddCommentModal allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
+                                    <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
+                                </AddCommentModal>: null}
                             </h3>
-                            <Comments allComments={comments} setComments={setComments} />
+                            <Comments allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
                         </Grid>
                     </Grid>
                 </Grid>

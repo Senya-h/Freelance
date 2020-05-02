@@ -7,9 +7,18 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DialogTitle from '@material-ui/core/DialogTitle'
 
+import {makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+    iconBg: {
+        backgroundColor: '#fff',
+        borderRadius: '50%'
+    },
+    
+}))
 
 const OpenDialogButton = (props) => {
-
+    const classes = useStyles();
     const [open, setOpen] = useState(false);
     // const classes = useStyles();
 
@@ -33,13 +42,13 @@ const OpenDialogButton = (props) => {
         if(props.form === 'skill') {
             iconType = (
                 <IconButton onClick={handleOpen}>
-                    <EditIcon color='primary' />
+                    <EditIcon classes={{colorPrimary: classes.red}} color='primary' />
                 </IconButton>
             );
         } else {
             iconType = (
-                <IconButton style={{position: 'absolute', right: '40px', top: '0'}} onClick={handleOpen}>
-                    <EditIcon color='primary' />
+                <IconButton style={{position: 'absolute', right: '45px', top: '0'}} onClick={handleOpen}>
+                    <EditIcon classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                 </IconButton>
             );
         }
