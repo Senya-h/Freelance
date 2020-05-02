@@ -102,6 +102,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#fff',
         borderRadius: '50%'
     },
+    sendMsgBtn: {
+        marginBottom: theme.spacing(1)
+    }
 }));
 
 const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
@@ -233,7 +236,11 @@ const FreelancerProfile = (props) => {
                         {/* Paslaugos, servisai */}
                         <Grid item xs={12}>              
                         <h2>{userInfo.name} {userInfo.ratingAverage >= 1 && <Rating name='read-only' precision={0.25} value={userInfo.ratingAverage} readOnly />} </h2>
-                        {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
+                        <h5>Miestas: {userInfo.location}</h5>
+                        <h5>El. paštas: {userInfo.email}</h5>
+
+                        {visitingUserID !== profileUserID && authData? <SendMessage className={classes.sendMsgBtn} recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
+
                         <div>
                             <h4>
                                 Siūlomos paslaugos
@@ -293,9 +300,9 @@ const FreelancerProfile = (props) => {
                                         : null}
                                 </h2>
                             </Grid>
-                            {works.map(work => (
+                            {works.filter(work => work.approved || visitingUserID === profileUserID).map(work => (
                                 <Grid item className={classes.portfolio} key={work.id} xs={12} md={5}>
-                                    <Portfolio title={work.title} imageUrl={work.filePath} description={work.description}/>
+                                    <Portfolio title={work.title} imageUrl={work.filePath} description={work.description} approved={work.approved} />
                                     {visitingUserID === profileUserID? (
                                     <>
                                     <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
@@ -307,7 +314,9 @@ const FreelancerProfile = (props) => {
                                     </>
                                     ):null}
                                 </Grid>
-                            ))}
+                                )
+                            )}
+                            
                         </Grid>
 
                         <Grid item className={classes.mobile}>

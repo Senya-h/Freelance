@@ -29,7 +29,6 @@ const Comments = (props) => {
 
     let commentAuthorIndex = -1;
     let comments = [];
-    console.log("KOMENTARUOSE ESU", props.allComments);
 
     props.allComments.forEach((comment, index) => {
         if(comment.user_id === props.visitingUserID) {
@@ -42,7 +41,7 @@ const Comments = (props) => {
                         <Rating name='read-only' precision={0.25} value={comment.rating} readOnly />
                         {comment.user_id === props.visitingUserID &&
                         <IconButton>
-                            <EditIcon classes={{colorPrimary: classes.red}} color='primary' />
+                            <EditIcon color='primary' />
                         </IconButton>
                         }
                     </p>
@@ -55,7 +54,7 @@ const Comments = (props) => {
     if(commentAuthorIndex !== -1) {
         const authorComment = props.allComments[commentAuthorIndex];
         comments.unshift(
-            <div key={authorComment.id} style={{backgroundColor: 'gray'}}>
+            <div key={authorComment.id} style={{backgroundColor: '#baffa1'}}>
                 <p className={classes.commentName}>
                     {authorComment.name}
                     <Rating name='read-only' precision={0.25} value={authorComment.rating} readOnly />

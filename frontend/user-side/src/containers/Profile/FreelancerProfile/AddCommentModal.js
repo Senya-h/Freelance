@@ -10,8 +10,6 @@ const AddCommentModal = (props) => {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
-        // formik.setFieldValue('rating', 3);
-        // formik.setFieldValue('comment', '');
         setOpen(true);
     }
 
@@ -46,9 +44,9 @@ const AddCommentModal = (props) => {
     } else {
         if(!hasVisitorCommented) {
             iconType = (
-                    <Button type='button' variant='contained' color='primary' onClick={handleOpen}>                            
-                        Pateikti atsiliepimą
-                    </Button> 
+                <Button type='button' variant='contained' color='primary' onClick={handleOpen}>                            
+                    Pateikti atsiliepimą
+                </Button> 
             )
         }
     }

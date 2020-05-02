@@ -15,7 +15,8 @@ const useStyles = makeStyles(theme => ({
         }
     },
     portfolio: {
-        marginBottom: '25px'
+        marginBottom: '25px',
+        position: 'relative'
     },
     portfolioImage: {
         width: '100%',
@@ -34,6 +35,20 @@ const useStyles = makeStyles(theme => ({
             margin: 0,
             padding: '5px'
         }
+    },
+    notApproved: {
+        opacity: '0.7'
+    },
+    waitingForApproval: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        background: 'rgba(255, 255, 255, 1)',
+        textAlign: 'center',
+        fontSize: '20px',
+        width: '300px',
+        maxWidth: '95%'
     }
 }))
 
@@ -51,13 +66,21 @@ const Portfolio = (props) => {
     }
     return (
         <>
-        <div className={classes.portfolio}>
-            <button onClick={handleOpen} type='button' style={{border: 'none', background: 'transparent', padding: 0}}>
-                <img className={classes.portfolioImage} src={`${baseURL}/storage/${props.imageUrl}`} alt={props.title}/>
-                <div className={classes.portfolioTitle}>
-                    <p>{props.title}</p>
+        <div className={classes.portfolio} >
+            <div className={!props.approved? classes.notApproved: ''}>
+                <button onClick={handleOpen} type='button' style={{border: 'none', background: 'transparent', padding: 0}}>
+                    <img className={classes.portfolioImage} src={`${baseURL}/storage/${props.imageUrl}`} alt={props.title}/>
+
+                    <div className={classes.portfolioTitle}>
+                        <p>{props.title}</p>
+                    </div>
+                </button>
+            </div>
+            {!props.approved &&
+                <div className={classes.waitingForApproval}>
+                    Laukiama patvirtinimo...
                 </div>
-            </button>
+            }
         </div>
         <Dialog open={open} onClose={handleClose} fullWidth>                          
             <DialogTitle>{props.title}</DialogTitle>
