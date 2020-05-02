@@ -314,11 +314,11 @@ const FreelancerProfile = (props) => {
                             <h3>
                                 <span>Atsiliepimai</span> 
                                 {visitingUserID !== profileUserID && authData?
-                                <AddCommentModal allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
+                                <AddCommentModal type="add" allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
                                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                                 </AddCommentModal>: null}
                             </h3>
-                            <Comments allComments={comments} setComments={setComments} visitingUserID={visitingUserID}/>
+                            <Comments profileUserID={profileUserID} allComments={comments} setComments={setComments} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID}/>
                         </Grid>
                     </Grid>
                         
@@ -341,11 +341,11 @@ const FreelancerProfile = (props) => {
                             <h3>
                                 <span>Atsiliepimai</span> 
                                 {visitingUserID !== profileUserID && authData?
-                                <AddCommentModal allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
+                                <AddCommentModal type="add" allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
                                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                                 </AddCommentModal>: null}
                             </h3>
-                            <Comments allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
+                            <Comments profileUserID={profileUserID} allComments={comments} setComments={setComments} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
                         </Grid>
                     </Grid>
                 </Grid>

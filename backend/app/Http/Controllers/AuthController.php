@@ -65,7 +65,7 @@ class AuthController extends Controller
 			return response()->json(['error' => [
                 'invalidCredentials' => 1,
             ]]);
-        } 
+        }
         $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
         if (count($banned) > 0) {
             return response()->json(['error' => [
@@ -100,12 +100,12 @@ class AuthController extends Controller
         User::where('id', $id)->update(['didLogin' => 1]);
     }
     public function refreshBannedToken() {
-        
+
         $checkBan = DB::table('ban_delete_users')->select('*')->where('user_id',auth()->user()->id)->where('baned',1)->get();
         if(count($checkBan) > 0) {
             $token = auth()->refresh();
             return response()->json(['banned' => 1]);
-                
+
 		} else {
 			return response()->json(200);
 		}

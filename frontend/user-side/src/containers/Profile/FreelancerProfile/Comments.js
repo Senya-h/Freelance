@@ -4,6 +4,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import AddCommentModal from './AddCommentModal';
+import CommentForm from './CommentForm';
 
 const useStyles = makeStyles(theme => ({
     scrollableComments: {
@@ -27,6 +29,7 @@ const Comments = (props) => {
 
     let commentAuthorIndex = -1;
     let comments = [];
+    console.log("KOMENTARUOSE ESU", props.allComments);
 
     props.allComments.forEach((comment, index) => {
         if(comment.user_id === props.visitingUserID) {
@@ -34,8 +37,7 @@ const Comments = (props) => {
         } else {
             comments.push(
                 <div key={comment.id}>
-                    {console.log(comment)}
-                    <p className={classes.commentName}>
+                        <p className={classes.commentName}>
                         {comment.name}
                         <Rating name='read-only' precision={0.25} value={comment.rating} readOnly />
                         {comment.user_id === props.visitingUserID &&
@@ -50,7 +52,6 @@ const Comments = (props) => {
         }
     })
 
-    console.log("komentarai: ", comments);
     if(commentAuthorIndex !== -1) {
         const authorComment = props.allComments[commentAuthorIndex];
         comments.unshift(
@@ -59,20 +60,16 @@ const Comments = (props) => {
                     {authorComment.name}
                     <Rating name='read-only' precision={0.25} value={authorComment.rating} readOnly />
                     {authorComment.user_id === props.visitingUserID &&
-                    <IconButton>
-                        <EditIcon classes={{colorPrimary: classes.red}} color='primary' />
-                    </IconButton>
+                    <AddCommentModal type="edit">
+                        <CommentForm setComments={props.setComments} allComments={props.allComments} token={props.token} commentToEdit={authorComment} />
+                    </AddCommentModal>
                     }
                 </p>
                 <p>{authorComment.comment}</p>
             </div>
         )
     }
-    console.log("komentarai paskui: ", comments);
-
-
-
-
+    console.log("Patys komentarai: ", comments);
     return (
         <div className={classes.scrollableComments}>
             {comments}                  

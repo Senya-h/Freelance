@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 const AddCommentModal = (props) => {
@@ -25,17 +26,36 @@ const AddCommentModal = (props) => {
     })
 
     let hasVisitorCommented = false;
-    props.allComments.forEach(comment => {
-        if(comment.user_id === props.visitingUserID) {
-            hasVisitorCommented = true;
+    if(props.allComments) {
+        props.allComments.forEach(comment => {
+            if(comment.user_id === props.visitingUserID) {
+                hasVisitorCommented = true;
+            }
+        })
+    }
+
+
+    let iconType = null;
+
+    if(props.type === "edit") {
+        iconType = (
+            <IconButton onClick={handleOpen}>
+                <EditIcon color='primary' />
+            </IconButton>
+        )
+    } else {
+        if(!hasVisitorCommented) {
+            iconType = (
+                    <Button type='button' variant='contained' color='primary' onClick={handleOpen}>                            
+                        Pateikti atsiliepimą
+                    </Button> 
+            )
         }
-    })
+    }
 
     return (
         <>
-        <Button type='button' variant='contained' color='primary' onClick={handleOpen}>                            
-            Pateikti atsiliepimą
-        </Button> 
+        {iconType}
         <Dialog open={open} onClose={handleClose} fullWidth>                          
             <DialogTitle>Palikti atsiliepimą</DialogTitle>
             {childWithProps}

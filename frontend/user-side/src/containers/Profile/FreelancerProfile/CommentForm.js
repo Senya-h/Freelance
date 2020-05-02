@@ -30,30 +30,53 @@ const useStyles = makeStyles(theme => ({
 
 const CommentForm = (props) => {
     const classes = useStyles();
+    const toEdit = props.commentToEdit? true: false;
 
     const formik = useFormik({
         initialValues: {
-            rating: 3,
-            comment: ''
+            rating: toEdit? props.commentToEdit.rating: 3,
+            comment: toEdit? props.commentToEdit.comment: ''
         },
         validationSchema: yupObject({
             rating: yupString().min(1).max(5),
         }),
         onSubmit: values => {
-            console.log(values);
-            axios.post('comment', {...values, receiver_id: props.profileUserID}, {
-                headers: {
-                    'Authorization': 'Bearer ' + props.token,
-                }
-            }).then(res => {
-                if(!res.error && res.status === 200) {
-                    props.handleClose();
-                    props.setComments([res.data, ...props.allComments])
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            if(toEdit) {
+                axios.put('comment/' + props.commentToEdit.id, values, {
+                    headers: {
+                        'Authorization': 'Bearer ' + props.token
+                    }
+                }).then(res => {
+                    if(!res.error) {
+                        props.handleClose();
+                        const newComments = props.allComments.map(comment => {
+                            if(comment.id === props.commentToEdit.id) {
+                                comment.rating = values.rating;
+                                comment.comment = values.comment;
+                            }
+                            return comment;
+                        })
+                        props.setComments(newComments)
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+            } else {
+                axios.post('comment', {...values, receiver_id: props.profileUserID}, {
+                    headers: {
+                        'Authorization': 'Bearer ' + props.token,
+                    }
+                }).then(res => {
+                    if(!res.error && res.status === 200) {
+                        props.handleClose();
+                        props.setComments([res.data, ...props.allComments])
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+            
         }
     })
 
