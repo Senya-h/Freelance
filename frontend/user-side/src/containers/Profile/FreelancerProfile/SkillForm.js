@@ -10,11 +10,9 @@ import {useFormik} from 'formik';
 import axios from '../../../axios';
 
 const SkillForm = (props) => {
-
     const formik = useFormik({
         initialValues: {
-            // skills_id: [...checkedSkills]
-            skills_id: [1]
+            skills_id: props.checkedSkills || []
         },
         onSubmit: values => {
             //Submitting user's skills to the server
@@ -34,8 +32,8 @@ const SkillForm = (props) => {
                         })
                     })
 
-                    console.log("Nauji skillsai: ", newSkills);
                     props.setSkills([...newSkills]);
+
                     if(props.setFieldValue) {
                         props.setFieldValue('skills', newSkills.map(skill => skill.id));
                     }

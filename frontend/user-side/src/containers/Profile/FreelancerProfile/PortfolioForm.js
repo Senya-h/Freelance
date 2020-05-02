@@ -3,10 +3,9 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import FormGroup from '@material-ui/core/FormGroup';
 import Box from '@material-ui/core/Box';
 import {useFormik} from 'formik';
-import axios from '../../../axios';
+import axios, {baseURL} from '../../../axios';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -22,12 +21,14 @@ const useStyles = makeStyles(theme => ({
 
 const PortfolioForm = (props) => {
     const classes = useStyles();
+    const toEdit = props.portfolioToEdit? true: false;
+
     const formik = useFormik({
         initialValues: {
-            title: '',
-            description: '',
-            localFile: '',
-            formFile: '',
+            title: toEdit? props.portfolioToEdit.title: '',
+            description: toEdit? props.portfolioToEdit.description: '',
+            localFile: toEdit? props.portfolioToEdit.filePath: '',
+            formFile: toEdit? props.portfolioToEdit.filePath: '',
         },
         validationSchema: yupObject({
             title: yupString().required("Privalomas laukelis"),
@@ -38,43 +39,83 @@ const PortfolioForm = (props) => {
             let formData = new FormData();
             formData.append('title', values.title);
             formData.append('description', values.description);
-            formData.append('file', values.formFile);
+            if(values.formFile !== props.portfolioToEdit.filePath) {
+                formData.append('filePath', values.formFile);
 
-            //Submitting user's skills to the server
-            axios.post('/work', formData, {
-                headers: {
-                    'Authorization': 'Bearer ' + props.token,
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(res => {
-                if(!res.error) {
-                    props.setWorks([...props.works, res.data]);
-                    props.handleClose();
-                }
-            })
+            }
+
+            if(toEdit) {
+                axios.post('/update/work&id=' + props.portfolioToEdit.id, formData, {
+                    headers: {
+                        'Authorization': 'Bearer ' + props.token,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(res => {
+                    console.log(res);
+                    if(!res.error) {
+                        const updatedPortfolio = props.works.map(work => {
+                            if(work.id === props.portfolioToEdit.id) {
+                                work.title = res.data.title;
+                                work.description = res.data.description;
+                                work.filePath = res.data.filePath;
+                            }
+                            return work;
+                        })
+
+                        props.setWorks(updatedPortfolio);
+                        props.handleClose();
+                    }
+                })
+            } else {
+                axios.post('/work', formData, {
+                    headers: {
+                        'Authorization': 'Bearer ' + props.token,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(res => {
+                    if(!res.error) {
+                        props.setWorks([...props.works, res.data]);
+                        props.handleClose();
+                    }
+                })
+            }
         }
     })
 
     return (
         <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
             <DialogContent className={classes.root} >
-                <FormGroup>
-                    <TextField autoFocus label="Pavadinimas" variant='outlined' {...formik.getFieldProps('title')} />
-                </FormGroup>
-                <FormGroup>
-                    <TextField label="Aprašymas" multiline rows={3} variant='outlined' {...formik.getFieldProps('description')} />
-                </FormGroup>
+                <div>
+                    <TextField autoFocus fullWidth label="Pavadinimas" variant='outlined' {...formik.getFieldProps('title')} />
+                    {formik.touched.title && formik.errors.title ? (
+                    <div className='text-danger'>{formik.errors.title}</div>
+                    ) : null}
+                </div>
+                <div>
+                    <TextField fullWidth label="Aprašymas" multiline rows={3} variant='outlined' {...formik.getFieldProps('description')} />
+                    {formik.touched.description && formik.errors.description ? (
+                    <div className='text-danger'>{formik.errors.description}</div>
+                    ) : null}
+                </div>
                 <Box display="flex" alignItems="end" flexDirection="column">
-                {formik.values.localFile?<img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile} alt="portfolio" />:null}
-                <Button variant='contained' component='label' color='primary'>
-                    Pridėti nuotrauką
-                    <input type='file' style={{display: 'none'}} name="file" onChange={(e) => {
-                        if(e.target.files[0]) {
-                            formik.setFieldValue('localFile', URL.createObjectURL(e.target.files[0]));
-                            formik.setFieldValue('formFile', e.currentTarget.files[0]);
-                        }
-                    }}/>
-                </Button>
+                    {formik.values.localFile?
+                        <img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile === props.portfolioToEdit.filePath? `${baseURL}/storage/${props.portfolioToEdit.filePath}`: formik.values.localFile} alt="portfolio" />
+                        :null}
+                    
+                    {formik.touched.formFile && formik.errors.formFile ? (
+                        <div className='text-danger'>{formik.errors.formFile}</div>
+                        ) : null}
+                        
+                    <Button variant='contained' component='label' color='primary'>
+                        {props.portfolioToEdit? "Keisti nuotrauką": "Pridėti nuotrauką"}
+                        <input type='file' style={{display: 'none'}} name="file" onChange={(e) => {
+                            if(e.target.files[0]) {
+                                formik.setFieldValue('localFile', URL.createObjectURL(e.target.files[0]));
+                                formik.setFieldValue('formFile', e.currentTarget.files[0]);
+                                {console.log(e.currentTarget.files[0])}
+                            }
+                        }}/>
+                    </Button>
                 </Box>
             </DialogContent>
             <DialogActions>

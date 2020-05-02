@@ -11,15 +11,14 @@ import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from '@material-ui/core';
 
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import EditIcon from '@material-ui/icons/Edit'
 
 import Portfolio from './Portfolio';
 import OpenDialogButton from './OpenDialogButton';
-import SkillModalButton from './SkillModalButton';
-import PortfolioModalButton from './PortfolioModalButton';
+import PortfolioForm from './PortfolioForm';
 import PhotoModalButton from './PhotoModalButton';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import ServiceForm from './ServiceForm';
+import SkillForm from './SkillForm';
 
 import Comments from './Comments';
 import AddCommentModal from './AddCommentModal';
@@ -261,7 +260,11 @@ const FreelancerProfile = (props) => {
                         <div>
                             <h4>
                                 Gebėjimai
-                                {visitingUserID === profileUserID?<SkillModalButton token={authData.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />: null}
+                                {visitingUserID === profileUserID?
+                                <OpenDialogButton type="edit" form="skill" title="Mano gebėjimai" >
+                                    <SkillForm token={authData.token} allSkills={allSkills} checkedSkills={skills.map(skill => skill.id.toString())} setSkills={setSkills}/>
+                                </OpenDialogButton>
+                                : null}
                             </h4>
                             <ul style={{listStyle: 'none'}}>
                                 {skills.map(skill => (
@@ -277,7 +280,9 @@ const FreelancerProfile = (props) => {
                                 <h2>
                                     Portfolio
                                     {visitingUserID === profileUserID?
-                                        <PortfolioModalButton token={authData.token} works={works} setWorks={setWorks} />
+                                        <OpenDialogButton type="add" title="Pridėti portfolio">
+                                            <PortfolioForm token={authData.token} works={works} setWorks={setWorks} />
+                                        </OpenDialogButton>
                                         : null}
                                 </h2>
                             </Grid>
@@ -289,9 +294,9 @@ const FreelancerProfile = (props) => {
                                     <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
                                         <RemoveCircleIcon fontSize="default" classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                                     </IconButton>
-                                    <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                                        <EditIcon color='primary' />
-                                    </IconButton>
+                                    <OpenDialogButton type="edit" title="Redaguoti portfolio">
+                                        <PortfolioForm portfolioToEdit={work} token={authData.token} works={works} setWorks={setWorks} />
+                                    </OpenDialogButton>
                                     </>
                                     ):null}
                                 </Grid>

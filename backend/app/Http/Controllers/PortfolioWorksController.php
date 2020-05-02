@@ -100,10 +100,11 @@ class PortfolioWorksController extends Controller
                 $updated = PortfolioWorks::where('id', $id)->update(['filePath' => $filename]);
             }
             $updated = PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
+            $updated = PortfolioWorks::where('id', $id)->first();
         } else if (Gate::denies('authorization', $work)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
-        return response()->json(["message" => "Darbas sėkmingai atnaujintas"], 201);
+        return response()->json($updated, 201);
 
     }
     public function destroy(Request $request, PortfolioWorks $work) {
