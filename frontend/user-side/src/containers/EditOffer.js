@@ -2,11 +2,12 @@ import React, {useState, useEffect} from 'react';
 import { useAuth } from '../context/auth';
 import {useParams, Redirect} from 'react-router-dom';
 
+import Loader from 'react-loader-spinner';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import OpenDialogButton from './Profile/FreelancerProfile/OpenDialogButton';
-import SkillForm from './Profile/FreelancerProfile/SkillForm';
+import SkillForm from './Profile/ClientProfile/SkillForm';
 
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
@@ -29,6 +30,19 @@ const useStyles = makeStyles( theme => ({
         [theme.breakpoints.up('md')]: {
             width: '750px'
         }
+    },
+    loadingRoot: {
+        width: '100%',
+        margin: '0 auto',
+        backgroundColor: '#fff',
+        textAlign: 'center', 
+        height: '600px', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        [theme.breakpoints.up('md')]: {
+            width: '750px'
+        }
     }
 }))
 
@@ -39,6 +53,7 @@ const NewOffer = (props) => {
 
     const [allSkills, setAllSkills] = useState([]);
     const [requiredSkills, setRequiredSkills] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     const {id} = useParams();
 
@@ -87,6 +102,7 @@ const NewOffer = (props) => {
                 formik.setFieldValue('description', res.data.description);
                 formik.setFieldValue('salary', res.data.salary);
                 formik.setFieldValue('skills', res.data.skills);
+                setLoading(false);
             })
     }, [authData.userID, id])
 
@@ -101,6 +117,16 @@ const NewOffer = (props) => {
 
 
     return (
+        <>
+        {isLoading? 
+        <div className={classes.loadingRoot}>
+            <Loader 
+                type="Bars"
+                color="#9200e6"
+                height={200}
+                width={200}
+            />
+        </div>: (
         <div className={classes.root}>
             <form onSubmit={formik.handleSubmit} autoComplete="off">
                 <h2>Redaguoti skelbimą</h2>
@@ -119,7 +145,7 @@ const NewOffer = (props) => {
                 <div>
                     <p>Reikalingi gebėjimai
                         <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
-                                <SkillForm noAxios token={authData.token} checkedSkills={formik.values.skills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={formik.setFieldValue} setSkills={setRequiredSkills}/>
+                                <SkillForm checkedSkills={formik.values.skills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={formik.setFieldValue} setSkills={setRequiredSkills}/>
                         </OpenDialogButton>
                     </p>
                     <ul style={{listStyle: 'none'}}>
@@ -140,6 +166,8 @@ const NewOffer = (props) => {
                 </Button>
             </form>
         </div>
+        )}
+        </>
     )
 };
 

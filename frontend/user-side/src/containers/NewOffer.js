@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import OpenDialogButton from './Profile/FreelancerProfile/OpenDialogButton';
-import SkillForm from './Profile/FreelancerProfile/SkillForm';
+import SkillForm from './Profile/ClientProfile/SkillForm';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
@@ -102,7 +102,7 @@ const NewOffer = (props) => {
                     <div>
                         <p>Reikalingi gebėjimai
                             <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
-                                    <SkillForm noAxios token={authData.token} checkedSkills={requiredSkills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={setFieldValue} setSkills={setRequiredSkills}/>
+                                    <SkillForm checkedSkills={requiredSkills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={setFieldValue} setSkills={setRequiredSkills}/>
                             </OpenDialogButton>
                         </p>
                         <ul style={{listStyle: 'none'}}>

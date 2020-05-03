@@ -12,7 +12,6 @@ const ConfirmDeleteModal = (props) => {
     }
 
     const handleDelete = () => {
-        console.log(props);
         axios.delete(props.modalInfo.deleteLink + props.modalInfo.id, {
             headers: {
                 'Authorization': 'Bearer ' + props.token
