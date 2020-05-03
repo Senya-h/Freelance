@@ -12,6 +12,12 @@ const useStyles = makeStyles(theme => ({
         overflowY: 'scroll',
         height: '600px',
     },
+    commentContainer: {
+        paddingLeft: '8px',
+        paddingRight: '8px',
+        paddingTop: '4px',
+        paddingBottom: '4px'
+    },
     commentName: {
         fontSize: '20px',
         display: 'flex',
@@ -35,7 +41,7 @@ const Comments = (props) => {
             commentAuthorIndex = index;
         } else {
             comments.push(
-                <div key={comment.id}>
+                <div className={classes.commentContainer} key={comment.id}>
                         <p className={classes.commentName}>
                         {comment.name}
                         <Rating name='read-only' precision={0.25} value={comment.rating} readOnly />
@@ -54,7 +60,7 @@ const Comments = (props) => {
     if(commentAuthorIndex !== -1) {
         const authorComment = props.allComments[commentAuthorIndex];
         comments.unshift(
-            <div key={authorComment.id} style={{backgroundColor: '#baffa1'}}>
+            <div key={authorComment.id} className={classes.commentContainer} style={{backgroundColor: '#baffa1'}}>
                 <p className={classes.commentName}>
                     {authorComment.name}
                     <Rating name='read-only' precision={0.25} value={authorComment.rating} readOnly />

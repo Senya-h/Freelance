@@ -16,13 +16,9 @@ const SkillForm = (props) => {
         },
         onSubmit: values => {
             //Submitting user's skills to the server
-            axios.post('/skill', values.skills_id, {
-                headers: {
-                    'Authorization': 'Bearer ' + props.token
-                }
-            }).then(res => {
-                if(!res.error && res.status === 200) {
-                    props.handleClose();
+            console.log("Submitting skills: ", values)
+            if(props.noAxios) {
+                if(props.setFieldValue) {
                     const newSkills = [];
                     props.allSkills.forEach(skill => {
                         values.skills_id.forEach(newSkillId => {
@@ -31,15 +27,33 @@ const SkillForm = (props) => {
                             }
                         })
                     })
-
                     props.setSkills([...newSkills]);
-
-                    if(props.setFieldValue) {
-                        props.setFieldValue('skills', newSkills.map(skill => skill.id));
-                    }
+                    props.setFieldValue('skills', newSkills);
+                    props.handleClose();
                 }
-                console.log(res);
-            })
+            } else {
+                axios.post('/skill', values.skills_id, {
+                    headers: {
+                        'Authorization': 'Bearer ' + props.token
+                    }
+                }).then(res => {
+                    if(!res.error && res.status === 200) {
+                        props.handleClose();
+                        const newSkills = [];
+                        props.allSkills.forEach(skill => {
+                            values.skills_id.forEach(newSkillId => {
+                                if(skill.id.toString() === newSkillId) {
+                                    newSkills.push({id: skill.id, skill: skill.skillName, approved: 0, comment: ""});
+                                }
+                            })
+                        })
+    
+                        props.setSkills([...newSkills]);
+                    }
+                    console.log(res);
+                })
+            }
+
         }
     })
 

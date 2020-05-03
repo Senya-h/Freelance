@@ -4,7 +4,8 @@ import { useAuth } from '../context/auth';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-
+import OpenDialogButton from './Profile/FreelancerProfile/OpenDialogButton';
+import SkillForm from './Profile/FreelancerProfile/SkillForm';
 
 import {Formik, Form, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
@@ -100,7 +101,11 @@ const NewOffer = (props) => {
                     </div>
                     <div>
                         <p>Reikalingi gebėjimai
-                            {/* <SkillModalButton token={authData.token} allSkills={allSkills} skills={requiredSkills} setSkills={setRequiredSkills} setFieldValue={setFieldValue} /> */}
+                            {/* <SkillModalButton token={authData.token} allSkills={allSkills}  setSkills={setRequiredSkills}  /> */}
+                            {console.log("Required:", requiredSkills)}
+                            <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
+                                    <SkillForm noAxios token={authData.token} checkedSkills={requiredSkills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={setFieldValue} setSkills={setRequiredSkills}/>
+                            </OpenDialogButton>
                         </p>
                         <ul style={{listStyle: 'none'}}>
                             {requiredSkills.map(skill => (
