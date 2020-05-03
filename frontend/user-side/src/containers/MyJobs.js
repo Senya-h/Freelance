@@ -125,6 +125,10 @@ const MyJobs = (props) => {
         }
     })
 
+    const handleDelete = () => {
+        
+    };
+
     return (
         <>
         <div className={classes.form} role="tabpanel">
@@ -183,6 +187,8 @@ const MyJobs = (props) => {
                                 <span className="location mb-0">{job.location}</span>
                                 <h2 className={classes.name}>{job.title}</h2>                                
                                 <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
+                                <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Redaguoti</Button>
+                                <Button className={classes.linkButton} onClick={handleDelete} variant='contained' color='primary'>Šalinti</Button>
                             </Grid>
                         </Grid>
                     </Grid>

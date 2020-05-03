@@ -39,7 +39,14 @@ const PortfolioForm = (props) => {
             let formData = new FormData();
             formData.append('title', values.title);
             formData.append('description', values.description);
-            if(values.formFile !== props.portfolioToEdit.filePath) {
+
+            let prevImage = null;
+            if(toEdit) {
+                prevImage = props.portfolioToEdit.filePath;
+            }
+
+            if(values.formFile !== prevImage) {
+                console.log("Pridedam nauja")
                 formData.append('filePath', values.formFile);
 
             }
@@ -48,11 +55,12 @@ const PortfolioForm = (props) => {
                 axios.post('/update/work&id=' + props.portfolioToEdit.id, formData, {
                     headers: {
                         'Authorization': 'Bearer ' + props.token,
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }).then(res => {
                     console.log(res);
-                    if(!res.error) {
+                    if(!res.data.error) {
                         const updatedPortfolio = props.works.map(work => {
                             if(work.id === props.portfolioToEdit.id) {
                                 work.title = res.data.title;
@@ -70,10 +78,12 @@ const PortfolioForm = (props) => {
                 axios.post('/work', formData, {
                     headers: {
                         'Authorization': 'Bearer ' + props.token,
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                        'Access-Control-Allow-Origin': '*'
                     }
                 }).then(res => {
-                    if(!res.error) {
+                    if(!res.data.error) {
+                        console.log("Darbas pridetas", res)
                         props.setWorks([...props.works, res.data]);
                         props.handleClose();
                     }
@@ -81,6 +91,13 @@ const PortfolioForm = (props) => {
             }
         }
     })
+
+    let shownImagePath = null;
+    if(toEdit) {
+        if(props.portfolioToEdit.filePath) {
+            shownImagePath = props.portfolioToEdit.filePath;
+        }
+    }
 
     return (
         <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
@@ -99,7 +116,7 @@ const PortfolioForm = (props) => {
                 </div>
                 <Box display="flex" alignItems="end" flexDirection="column">
                     {formik.values.localFile?
-                        <img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile === props.portfolioToEdit.filePath? `${baseURL}/storage/${props.portfolioToEdit.filePath}`: formik.values.localFile} alt="portfolio" />
+                        <img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile === shownImagePath? `${baseURL}/storage/${shownImagePath}`: formik.values.localFile} alt="portfolio" />
                         :null}
                     
                     {formik.touched.formFile && formik.errors.formFile ? (
@@ -107,7 +124,7 @@ const PortfolioForm = (props) => {
                         ) : null}
                         
                     <Button variant='contained' component='label' color='primary'>
-                        {props.portfolioToEdit? "Keisti nuotrauką": "Pridėti nuotrauką"}
+                        {formik.values.localFile? "Keisti nuotrauką": "Pridėti nuotrauką"}
                         <input type='file' style={{display: 'none'}} name="file" onChange={(e) => {
                             if(e.target.files[0]) {
                                 formik.setFieldValue('localFile', URL.createObjectURL(e.target.files[0]));
