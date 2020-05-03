@@ -129,7 +129,6 @@ const PortfolioForm = (props) => {
                             if(e.target.files[0]) {
                                 formik.setFieldValue('localFile', URL.createObjectURL(e.target.files[0]));
                                 formik.setFieldValue('formFile', e.currentTarget.files[0]);
-                                {console.log(e.currentTarget.files[0])}
                             }
                         }}/>
                     </Button>

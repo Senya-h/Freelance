@@ -18,6 +18,7 @@ import Freelancers from './containers/Freelancers';
 import Messages from './containers/Messages';
 import Footer from './components/Footer';
 import NewOffer from './containers/NewOffer';
+import EditOffer from './containers/EditOffer';
 import Jobs from './containers/Jobs';
 import Job from './containers/Job';
 import MyJobs from './containers/MyJobs';
@@ -86,6 +87,7 @@ const App = () => {
             <Route path='/freelancers' component={Freelancers} />
             <PrivateRoute path='/messages' component={Messages} />
             <RoleRoute role={2} path='/new-offer' component={NewOffer} />
+            <RoleRoute role={2} path="/edit/job/:id" component={EditOffer} />
             <RoleRoute role={2} path='/my-jobs' component={MyJobs} />
             <Route component={PageNotFound} />
           </Switch>

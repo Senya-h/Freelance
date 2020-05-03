@@ -122,7 +122,7 @@ class JobOfferController extends Controller
                 ->where('id', $offer->user_id)
                 ->first();
         $skills = DB::table('job_offer_skill')
-                ->select('job_offer_skill.skill_id', 'skill.skillName')
+                ->select('job_offer_skill.skill_id as id', 'skill.skillName as skill')
                 ->join('skill','skill.id','job_offer_skill.skill_id')
                 ->where('offer_id', $offer->id)
                 ->get();
@@ -186,5 +186,5 @@ class JobOfferController extends Controller
         return response()->json(["message" => "Pasiūlymas sekmingai ištrintas"], 200);
     }
 
- 
+
 }

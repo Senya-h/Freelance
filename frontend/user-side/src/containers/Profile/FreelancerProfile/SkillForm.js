@@ -23,7 +23,7 @@ const SkillForm = (props) => {
                     props.allSkills.forEach(skill => {
                         values.skills_id.forEach(newSkillId => {
                             if(skill.id.toString() === newSkillId) {
-                                newSkills.push({id: skill.id, skill: skill.skillName, approved: 0, comment: ""});
+                                newSkills.push({id: skill.id, skill: skill.skillName});
                             }
                         })
                     })

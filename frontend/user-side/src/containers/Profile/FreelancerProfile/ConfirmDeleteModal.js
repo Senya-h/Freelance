@@ -12,15 +12,16 @@ const ConfirmDeleteModal = (props) => {
     }
 
     const handleDelete = () => {
+        console.log(props);
         axios.delete(props.modalInfo.deleteLink + props.modalInfo.id, {
             headers: {
                 'Authorization': 'Bearer ' + props.token
             }
         }).then(res => {
             console.log(res);
-            if(!res.error && res.status === 200) {
+            if(!res.data.error && res.status === 200) {
                 handleClose();
-                props.modalInfo.portfolioRef.setPortfolio([...props.modalInfo.portfolioRef.portfolio.filter(portfolio => portfolio.id !== props.modalInfo.id)])
+                props.modalInfo.stateRef.setState([...props.modalInfo.stateRef.state.filter(state => state.id !== props.modalInfo.id)])
             }
         })
     }

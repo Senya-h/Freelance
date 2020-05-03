@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import ConfirmDeleteModal from './Profile/FreelancerProfile/ConfirmDeleteModal';
+
 import {Link} from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
@@ -56,6 +58,13 @@ const MyJobs = (props) => {
     const [isLoading, setLoading] = useState(true);
     const [skillNames, setSkillNames] = useState(['Kraunama...']);
 
+    const [deleteModalInfo, setDeleteModalInfo] = useState({
+        open: false,
+        deleteLink: '/joboffer/delete/',
+        id: 0,
+        stateRef: {}
+    });
+
     const [pageCount, setPageCount] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -68,6 +77,7 @@ const MyJobs = (props) => {
             .then(res => {
                 setSkillNames(res.data.map(skill => skill.skillName));
             })
+        
     },[]);
 
     useEffect(() => {
@@ -106,7 +116,7 @@ const MyJobs = (props) => {
                 setLoading(false);
 
             })
-        }, [props.location.search, props.history]);
+        }, [props.location.search, props.history, authData.token]);
 
     const query = new URLSearchParams(props.location.search);
     const service = query.get('service') || '';
@@ -125,8 +135,13 @@ const MyJobs = (props) => {
         }
     })
 
-    const handleDelete = () => {
-        
+    const handleDelete = (id) => {
+        let stateRef = {
+            state: jobs,
+            setState: setJobs
+        };
+
+        setDeleteModalInfo({...deleteModalInfo, id, open: true, stateRef})
     };
 
     return (
@@ -187,8 +202,8 @@ const MyJobs = (props) => {
                                 <span className="location mb-0">{job.location}</span>
                                 <h2 className={classes.name}>{job.title}</h2>                                
                                 <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
-                                <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Redaguoti</Button>
-                                <Button className={classes.linkButton} onClick={handleDelete} variant='contained' color='primary'>Šalinti</Button>
+                                <Button className={classes.linkButton} component={Link} to={`/edit/job/${job.id}`} variant='contained' color='primary'>Redaguoti</Button>
+                                <Button className={classes.linkButton} onClick={() => handleDelete(job.id)} variant='contained' color='primary'>Šalinti</Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -213,7 +228,9 @@ const MyJobs = (props) => {
                 />
             </Grid>
             }
-        </Grid>)}
+        </Grid>
+        )}
+        <ConfirmDeleteModal token={authData.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />
         </>
     )
 }

@@ -10,8 +10,6 @@ import Grid from '@material-ui/core/Grid';
 
 import {useFormik} from 'formik';
 
-import axios from '../../axios';
-
 const useStyles = makeStyles(theme => ({
     submitBtn: {
         width: '100%',

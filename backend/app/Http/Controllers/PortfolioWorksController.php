@@ -58,12 +58,12 @@ class PortfolioWorksController extends Controller
         $validation = Validator::make($request->all(),[
             'title' => 'required',
             'description' => 'required',
-            'file' => 'mimes:'.$string.'|required',
+            'filePath' => 'mimes:'.$string.'|required',
         ]);
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);
         } else {
-            $path = $request->file('file')->store('public/portfolioWorks');
+            $path = $request->file('filePath')->store('public/portfolioWorks');
             $filename = str_replace('public/', "", $path);
             $work = PortfolioWorks::create([
                 'title' => request('title'),

@@ -189,32 +189,32 @@ const FreelancerProfile = (props) => {
 
     const openModal = (id, type) => {
         let deleteLink = '';
-        let portfolioRef = {
-            portfolio: undefined,
-            setPortfolio: undefined
+        let stateRef = {
+            state: undefined,
+            setState: undefined
         }
         switch(type) {
             case PORTFOLIO_TYPES.SERVICE.name:
                 deleteLink = PORTFOLIO_TYPES.SERVICE.deleteLink;
-                portfolioRef.portfolio = services;
-                portfolioRef.setPortfolio = setServices;
+                stateRef.state = services;
+                stateRef.setState = setServices;
                 break;
             case PORTFOLIO_TYPES.SKILL.name:
                 deleteLink = PORTFOLIO_TYPES.SKILL.deleteLink;
-                portfolioRef.portfolio = skills;
-                portfolioRef.setPortfolio = setSkills;
+                stateRef.state = skills;
+                stateRef.setState = setSkills;
                 break;
             case PORTFOLIO_TYPES.WORK.name:
                 deleteLink = PORTFOLIO_TYPES.WORK.deleteLink;
-                portfolioRef.portfolio = works;
-                portfolioRef.setPortfolio = setWorks;
+                stateRef.state = works;
+                stateRef.setState = setWorks;
                 break;
             default:
                 break;
         }
 
         if(deleteLink) {
-            setDeleteModalInfo({open: true, deleteLink, id, portfolioRef});
+            setDeleteModalInfo({open: true, deleteLink, id, stateRef});
         }
         
     };
@@ -327,7 +327,7 @@ const FreelancerProfile = (props) => {
                                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                                 </AddCommentModal>: null}
                             </h3>
-                            <Comments profileUserID={profileUserID} allComments={comments} setComments={setComments} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID}/>
+                            <Comments profileUserID={profileUserID} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID}/>
                         </Grid>
                     </Grid>
                         
@@ -354,7 +354,7 @@ const FreelancerProfile = (props) => {
                                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                                 </AddCommentModal>: null}
                             </h3>
-                            <Comments profileUserID={profileUserID} allComments={comments} setComments={setComments} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
+                            <Comments profileUserID={profileUserID} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
                         </Grid>
                     </Grid>
                 </Grid>
