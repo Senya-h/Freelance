@@ -63,7 +63,7 @@ const NewOffer = (props) => {
     const handleSubmit = values => {  
         console.log(values);
         
-        axios.post('/joboffer', values, {
+        axios.post('/joboffer', {...values, skills: values.skills.map(skill => skill.id)}, {
             headers: {
                 'Authorization': 'Bearer ' + authData.token
             }
@@ -101,8 +101,6 @@ const NewOffer = (props) => {
                     </div>
                     <div>
                         <p>Reikalingi gebėjimai
-                            {/* <SkillModalButton token={authData.token} allSkills={allSkills}  setSkills={setRequiredSkills}  /> */}
-                            {console.log("Required:", requiredSkills)}
                             <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
                                     <SkillForm noAxios token={authData.token} checkedSkills={requiredSkills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={setFieldValue} setSkills={setRequiredSkills}/>
                             </OpenDialogButton>
