@@ -73,10 +73,10 @@ class AdminController extends Controller
                 $message_user->delete();
                 $service_user = Service::where('user_id',$id);
                 $service_user->delete();
-                $file = PortfolioWorks::select('filePath')->where('user_id', '=', $id)->get();
+                /*$file = PortfolioWorks::select('filePath')->where('user_id', '=', $id)->get();
                 File::delete('../storage/app/public/' . $file['filePath']);
                 $portfolioWork_user = PortfolioWorks::where('user_id',$id);
-                $portfolioWork_user->delete();
+                $portfolioWork_user->delete();*/
                 $user = User::find($id);
                 $user->delete();
                 return response()->json(['message'=>"Klientas sėkmingai ištrintas"],200);

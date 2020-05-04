@@ -16,7 +16,7 @@ class GiveRole extends Component{
             userEmail: '',
             loading: false,
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
-            suggestions: []
+            validEmail: false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeRole = this.handleChangeRole.bind(this);
@@ -27,6 +27,16 @@ class GiveRole extends Component{
     }
     handleChangeUserEmail(event){
         this.setState({userEmail: event.target.value})
+    }
+    checkEmail = () => {
+        axios.get(`emailCheck&email=${this.state.userEmail}`)
+        .then(data => {
+                if(data.data === 200) {
+                    this.setState({
+                        validEmail: true
+                    })
+                } console.log(data.data)
+        })
     }
     componentDidMount(){
         this._isMounted = true;
@@ -40,29 +50,35 @@ class GiveRole extends Component{
                 }
             })
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
     handleSubmit(event) {
         event.preventDefault();
+        this.checkEmail()
         if(document.querySelector('.email').value === "" || document.querySelector('.role').value === "") {
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Būtina užpildyti visus laukelius</div>"
         } else {
-            axios.post(`/add/role&id=${this.state.role}`, {email: this.state.userEmail}, {
-                headers: {
-                    'Authorization': this.state.token,
-                    'Content-Type': 'application/json',
-                }}
-            ).then(res => {
-                console.log(res.data)
-                if(res.data.error) {
-                    document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+res.data.error+"</div>"
-                } else {
-                    document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Vartotojui su el.paštu "+this.state.userEmail+" rolė suteikta</div>"
-                }
-                }).catch(error => {
-                console.log(error.response)
-            })
+            console.log(this.state.validEmail)
+            if(this.state.validEmail === true) {
+                axios.post(`/add/role&id=${this.state.role}`, {email: this.state.userEmail, validEmail: false}, {
+                    headers: {
+                        'Authorization': this.state.token,
+                        'Content-Type': 'application/json',
+                    }}
+                ).then(res => {
+                    if(res.data.error) {
+                        document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+res.data.error+"</div>"
+                    } else {
+                        document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Vartotojui su el.paštu "+this.state.userEmail+" rolė suteikta</div>"
+                    }
+                    }).catch(error => {
+                    console.log(error.response)
+                })
+            } else {
+                document.querySelector('.error').innerHTML = "<div class=\"alert alert-info\" role=\"alert\">Vartotojas su "+this.state.userEmail+" el.paštu neegzistuoja</div>"
+            }
         }
     }
 
@@ -82,7 +98,7 @@ render() {
                 <div className="main-content">
                     <div className="container-fluid">
                         <h1>Duoti rolę</h1>
-                        <Link to="/remove-role">Atimti rolę</Link>
+                        <Link to="/role/remove">Atimti rolę</Link>
                         <div className="error"></div>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group controlId="exampleForm.ControlInput1">
