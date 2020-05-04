@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'info@freelance.lt',
             'location' => 'Kaunas',
             'role' => 1,
-            'foto' => '',
+            'foto' => 'userimg/default.png',
             'password' => Hash::make('admin123'),
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
                 'email' => 'freelancer.'.$faker->unique()->email,
                 'location' => $faker->city,
                 'role' => 3,
-                'foto' => '',
+                'foto' => 'userimg/default.png',
                 'password' => Hash::make('fake123'),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
                  'email' => 'client.'.$faker->unique()->email,
                  'location' => $faker->city,
                  'role' => 2,
-                 'foto' => '',
+                 'foto' => 'userimg/default.png',
                  'password' => Hash::make('fake123'),
                  'created_at' => \Carbon\Carbon::now(),
                  'updated_at' => \Carbon\Carbon::now()
