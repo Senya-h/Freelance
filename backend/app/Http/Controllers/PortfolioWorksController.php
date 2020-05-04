@@ -92,6 +92,7 @@ class PortfolioWorksController extends Controller
             'filePath'  => 'mimes"'.$string.'|required'
         ]);
         if (Gate::allows('authorization', $work)) {
+            DB::table('admin_work_approves')->where('work_id', $id)->delete();
             if ($request->hasFile('filePath')) {
                 $file = PortfolioWorks::select('filePath')->where('id', '=', $id)->get();
                 File::delete('../storage/app/public/' . $file[0]['filePath']);

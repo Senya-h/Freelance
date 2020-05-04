@@ -154,7 +154,7 @@ class JobOfferController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $offer = JobOffer::select('*')->where('id', $id)->get()[0];
+        $offer = JobOffer::select('*')->where('id', $id)->first();
         if (Gate::allows('authorization', $offer)) {
             $validatedData = $request->validate([
                 'title' => 'required|max:255',
@@ -162,12 +162,18 @@ class JobOfferController extends Controller
                 'salary'  => 'required|max:9',
                 'city'  => 'required|max:30'
             ]);
-            JobOffer::where('id', $id)->update($request->except(['_token']));
+            $offer = JobOffer::where('id', $id)->first();
+            $offer->skills()->detach();
+            JobOffer::where('id', $id)->update($request->except(['_token', 'skills']));
+            $skillsArr = $request->input('skills');
+                for($i = 0; $i < count($skillsArr); $i++) {
+                    $offer->skills()->attach($skillsArr[$i]);
+            }
         } else if (Gate::denies('authorization', $offer)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
 
-        return response()->json(["message" => "Pasiūlymas sekmingai atnaujintas"], 200);
+        return response()->json($offer, 200);
     }
 
     public function destroy($id, Request $request) {
@@ -178,6 +184,7 @@ class JobOfferController extends Controller
         }
         $offer = JobOffer::select('*')->where('id', $id)->get()[0];
         if (Gate::allows('authorization', $offer)) {
+            $offer->skills()->detach();
             $offer->delete();
         } else if (Gate::denies('authorization', $offer)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
