@@ -107,7 +107,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
 const PORTFOLIO_TYPES = {
     SERVICE: {
         name: "SERVICE",
@@ -138,7 +137,7 @@ const FreelancerProfile = (props) => {
     const [userInfo, setUserInfo] = useState({
         name: '',
         email: '',
-        photo: DEFAULT_PHOTO,
+        photo: '',
         location: '',
         role: '',
     });
@@ -169,7 +168,7 @@ const FreelancerProfile = (props) => {
                 setUserInfo({
                     name: info.name, 
                     location: info.location, 
-                    photo: info.foto? info.foto: DEFAULT_PHOTO,
+                    photo: info.foto,
                     email: info.email,
                     ratingAverage: info.ratingAverage
                 });
@@ -335,7 +334,7 @@ const FreelancerProfile = (props) => {
                     <Grid className={classes.photoArea} container item xs={12} md={4} spacing={3} direction='column'>
                         <Grid item>
                             <div className={classes.profileImage}>
-                                <img src={userInfo.photo === DEFAULT_PHOTO? userInfo.photo: `${baseURL}/storage/${userInfo.photo}`} alt="#" />
+                                <img src={`${baseURL}/storage/${userInfo.photo}`} alt="Profilio nuotrauka" />
                                 {visitingUserID === profileUserID?
                                 <PhotoModalButton 
                                     className={classes.imageAddIcon}

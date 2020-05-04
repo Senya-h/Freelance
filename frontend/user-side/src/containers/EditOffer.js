@@ -64,7 +64,8 @@ const NewOffer = (props) => {
         initialValues: {
             title: '',
             description: '',
-            city: '',
+            city: null,
+            inputCity: '',
             salary: '',
             skills: []
         },
@@ -107,6 +108,7 @@ const NewOffer = (props) => {
                 formik.setFieldValue('description', res.data.description);
                 formik.setFieldValue('salary', res.data.salary);
                 formik.setFieldValue('city', res.data.city);
+                formik.setFieldValue('inputCity', res.data.city);
                 formik.setFieldValue('skills', res.data.skills);
                 setLoading(false);
             })
@@ -153,11 +155,16 @@ const NewOffer = (props) => {
                         width="300px"
                         options={cities}
                         value={formik.values.city}
+                        inputValue={formik.values.inputCity}
                         name="city"
                         label="Miestas"
-                        change={(e, value) => {
-                            console.log("CHANGE", value !== null? value: '');
-                            formik.setFieldValue('city', value !== null? value: '')
+                        onInputchange={(e, value) => {
+                            console.log("On Input change", value);
+                            formik.setFieldValue('inputCity', value !== null? value: '')
+                        }}
+                        onChange={(e, value) => {
+                            console.log("On change", value);
+                            formik.setFieldValue('city', value);
                         }}
                     />
                     {formik.touched.city && formik.errors.city ? (

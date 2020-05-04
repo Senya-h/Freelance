@@ -73,6 +73,12 @@ const Freelancers = (props) => {
             })
     },[]);
 
+    const query = new URLSearchParams(props.location.search);
+    const service = query.get('service') || '';
+    const skill = query.get('skill') || '';
+    const city = query.get('city') || '';
+
+
     useEffect(() => {
         setLoading(true);
         const query = new URLSearchParams(props.location.search);
@@ -107,10 +113,6 @@ const Freelancers = (props) => {
             })
         }, [props.location.search, props.history]);
 
-    const query = new URLSearchParams(props.location.search);
-    const service = query.get('service') || '';
-    const skill = query.get('skill') || '';
-    const city = query.get('city') || '';
 
     const formik = useFormik({
         initialValues: {service, skill, city},

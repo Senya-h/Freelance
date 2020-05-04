@@ -53,6 +53,7 @@ const NewOffer = (props) => {
         title: '',
         description: '',
         salary: '',
+        inputCity: '',
         city: '',
         skills: []
     };
@@ -108,10 +109,14 @@ const NewOffer = (props) => {
                             width="300px"
                             options={cities}
                             value={values.city}
+                            inputValue={values.inputCity}
                             name="city"
                             label="Miestas"
-                            change={(e, value) => {
-                                setFieldValue('city', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setFieldValue('inputCity', value !== null? value: '')
+                            }}
+                            onChange={(e, value) => {
+                                setFieldValue('city', value);
                             }}
                         />
                         <ErrorMessage name='city' render={msg => <div className='text-danger'>{msg}</div>} />
