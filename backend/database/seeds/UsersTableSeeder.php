@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
         for($i = 0; $i < 150; $i++) {
            $fakeUser = New User([
                 'name' => $faker->name,
-                'email' => 'freelancer'.$faker->unique()->email,
+                'email' => 'freelancer.'.$faker->unique()->email,
                 'location' => $faker->city,
                 'role' => 3,
                 'foto' => '',
@@ -44,7 +44,7 @@ class UsersTableSeeder extends Seeder
         for($i = 0; $i < 150; $i++) {
             $fakeUser = New User([
                  'name' => $faker->name,
-                 'email' => 'client'.$faker->unique()->email,
+                 'email' => 'client.'.$faker->unique()->email,
                  'location' => $faker->city,
                  'role' => 2,
                  'foto' => '',

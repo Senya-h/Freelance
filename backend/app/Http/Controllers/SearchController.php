@@ -121,22 +121,22 @@ class SearchController extends Controller
         $skill = $request->input("skill");
         $city = $request->input("city");
 
-        $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+        $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
                 ->join('job_offers', 'job_offers.user_id', 'users.id')
                 ->where('role',2)
                 ->get();
         if($request->has("title") && !$request->has("skill") && !$request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
                 ->join('job_offers', 'job_offers.user_id', 'users.id')
                 ->where('role',2)
                 ->where('title','LIKE', '%'.$title.'%')
                 ->get();
         }
         if(!$request->has("title") && $request->has("skill") && !$request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
                 ->join('job_offers', 'job_offers.user_id', 'users.id')
                 ->join('job_offer_skill', 'job_offer_skill.offer_id','job_offers.id')
                 ->join('skill','skill.id','job_offer_skill.skill_id')
@@ -145,16 +145,16 @@ class SearchController extends Controller
                 ->get();
         }
         if(!$request->has("title") && !$request->has("skill") && $request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
                 ->join('job_offers', 'job_offers.user_id', 'users.id')
                 ->where('role',2)
-                ->where('users.location','LIKE', '%'.$city.'%')
+                ->where('job_offers.city','LIKE', '%'.$city.'%')
                 ->get();
         }
         if($request->has("title") && $request->has("skill") && !$request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
                 ->join('job_offers', 'job_offers.user_id', 'users.id')
                 ->join('job_offer_skill', 'job_offer_skill.offer_id','job_offers.id')
                 ->join('skill','skill.id','job_offer_skill.skill_id')
@@ -164,33 +164,33 @@ class SearchController extends Controller
                 ->get();
         }
         if($request->has("title") && !$request->has("skill") && $request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                             'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
                 ->join('job_offers', 'job_offers.user_id', 'users.id')
                 ->where('role',2)
                 ->where('job_offers.title','LIKE', '%'.$title.'%')
-                ->where('users.location','LIKE', '%'.$city.'%')
+                ->where('job_offers.city','LIKE', '%'.$city.'%')
                 ->get();
         }
         if(!$request->has("title") && $request->has("skill") && $request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                        'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                        'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
             ->join('job_offers', 'job_offers.user_id', 'users.id')
             ->join('job_offer_skill', 'job_offer_skill.offer_id','job_offers.id')
             ->join('skill','skill.id','job_offer_skill.skill_id')
             ->where('role',2)
-            ->where('users.location','LIKE', '%'.$city.'%')
+            ->where('job_offers.city','LIKE', '%'.$city.'%')
             ->where('skillName','LIKE', '%'.$skill.'%')
             ->get();
         }
         if($request->has("title") && $request->has("skill") && $request->has("city")) {
-            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto',
-                        'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary')
+            $offers = User::select('users.id as id', 'users.name', 'users.email', 'users.created_at', 'users.foto',
+                        'job_offers.id as job_id', 'job_offers.title', 'job_offers.description', 'job_offers.salary', 'job_offers.city')
             ->join('job_offers', 'job_offers.user_id', 'users.id')
             ->join('job_offer_skill', 'job_offer_skill.offer_id','job_offers.id')
             ->join('skill','skill.id','job_offer_skill.skill_id')
             ->where('role',2)
-            ->where('users.location','LIKE', '%'.$city.'%')
+            ->where('job_offers.city','LIKE', '%'.$city.'%')
             ->where('skillName','LIKE', '%'.$skill.'%')
             ->where('job_offers.title','LIKE', '%'.$title.'%')
             ->get();
@@ -214,14 +214,15 @@ class SearchController extends Controller
                         'id' => $offer->id,
                         'name' => $offer->name,
                         'email' => $offer->email,
-                        'location' => $offer->location,
                         'foto' => $offer->foto
                     ],
                     'offers' => [
                         'id' => $offer->job_id,
                         'title' => $offer->title,
-                        'description' => $offer->salary,
-                        'skills' => $skills
+                        'description' => $offer->description,
+                        'salary' => $offer->salary,
+                        'city' => $offer->city,
+                        'skills' => $skills,
                     ]
                 ];
             }

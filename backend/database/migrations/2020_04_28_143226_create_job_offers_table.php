@@ -18,6 +18,7 @@ class CreateJobOffersTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('salary');
+            $table->string('city');
             $table->integer('user_id');
             $table->timestamps();
         });

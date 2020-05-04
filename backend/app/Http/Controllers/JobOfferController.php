@@ -33,6 +33,7 @@ class JobOfferController extends Controller
                 'title' => $offer->title,
                 'description' => $offer->description,
                 'salary' => $offer->salary,
+                'city' => $offer->city,
                 'created_at' => $offer->created_at,
                 'updated_at' => $offer->updated_at,
                 'skills' => $skills,
@@ -70,6 +71,7 @@ class JobOfferController extends Controller
                 'title' => $offer->title,
                 'description' => $offer->description,
                 'salary' => $offer->salary,
+                'city' => $offer->city,
                 'created_at' => $offer->created_at,
                 'updated_at' => $offer->updated_at,
                 'skills' => $skills,
@@ -88,7 +90,8 @@ class JobOfferController extends Controller
         $validation = Validator::make($request->all(),[
             'title' => 'required|max:255',
             'description' => 'required|max:255',
-            'salary'  => 'required|max:9'
+            'salary'  => 'required|max:9',
+            'city'  => 'required|max:30'
         ]);
             if ($validation->fails()) {
                 return response()->json(["error" => $validation->errors()]);
@@ -97,20 +100,14 @@ class JobOfferController extends Controller
                     'title' => request('title'),
                     'description' => request('description'),
                     'salary' => request('salary'),
-                    'user_id' => auth()->user()->id
+                    'city'  => request('city'),
+                    'user_id' => auth()->user()->id,
                 ]);
                 $skillsArr = $request->input('skills');
                 for($i = 0; $i < count($skillsArr); $i++) {
                     $offer->skills()->attach($skillsArr[$i]);
                 }
-                $job = [
-                    'title' => $request->input('title'),
-                    'description' => $request->input('description'),
-                    'salary' => $request->input('salary'),
-                    'user_id' => auth()->user()->id,
-                    'skills_id' => $skillsArr,
-                ];
-                return response()->json($job, 201);
+                return response()->json($offer, 201);
             }
     }
 
@@ -134,6 +131,7 @@ class JobOfferController extends Controller
                 'created_at' => $offer->created_at,
                 'updated_at' => $offer->updated_at,
                 'skills' => $skills,
+                'city' => $offer->city,
                 'userInfo' => [
                     'id' => $offer->user_id,
                     'name' => $user->name,
@@ -161,7 +159,8 @@ class JobOfferController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required|max:255',
                 'description' => 'required|max:255',
-                'salary'  => 'required|max:9'
+                'salary'  => 'required|max:9',
+                'city'  => 'required|max:30'
             ]);
             JobOffer::where('id', $id)->update($request->except(['_token']));
         } else if (Gate::denies('authorization', $offer)){

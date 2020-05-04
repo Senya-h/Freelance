@@ -69,7 +69,7 @@ const Sidebar = (props) => {
 				</div>
 			</li>
 
-            <li><NavLink exact to="/login" className="nav-link" onClick={logout} onClick={() => setZero('none')}><i className="fa fa-paper-plane-o"></i>
+            <li><NavLink exact to="/login" className="nav-link" onClick={() => {logout(); setZero('none')}}><i className="fa fa-paper-plane-o"></i>
                 <span>Atsijungti</span></NavLink></li>
             </>
         )
