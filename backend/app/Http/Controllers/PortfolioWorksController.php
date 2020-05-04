@@ -63,15 +63,22 @@ class PortfolioWorksController extends Controller
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);
         } else {
-            $path = $request->file('filePath')->store('public/portfolioWorks');
-            $filename = str_replace('public/', "", $path);
-            $work = PortfolioWorks::create([
-                'title' => request('title'),
-                'description' => request('description'),
-                'filePath' => $filename,
-                'user_id' => auth()->user()->id
-            ]);
-            return response()->json($work);
+            $userWork = PortfolioWorks::where('user_id', auth()->user()->id)->get();
+            $workCount = count($userWork);
+            $limit = 6;
+            if ($workCount >= $limit) {
+                return response()->json(['error'=>['limit'=>1]], 400);
+            } else {
+                $path = $request->file('filePath')->store('public/portfolioWorks');
+                $filename = str_replace('public/', "", $path);
+                $work = PortfolioWorks::create([
+                    'title' => request('title'),
+                    'description' => request('description'),
+                    'filePath' => $filename,
+                    'user_id' => auth()->user()->id
+                ]);
+                return response()->json($work);
+            }
         }
     }
     public function update($id, Request $request, PortfolioWorks $portfolioworks) {
