@@ -43,7 +43,7 @@ class AuthController extends Controller
                         'email' => $request->email,
                         'location' => $request->location,
                         'role' => $request->role,
-                        'foto' => '',
+                        'foto' => 'userimg/default.png',
                         'password' => Hash::make($request->password),
                     ]);
                     $user->save();
