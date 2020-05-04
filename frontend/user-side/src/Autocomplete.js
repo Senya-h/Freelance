@@ -17,7 +17,6 @@ option: {
 
 const AutoComplete = (props) => {
     const classes = useStyles();
-    console.log("AUTO: ", props.value, typeof(props.value), props.value || null);
     return (
         <Autocomplete
             style={{ width: props.width || 300 }}
@@ -25,14 +24,17 @@ const AutoComplete = (props) => {
             classes={{
                 option: classes.option,
             }}
-            value={props.value}
+
+            value={props.value || null}
+            onChange={props.onChange}
+
             inputValue={props.inputValue}
+            onInputChange={props.onInputchange}
+
             autoSelect
             autoHighlight
             getOptionLabel={(option) => option}
             renderOption={(option) => option}
-            onChange={props.onChange}
-            onInputChange={props.onInputChange}
             renderInput={(params) => (
                 <TextField
                 {...params}

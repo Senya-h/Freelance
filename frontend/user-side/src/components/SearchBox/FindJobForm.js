@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Autocomplete from '../../Autocomplete';
 import cities from '../../cities';
 import {withRouter} from 'react-router-dom';
@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
 
 const FindJobForm = (props) => {
     const classes = useStyles();
-
+    const [inputSkill, setInputSkill] = useState('');
+    const [inputCity, setInputCity] = useState('');
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -50,10 +51,17 @@ const FindJobForm = (props) => {
                             width="100%"
                             options={props.skillNames}
                             value={formik.values.skill}
+                            inputValue={inputSkill}
                             name="skill"
                             label="Gebėjimas"
-                            change={(e, value) => {
-                                formik.setFieldValue('skill', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setInputSkill(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                formik.setFieldValue('skill', value);
+                                if(!value) {
+                                    setInputSkill('');
+                                }
                             }}
                         />
                     </Grid>
@@ -62,10 +70,17 @@ const FindJobForm = (props) => {
                             width="100%"
                             options={cities}
                             value={formik.values.city}
+                            inputValue={inputCity}
                             name="city"
                             label="Miestas"
-                            change={(e, value) => {
-                                formik.setFieldValue('city', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setInputCity(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                formik.setFieldValue('city', value);
+                                if(!value) {
+                                    setInputCity('');
+                                }
                             }}
                         />
                     </Grid>

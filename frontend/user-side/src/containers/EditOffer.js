@@ -58,14 +58,15 @@ const NewOffer = (props) => {
     const [requiredSkills, setRequiredSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
+    const [inputCity, setInputCity] = useState('');
+
     const {id} = useParams();
 
     const formik = useFormik({
         initialValues: {
             title: '',
             description: '',
-            city: null,
-            inputCity: '',
+            city: '',
             salary: '',
             skills: []
         },
@@ -76,7 +77,7 @@ const NewOffer = (props) => {
             salary: Yup.number().min(0, 'Atlyginimas negali būti mažesnis už 0').required("Privalomas laukelis"),
         }),
         onSubmit: values => {  
-            console.log(values);
+            console.log("SUBMIT:",{...values, skills: values.skills.map(skill => skill.id)});
             
             axios.put('/joboffer/update/' + id, {...values, skills: values.skills.map(skill => skill.id)}, {
                 headers: {
@@ -108,7 +109,8 @@ const NewOffer = (props) => {
                 formik.setFieldValue('description', res.data.description);
                 formik.setFieldValue('salary', res.data.salary);
                 formik.setFieldValue('city', res.data.city);
-                formik.setFieldValue('inputCity', res.data.city);
+                setInputCity(res.data.city);
+                
                 formik.setFieldValue('skills', res.data.skills);
                 setLoading(false);
             })
@@ -151,20 +153,22 @@ const NewOffer = (props) => {
                     ) : null}
                 </div>
                 <div>
+                    {console.log(formik.values)}
                     <Autocomplete
                         width="300px"
                         options={cities}
                         value={formik.values.city}
-                        inputValue={formik.values.inputCity}
+                        inputValue={inputCity}
                         name="city"
                         label="Miestas"
                         onInputchange={(e, value) => {
-                            console.log("On Input change", value);
-                            formik.setFieldValue('inputCity', value !== null? value: '')
+                            setInputCity(value !== null? value: '');
                         }}
                         onChange={(e, value) => {
-                            console.log("On change", value);
                             formik.setFieldValue('city', value);
+                            if(!value) {
+                                setInputCity('');
+                            }
                         }}
                     />
                     {formik.touched.city && formik.errors.city ? (

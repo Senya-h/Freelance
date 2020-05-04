@@ -40,6 +40,7 @@ const NewOffer = (props) => {
 
     const [allSkills, setAllSkills] = useState([]);
     const [requiredSkills, setRequiredSkills] = useState([]);
+    const [inputCity, setInputCity] = useState('');
 
     useEffect(() => {
         axios.get('/skills')
@@ -53,7 +54,6 @@ const NewOffer = (props) => {
         title: '',
         description: '',
         salary: '',
-        inputCity: '',
         city: '',
         skills: []
     };
@@ -109,14 +109,17 @@ const NewOffer = (props) => {
                             width="300px"
                             options={cities}
                             value={values.city}
-                            inputValue={values.inputCity}
+                            inputValue={inputCity}
                             name="city"
                             label="Miestas"
                             onInputchange={(e, value) => {
-                                setFieldValue('inputCity', value !== null? value: '')
+                                setInputCity(value !== null? value: '');
                             }}
                             onChange={(e, value) => {
                                 setFieldValue('city', value);
+                                if(!value) {
+                                    setInputCity('');
+                                }
                             }}
                         />
                         <ErrorMessage name='city' render={msg => <div className='text-danger'>{msg}</div>} />

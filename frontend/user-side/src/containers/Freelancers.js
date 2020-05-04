@@ -62,6 +62,8 @@ const Freelancers = (props) => {
 
     const [pageCount, setPageCount] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [inputSkill, setInputSkill] = useState('');
+    const [inputCity, setInputCity] = useState('');
 
     const [freelancers, setFreelancers] = useState([]);
     
@@ -139,10 +141,17 @@ const Freelancers = (props) => {
                             width="100%"
                             options={skillNames}
                             value={formik.values.skill}
+                            inputValue={inputSkill}
                             name="skill"
                             label="Gebėjimas"
-                            change={(e, value) => {
-                                formik.setFieldValue('skill', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setInputSkill(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                formik.setFieldValue('skill', value);
+                                if(!value) {
+                                    setInputSkill('');
+                                }
                             }}
                         />
                     </Grid>
@@ -151,10 +160,17 @@ const Freelancers = (props) => {
                             width="100%"
                             options={cities}
                             value={formik.values.city}
+                            inputValue={inputCity}
                             name="city"
                             label="Miestas"
-                            change={(e, value) => {
-                                formik.setFieldValue('city', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setInputCity(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                formik.setFieldValue('city', value);
+                                if(!value) {
+                                    setInputCity('');
+                                }
                             }}
                         />
                     </Grid>
