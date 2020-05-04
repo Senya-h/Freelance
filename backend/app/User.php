@@ -72,4 +72,8 @@ class User extends Authenticatable implements JWTSubject
     {
     return null !== $this->roles()->where('role', $role)->first();
     }
+    public function work()
+    {
+        return $this->hasMany('App\PortfolioWorks','user_id','work_id');
+    }
 }

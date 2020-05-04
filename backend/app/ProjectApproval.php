@@ -8,6 +8,6 @@ class ProjectApproval extends Model
 {
     protected $table = 'project_approval';
     protected $fillable = [
-        'user_id','work_id','file','comment','approved'
+        'user_id','work_id','approved'
     ];
 }
