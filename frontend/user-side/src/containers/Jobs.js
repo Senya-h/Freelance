@@ -29,7 +29,9 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     mainGrid: {
-        marginBottom: '0px'
+        marginBottom: '0px',
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3)
     },
     linkButton: {
         '&:hover': {
@@ -53,6 +55,10 @@ const useStyles = makeStyles(theme => ({
     divider: {
         marginLeft: '-1.5rem',
         marginRight: '-1.5rem'
+    },
+    submitBtn: {
+        width: '100%',
+        height: '100%'
     }
 }))
 
@@ -172,7 +178,7 @@ const Jobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} justify="space-evenly" className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
+        <Grid container spacing={5} justify="start" className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
                     <Grid key={job.offers.id} item xs={12} md={4} lg={3}>
@@ -180,8 +186,8 @@ const Jobs = (props) => {
                             <Grid item className="img" style={{backgroundImage: job.userInfo.foto? `url('${baseURL}/storage/${job.userInfo.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '120px', height: '120px', margin: '0 auto 30px auto'}}></Grid>
                             <Grid item className="text">
                                 <h2 className={classes.name}>{job.offers.title}</h2>                                
-                                <p className="location mb-0">{job.userInfo.location}</p>
-                                <p>{job.offers.salary}</p>
+                                <p>{job.offers.city}</p>
+                                <p>{job.offers.salary} €/mėn.</p>
                                 <hr className={classes.divider} />
                                 <Button className={classes.linkButton} component={Link} to={`/job/${job.offers.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>

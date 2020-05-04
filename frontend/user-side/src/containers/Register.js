@@ -149,6 +149,7 @@ const Register = (props) => {
                         name='location'
                         label='Miestas'
                         options={cities}
+                        value={values.location}
                         change={(e, value) => {
                             setFieldValue(
                             "location",

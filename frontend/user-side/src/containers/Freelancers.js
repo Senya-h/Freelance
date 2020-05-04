@@ -48,6 +48,10 @@ const useStyles = makeStyles(theme => ({
         fontSize: '30px',
         minHeight: '250px',
         backgroundColor: '#fff'
+    },
+    submitBtn: {
+        width: '100%',
+        height: '100%'
     }
 }))
 

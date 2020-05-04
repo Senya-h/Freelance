@@ -1,4 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import cities from '../cities';
+import Autocomplete from '../Autocomplete';
+
 import { useAuth } from '../context/auth';
 import {useParams, Redirect} from 'react-router-dom';
 
@@ -61,12 +64,14 @@ const NewOffer = (props) => {
         initialValues: {
             title: '',
             description: '',
+            city: '',
             salary: '',
             skills: []
         },
         validationSchema: Yup.object({
             title: Yup.string().max(50, "Darbo pavadinimas negali viršyti 50 simbolių").required('Privalomas laukelis'),
             description: Yup.string().max(2000, 'Darbo pobūdis negali viršyti 2000 simbolių').required("Privalomas laukelis"),
+            city: Yup.string().required("Privalomas laukelis"),
             salary: Yup.number().min(0, 'Atlyginimas negali būti mažesnis už 0').required("Privalomas laukelis"),
         }),
         onSubmit: values => {  
@@ -79,7 +84,7 @@ const NewOffer = (props) => {
             })
                 .then(res => {
                     console.log(res);
-                    if(!res.data.error && res.status === 201) {
+                    if(!res.data.error && res.status === 200) {
                         props.history.push({
                             pathname: '/my-jobs',
                         });
@@ -101,6 +106,7 @@ const NewOffer = (props) => {
                 formik.setFieldValue('title', res.data.title);
                 formik.setFieldValue('description', res.data.description);
                 formik.setFieldValue('salary', res.data.salary);
+                formik.setFieldValue('city', res.data.city);
                 formik.setFieldValue('skills', res.data.skills);
                 setLoading(false);
             })
@@ -140,6 +146,22 @@ const NewOffer = (props) => {
                     <TextField variant='outlined' label='Darbo pobūdis' {...formik.getFieldProps('description')} fullWidth multiline rows={4}/>
                     {formik.touched.description && formik.errors.description ? (
                     <div className='text-danger'>{formik.errors.description}</div>
+                    ) : null}
+                </div>
+                <div>
+                    <Autocomplete
+                        width="300px"
+                        options={cities}
+                        value={formik.values.city}
+                        name="city"
+                        label="Miestas"
+                        change={(e, value) => {
+                            console.log("CHANGE", value !== null? value: '');
+                            formik.setFieldValue('city', value !== null? value: '')
+                        }}
+                    />
+                    {formik.touched.city && formik.errors.city ? (
+                    <div className='text-danger'>{formik.errors.city}</div>
                     ) : null}
                 </div>
                 <div>
