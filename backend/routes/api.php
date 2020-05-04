@@ -104,7 +104,7 @@ Route::get('checkJWT','AuthController@refreshBannedToken');
 //Tikrina ar useris nėra užblokuotas
 Route::get('statistics','ApiController@statistics');
 
-Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
+Route::get('comment', 'CommentsController@index');//nesutvarkytas
 Route::post('comment','CommentsController@create');
 Route::put('comment/{comment}','CommentsController@update');
 Route::delete('comment/{id}','CommentsController@delete');
@@ -112,7 +112,7 @@ Route::delete('comment/{id}','CommentsController@delete');
 //Userio info su role
 Route::post('user/roles','AdminController@findUserWithRoles');
 
-Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
+Route::get('project', 'ProjectApprovalController@index');//nesutvarkytas
 Route::post('project','ProjectApprovalController@create');
 Route::post('project/{project}','ProjectApprovalController@update');
 Route::delete('project/{id}','ProjectApprovalController@delete');

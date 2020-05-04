@@ -14,13 +14,13 @@ class CreateProjectApprovalTable extends Migration
     public function up()
     {
         Schema::create('project_approval', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->integer('work_id');
-            $table->string('file')->nullable();
-            $table->text('comment');
+            $table->unsignedBigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('work_id')->unsigned();
+            $table->foreign('work_id')->references('id')->on('portfolio_works');
             $table->boolean('approved');
             $table->timestamps();
+            $table->primary(['user_id','work_id']);
         });
     }
 

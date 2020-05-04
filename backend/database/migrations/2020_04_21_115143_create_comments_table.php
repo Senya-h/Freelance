@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
             $table->integer('user_id');
             $table->integer('receiver_id');
             $table->integer('rating');
-            $table->longText('comment');
+            $table->longText('comment')->nullable();
             $table->timestamps();
         });
     }
