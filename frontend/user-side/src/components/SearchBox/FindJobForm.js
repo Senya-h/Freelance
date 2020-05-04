@@ -10,8 +10,6 @@ import Grid from '@material-ui/core/Grid';
 
 import {useFormik} from 'formik';
 
-import axios from '../../axios';
-
 const useStyles = makeStyles(theme => ({
     submitBtn: {
         width: '100%',
@@ -26,20 +24,15 @@ const FindJobForm = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            jobTitle: '',
+            title: '',
             skill: '',
             city: ''
         },
         onSubmit: values => {
-            console.log("SUBMIT", values);
-            axios.get('/search', {service: values.service, skill: values.skill})
-                .then(res => {
-                    console.log(res);
-                    props.history.push({
-                        pathname: '/jobs',
-                        search: `?job_title=${values.jobTitle}&skill=${values.skill}&city=${values.city}`
-                    });
-                })
+            props.history.push({
+                pathname: '/jobs',
+                search: `?title=${values.title}&skill=${values.skill}&city=${values.city}`
+            });
         }
     });
 
@@ -50,12 +43,13 @@ const FindJobForm = (props) => {
             <form autoComplete='new-password' onSubmit={formik.handleSubmit} className="search-job">
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={3}>
-                        <TextField autoComplete="off" style={{width: '100%'}} label="Darbo pavadinimas" variant='outlined'  {...formik.getFieldProps('jobTitle')}/>
+                        <TextField autoComplete="off" style={{width: '100%'}} label="Darbo pavadinimas" variant='outlined'  {...formik.getFieldProps('title')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <Autocomplete
                             width="100%"
                             options={props.skillNames}
+                            value={formik.values.skill}
                             name="skill"
                             label="Gebėjimas"
                             change={(e, value) => {
@@ -67,6 +61,7 @@ const FindJobForm = (props) => {
                         <Autocomplete 
                             width="100%"
                             options={cities}
+                            value={formik.values.city}
                             name="city"
                             label="Miestas"
                             change={(e, value) => {

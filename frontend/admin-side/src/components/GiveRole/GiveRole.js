@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from '../../axios';
 import load from '../../img/loading.gif';
-import {Form, Button, Col, Row} from 'react-bootstrap';
+import {Form, Button} from 'react-bootstrap';
 import {
     Link
 } from "react-router-dom";
@@ -16,12 +16,12 @@ class GiveRole extends Component{
             userEmail: '',
             loading: false,
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 
+            suggestions: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChangeRole = this.handleChangeRole.bind(this);
         this.handleChangeUserEmail = this.handleChangeUserEmail.bind(this);
     }
-    
     handleChangeRole(event){
         this.setState({role: event.target.value})
     }
@@ -40,6 +40,9 @@ class GiveRole extends Component{
                 }
             })
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
     handleSubmit(event) {
         event.preventDefault();
         if(document.querySelector('.email').value === "" || document.querySelector('.role').value === "") {
@@ -51,6 +54,7 @@ class GiveRole extends Component{
                     'Content-Type': 'application/json',
                 }}
             ).then(res => {
+                console.log(res.data)
                 if(res.data.error) {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+res.data.error+"</div>"
                 } else {
@@ -61,6 +65,7 @@ class GiveRole extends Component{
             })
         }
     }
+
     
 render() {
     const options = this.state.roles.map(role => ( 

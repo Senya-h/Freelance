@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'info@freelance.lt',
             'location' => 'Kaunas',
             'role' => 1,
-            'foto' => '',
+            'foto' => 'userimg/default.png',
             'password' => Hash::make('admin123'),
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
@@ -30,16 +30,30 @@ class UsersTableSeeder extends Seeder
         for($i = 0; $i < 150; $i++) {
            $fakeUser = New User([
                 'name' => $faker->name,
-                'email' => $faker->unique()->email,
+                'email' => 'freelancer.'.$faker->unique()->email,
                 'location' => $faker->city,
                 'role' => 3,
-                'foto' => '',
+                'foto' => 'userimg/default.png',
                 'password' => Hash::make('fake123'),
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]);
                 $fakeUser->save();
                 $fakeUser->roles()->sync(3,false); 
-        }       
+        }      
+        for($i = 0; $i < 150; $i++) {
+            $fakeUser = New User([
+                 'name' => $faker->name,
+                 'email' => 'client.'.$faker->unique()->email,
+                 'location' => $faker->city,
+                 'role' => 2,
+                 'foto' => 'userimg/default.png',
+                 'password' => Hash::make('fake123'),
+                 'created_at' => \Carbon\Carbon::now(),
+                 'updated_at' => \Carbon\Carbon::now()
+             ]);
+                 $fakeUser->save();
+                 $fakeUser->roles()->sync(2,false); 
+         }    
     }
 }

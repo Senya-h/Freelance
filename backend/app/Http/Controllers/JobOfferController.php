@@ -33,6 +33,7 @@ class JobOfferController extends Controller
                 'title' => $offer->title,
                 'description' => $offer->description,
                 'salary' => $offer->salary,
+                'city' => $offer->city,
                 'created_at' => $offer->created_at,
                 'updated_at' => $offer->updated_at,
                 'skills' => $skills,
@@ -62,11 +63,15 @@ class JobOfferController extends Controller
                     ->join('skill','skill.id','job_offer_skill.skill_id')
                     ->where('offer_id', $offer->id)
                     ->get();
+            if(count($skills) === 0) {
+                $skills = [];
+            }
             $offers[] = [
                 'id' => $offer->id,
                 'title' => $offer->title,
                 'description' => $offer->description,
                 'salary' => $offer->salary,
+                'city' => $offer->city,
                 'created_at' => $offer->created_at,
                 'updated_at' => $offer->updated_at,
                 'skills' => $skills,
@@ -85,7 +90,8 @@ class JobOfferController extends Controller
         $validation = Validator::make($request->all(),[
             'title' => 'required|max:255',
             'description' => 'required|max:255',
-            'salary'  => 'required|max:9'
+            'salary'  => 'required|max:9',
+            'city'  => 'required|max:30'
         ]);
             if ($validation->fails()) {
                 return response()->json(["error" => $validation->errors()]);
@@ -94,20 +100,14 @@ class JobOfferController extends Controller
                     'title' => request('title'),
                     'description' => request('description'),
                     'salary' => request('salary'),
-                    'user_id' => auth()->user()->id
+                    'city'  => request('city'),
+                    'user_id' => auth()->user()->id,
                 ]);
                 $skillsArr = $request->input('skills');
                 for($i = 0; $i < count($skillsArr); $i++) {
                     $offer->skills()->attach($skillsArr[$i]);
                 }
-                $job = [
-                    'title' => $request->input('title'),
-                    'description' => $request->input('description'),
-                    'salary' => $request->input('salary'),
-                    'user_id' => auth()->user()->id,
-                    'skills_id' => $skillsArr,
-                ];
-                return response()->json($job, 201);
+                return response()->json($offer, 201);
             }
     }
 
@@ -119,7 +119,7 @@ class JobOfferController extends Controller
                 ->where('id', $offer->user_id)
                 ->first();
         $skills = DB::table('job_offer_skill')
-                ->select('job_offer_skill.skill_id', 'skill.skillName')
+                ->select('job_offer_skill.skill_id as id', 'skill.skillName as skill')
                 ->join('skill','skill.id','job_offer_skill.skill_id')
                 ->where('offer_id', $offer->id)
                 ->get();
@@ -131,6 +131,7 @@ class JobOfferController extends Controller
                 'created_at' => $offer->created_at,
                 'updated_at' => $offer->updated_at,
                 'skills' => $skills,
+                'city' => $offer->city,
                 'userInfo' => [
                     'id' => $offer->user_id,
                     'name' => $user->name,
@@ -153,19 +154,26 @@ class JobOfferController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $offer = JobOffer::select('*')->where('id', $id)->get()[0];
+        $offer = JobOffer::select('*')->where('id', $id)->first();
         if (Gate::allows('authorization', $offer)) {
             $validatedData = $request->validate([
                 'title' => 'required|max:255',
                 'description' => 'required|max:255',
-                'salary'  => 'required|max:9'
+                'salary'  => 'required|max:9',
+                'city'  => 'required|max:30'
             ]);
-            JobOffer::where('id', $id)->update($request->except(['_token']));
+            $offer = JobOffer::where('id', $id)->first();
+            $offer->skills()->detach();
+            JobOffer::where('id', $id)->update($request->except(['_token', 'skills']));
+            $skillsArr = $request->input('skills');
+                for($i = 0; $i < count($skillsArr); $i++) {
+                    $offer->skills()->attach($skillsArr[$i]);
+            }
         } else if (Gate::denies('authorization', $offer)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
 
-        return response()->json(["message" => "Pasiūlymas sekmingai atnaujintas"], 200);
+        return response()->json($offer, 200);
     }
 
     public function destroy($id, Request $request) {
@@ -176,6 +184,7 @@ class JobOfferController extends Controller
         }
         $offer = JobOffer::select('*')->where('id', $id)->get()[0];
         if (Gate::allows('authorization', $offer)) {
+            $offer->skills()->detach();
             $offer->delete();
         } else if (Gate::denies('authorization', $offer)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
@@ -183,5 +192,5 @@ class JobOfferController extends Controller
         return response()->json(["message" => "Pasiūlymas sekmingai ištrintas"], 200);
     }
 
- 
+
 }

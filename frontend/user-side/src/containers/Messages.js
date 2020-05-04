@@ -109,12 +109,20 @@ const Messages = () => {
                         </TableRow>
                     </TableHead>     
                     <TableBody>
+<<<<<<< HEAD
                         {messagesList.map(message => (
                             <TableRow key={message.id}>
                                 {vienas}
                                 <TableCell>{message.notification_read}</TableCell>
                                 <TableCell>{message.name}</TableCell>
                                 <TableCell>{message.created_at}</TableCell>
+=======
+                        {messages.map((message, index) => (
+                            <TableRow key={index}>
+                                <TableCell><Link>Pavadinimas</Link></TableCell>
+                                <TableCell><Link to={`/profile`}>Katukas</Link></TableCell>
+                                <TableCell>2020</TableCell>
+>>>>>>> 1ae49f361f47a78b6cbf7f7fdbf26b078025d891
                             </TableRow>
                         ))}
                     </TableBody>

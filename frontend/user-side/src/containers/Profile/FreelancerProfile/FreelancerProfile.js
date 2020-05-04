@@ -11,14 +11,16 @@ import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from '@material-ui/core';
 
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import EditIcon from '@material-ui/icons/Edit'
 
-import Portfolio from './Portfolio/Portfolio';
-import ServiceModalButton from './ServiceModalButton';
-import SkillModalButton from './SkillModalButton';
-import PortfolioModalButton from './PortfolioModalButton';
+import Portfolio from './Portfolio';
+import OpenDialogButton from './OpenDialogButton';
+import PortfolioForm from './PortfolioForm';
 import PhotoModalButton from './PhotoModalButton';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
+import ServiceForm from './ServiceForm';
+import SkillForm from './SkillForm';
+import CommentForm from './CommentForm';
+
 import Comments from './Comments';
 import AddCommentModal from './AddCommentModal';
 
@@ -80,6 +82,9 @@ const useStyles = makeStyles(theme => ({
         display: 'none',
         [theme.breakpoints.up('md')]: {
             display: 'block'
+        },
+        '& h3 span': {
+            marginRight: theme.spacing(1)
         }
     },
     mobile: {
@@ -88,11 +93,17 @@ const useStyles = makeStyles(theme => ({
         overflowY: 'scroll',
         [theme.breakpoints.up('md')]: {
             display: 'none'
+        },
+        '& h3 span': {
+            marginRight: theme.spacing(1)
         }
     },
     iconBg: {
         backgroundColor: '#fff',
         borderRadius: '50%'
+    },
+    sendMsgBtn: {
+        marginBottom: theme.spacing(1)
     }
 }));
 
@@ -178,32 +189,32 @@ const FreelancerProfile = (props) => {
 
     const openModal = (id, type) => {
         let deleteLink = '';
-        let portfolioRef = {
-            portfolio: undefined,
-            setPortfolio: undefined
+        let stateRef = {
+            state: undefined,
+            setState: undefined
         }
         switch(type) {
             case PORTFOLIO_TYPES.SERVICE.name:
                 deleteLink = PORTFOLIO_TYPES.SERVICE.deleteLink;
-                portfolioRef.portfolio = services;
-                portfolioRef.setPortfolio = setServices;
+                stateRef.state = services;
+                stateRef.setState = setServices;
                 break;
             case PORTFOLIO_TYPES.SKILL.name:
                 deleteLink = PORTFOLIO_TYPES.SKILL.deleteLink;
-                portfolioRef.portfolio = skills;
-                portfolioRef.setPortfolio = setSkills;
+                stateRef.state = skills;
+                stateRef.setState = setSkills;
                 break;
             case PORTFOLIO_TYPES.WORK.name:
                 deleteLink = PORTFOLIO_TYPES.WORK.deleteLink;
-                portfolioRef.portfolio = works;
-                portfolioRef.setPortfolio = setWorks;
+                stateRef.state = works;
+                stateRef.setState = setWorks;
                 break;
             default:
                 break;
         }
 
         if(deleteLink) {
-            setDeleteModalInfo({open: true, deleteLink, id, portfolioRef});
+            setDeleteModalInfo({open: true, deleteLink, id, stateRef});
         }
         
     };
@@ -225,26 +236,35 @@ const FreelancerProfile = (props) => {
                         {/* Paslaugos, servisai */}
                         <Grid item xs={12}>              
                         <h2>{userInfo.name} {userInfo.ratingAverage >= 1 && <Rating name='read-only' precision={0.25} value={userInfo.ratingAverage} readOnly />} </h2>
-                        {visitingUserID !== profileUserID && authData? <SendMessage recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
+                        <h5>Miestas: {userInfo.location}</h5>
+                        <h5>El. paštas: {userInfo.email}</h5>
+
+                        {visitingUserID !== profileUserID && authData? <SendMessage className={classes.sendMsgBtn} recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
+
                         <div>
                             <h4>
                                 Siūlomos paslaugos
-                                {visitingUserID === profileUserID? <ServiceModalButton services={services} setServices={setServices} token={authData.token}/>: null}             
+                                {visitingUserID === profileUserID? 
+                                <OpenDialogButton type="add" title="Pridėti paslaugą">
+                                    <ServiceForm services={services} setServices={setServices} token={authData.token} />
+                                </OpenDialogButton>
+                                : null}             
                             </h4>
                             <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
                                 {services.map(service => (
                                     <li key={service.id} className={classes.service}>
-                                        <h5>{service.service}</h5>
+                                        {console.log(service)}
+                                        <h5>{service.title}</h5>
                                         <p>{service.description}</p>
                                         <p>Užmokestis: <strong>{service.price_per_hour} €/h</strong></p>
                                         {visitingUserID === profileUserID ? (
                                         <>
                                         <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(service.id, PORTFOLIO_TYPES.SERVICE.name)}>
-                                            <RemoveCircleIcon classes={{colorPrimary: classes.red}} color='primary' />
+                                            <RemoveCircleIcon classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                                         </IconButton>
-                                        <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                                            <EditIcon color='primary' />
-                                        </IconButton>
+                                        <OpenDialogButton type="edit" title="Redaguoti paslaugą">
+                                            <ServiceForm serviceToEdit={service} services={services} setServices={setServices} token={authData.token} />
+                                        </OpenDialogButton>
                                         </>
                                         ): null}
                                     </li>
@@ -254,7 +274,11 @@ const FreelancerProfile = (props) => {
                         <div>
                             <h4>
                                 Gebėjimai
-                                {visitingUserID === profileUserID?<SkillModalButton token={authData.token} allSkills={allSkills} skills={skills} setSkills={setSkills} />: null}
+                                {visitingUserID === profileUserID?
+                                <OpenDialogButton type="edit" form="skill" title="Mano gebėjimai" >
+                                    <SkillForm token={authData.token} allSkills={allSkills} checkedSkills={skills.map(skill => skill.id.toString())} setSkills={setSkills}/>
+                                </OpenDialogButton>
+                                : null}
                             </h4>
                             <ul style={{listStyle: 'none'}}>
                                 {skills.map(skill => (
@@ -270,33 +294,40 @@ const FreelancerProfile = (props) => {
                                 <h2>
                                     Portfolio
                                     {visitingUserID === profileUserID?
-                                        <PortfolioModalButton token={authData.token} works={works} setWorks={setWorks} />
+                                        <OpenDialogButton type="add" title="Pridėti portfolio">
+                                            <PortfolioForm token={authData.token} works={works} setWorks={setWorks} />
+                                        </OpenDialogButton>
                                         : null}
                                 </h2>
                             </Grid>
-                            {works.map(work => (
+                            {works.filter(work => work.approved || visitingUserID === profileUserID).map(work => (
                                 <Grid item className={classes.portfolio} key={work.id} xs={12} md={5}>
-                                    <Portfolio title={work.title} imageUrl={work.filePath} description={work.description}/>
+                                    <Portfolio title={work.title} imageUrl={work.filePath} description={work.description} approved={work.approved} />
                                     {visitingUserID === profileUserID? (
                                     <>
                                     <IconButton style={{position: 'absolute', right: '0', top: '0'}} onClick={() => openModal(work.id, PORTFOLIO_TYPES.WORK.name)}>
                                         <RemoveCircleIcon fontSize="default" classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                                     </IconButton>
-                                    <IconButton style={{position: 'absolute', right: '40px', top: '0'}}>
-                                        <EditIcon color='primary' />
-                                    </IconButton>
+                                    <OpenDialogButton type="edit" title="Redaguoti portfolio">
+                                        <PortfolioForm portfolioToEdit={work} token={authData.token} works={works} setWorks={setWorks} />
+                                    </OpenDialogButton>
                                     </>
                                     ):null}
                                 </Grid>
-                            ))}
+                                )
+                            )}
+                            
                         </Grid>
 
                         <Grid item className={classes.mobile}>
                             <h3>
-                                Atsiliepimai 
-                                {visitingUserID !== profileUserID && authData?<AddCommentModal allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID}/>: null}
+                                <span>Atsiliepimai</span> 
+                                {visitingUserID !== profileUserID && authData?
+                                <AddCommentModal type="add" allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
+                                    <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
+                                </AddCommentModal>: null}
                             </h3>
-                            <Comments allComments={comments} setComments={setComments}/>
+                            <Comments profileUserID={profileUserID} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID}/>
                         </Grid>
                     </Grid>
                         
@@ -316,10 +347,14 @@ const FreelancerProfile = (props) => {
                             </div>
                         </Grid>
                         <Grid item className={classes.desktop}>
-                            <h3>Atsiliepimai 
-                                {visitingUserID !== profileUserID && authData?<AddCommentModal token={authData.token} allComments={comments} setComments={setComments} profileUserID={profileUserID} />: null}
+                            <h3>
+                                <span>Atsiliepimai</span> 
+                                {visitingUserID !== profileUserID && authData?
+                                <AddCommentModal type="add" allComments={comments} token={authData.token} visitingUserID={visitingUserID}>
+                                    <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
+                                </AddCommentModal>: null}
                             </h3>
-                            <Comments allComments={comments} setComments={setComments} />
+                            <Comments profileUserID={profileUserID} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
                         </Grid>
                     </Grid>
                 </Grid>

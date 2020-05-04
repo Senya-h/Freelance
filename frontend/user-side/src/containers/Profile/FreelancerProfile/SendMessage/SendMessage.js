@@ -18,9 +18,8 @@ import {object as yupObject, string as yupString} from 'yup';
 
 import axios from '../../../../axios';
 
-const SendMessage = React.memo(props => {
+const SendMessage = props => {
     let alertMessage = null;
-    console.log("AS CIA");
     const [open, setOpen] = useState(false)
 
     const handleOpen = () => {
@@ -68,8 +67,8 @@ const SendMessage = React.memo(props => {
     })
 
     return (
-        <div>
-            <Button onClick={handleOpen} variant='contained' color='primary' startIcon={<MessageIcon />}>
+        <>
+            <Button className={props.className} onClick={handleOpen} variant='contained' color='primary' startIcon={<MessageIcon />}>
                 Siųsti žinutę
             </Button>
             <Dialog open={open} onClose={handleClose} fullWidth>
@@ -92,17 +91,12 @@ const SendMessage = React.memo(props => {
                                 <Button type='submit' variant="contained" color="primary" endIcon={<SendIcon />}>Siųsti</Button>
                             </FormGroup>
                         </DialogActions>
-                         {console.log("ALERT:", alertMessage)}
                         {alertMessage}
                     </form>
                 </div>
             </Dialog>
-        </div>
+        </>
     )
-}, (prevProps, nextProps) => {
-    console.log("Previous: ", prevProps);
-    console.log("Next: ", nextProps);
-    return false;
-});
+}
 
 export default SendMessage;

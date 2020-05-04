@@ -19,12 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('emailCheck&email={email}', 'ApiController@checkEmail');
+Route::get('emailCheck&email={email}', 'AuthController@checkEmail');
 //Registration/Login
-Route::post('register','ApiController@register');
-Route::post('login','ApiController@login');
-Route::get('new_token', 'ApiController@tokenRefresh');
-Route::post('verify_login/{id}', 'ApiController@verifyFirstLogin');
+Route::post('register','AuthController@register');
+Route::post('login','AuthController@login');
+Route::get('new_token', 'AuthController@tokenRefresh');
+Route::post('verify_login/{id}', 'AuthController@verifyFirstLogin');
 
 //Admin login
 Route::post('login/admin','AdminController@adminLogin');
@@ -77,9 +77,13 @@ Route::post('add/role&id={role_id}', 'AdminController@store'); //Prideti role us
 Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
+<<<<<<< HEAD
 Route::get('message/{receivers_id}', 'MessageController@received');
 Route::get('received/messages/{receivers_id}', 'MessageController@receivedMessages');
 Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1) 
+=======
+Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1)
+>>>>>>> 1ae49f361f47a78b6cbf7f7fdbf26b078025d891
 Route::post('message{id}', 'MessageController@create'); //Išsiusti žinute
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 
@@ -100,9 +104,9 @@ Route::get('banned','ApiController@bannedUsersList');
 //Freelancerių sąrašas
 Route::get('freelancers','ApiController@freelancersList');
 //Freelancerių paieška
-Route::get('search','ApiController@search');
+Route::get('search','SearchController@freelancersSearch');
 //Tikrina ar useris nėra užblokuotas
-Route::get('checkJWT','ApiController@refreshBannedToken');
+Route::get('checkJWT','AuthController@refreshBannedToken');
 //Tikrina ar useris nėra užblokuotas
 Route::get('statistics','ApiController@statistics');
 
@@ -114,6 +118,15 @@ Route::delete('comment/{id}','CommentsController@delete');
 //Userio info su role
 Route::post('user/roles','AdminController@findUserWithRoles');
 
+Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
+Route::post('project','ProjectApprovalController@create');
+Route::post('project/{project}','ProjectApprovalController@update');
+Route::delete('project/{id}','ProjectApprovalController@delete');
+
+//Contact form
+Route::get('send-mail', 'MailSendController@mailsend');
+
+//Client Side
 //Klientų darbų pasiūlymai
 
 Route::get('offers-list', 'JobOfferController@list'); // Pasiūlymų sąrašas
@@ -123,8 +136,4 @@ Route::post('joboffer','JobOfferController@create'); //Sukurti paslaugą
 Route::put('joboffer/update/{id}','JobOfferController@update'); //Atnaujinti paslaugą
 Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti paslaugą
 
-
-Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
-Route::post('project','ProjectApprovalController@create');
-Route::put('project/{project}','ProjectApprovalController@update');
-Route::delete('project/{id}','ProjectApprovalController@delete');
+Route::get('search/clients', 'SearchController@clientsSearch');

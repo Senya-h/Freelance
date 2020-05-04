@@ -20,89 +20,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiController extends Controller
 {
-    protected function register(Request $request){
-
-		if($request->input('role') != 2 && $request->input('role') != 3) {
-			//jei grupė nėra nei 2(Client), nei 3(Freelancer) registracija nera patvirtinama
-			return response()->json(['error'=>[
-				'group' => ['Grupė neteisinga']
-			]]);
-		} else {
-			$validation = Validator::make($request->all(),[
-				'name' => ['required', 'string', 'max:255'],
-				'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-				'password' => ['required', 'string', 'min:8'],
-			]);
-			$secret = env('GOOGLE_RECAPTCHA_SECRET');
-            $captchaId = $request->input('recaptcha');
-            $responseCaptcha = json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$captchaId));
-
-
-            if($responseCaptcha->success == true) {
-                if ($validation->fails()) {
-                    return response()->json(["error" => $validation->errors()]);
-                } else {
-                    $user = New User([
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'location' => $request->location,
-                        'role' => $request->role,
-                        'foto' => '',
-                        'password' => Hash::make($request->password),
-                    ]);
-                    $user->save();
-                    $user->roles()->sync($request->role, false);
-                    return response()->json($user, 201);
-                }
-            } else {
-                return response()->json(['error'=>[
-                    'recaptcha' => ['Recaptcha error']
-                ]]);
-            }
-		}
-	}
-	public function login(Request $request)
-	{
-		$creds = $request->only(['email', 'password']); //gauna teisingus prisijungimo duomenis
-		$token = auth()->attempt($creds);
-		if(!$token = auth()->attempt($creds)) { //jei duomenys neteisingi, login tokeno neduoda
-			return response()->json(['error' => [
-                'invalidCredentials' => 1,
-            ]]);
-        } 
-        $banned = DB::table('ban_delete_users')->select('*')->where('user_id', auth()->user()->id)->where('baned',1)->get();
-        if (count($banned) > 0) {
-            return response()->json(['error' => [
-                'banned' => 1
-            ]]);
-        }
-
-        $userId = auth()->user()->id; //Autentikuoto vartotojo id
-        $userRole = auth()->user()->role; //Autentikuoto vartotojo id
-		//jei duomenys teisingi, login tokena duoda
-		return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole]);
-	}
-	public function tokenRefresh()
-	{
-		try { //jeigu tokenas aktyvus, refreshina tokena a.k.a atjungia vartotoja
-			$token = auth()->refresh();
-			return response()->json(['new token' => $token]);
-		} catch(\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-			return response()->json(['error' => $e->getMessage()], 401);
-		}
-	}
-	public function checkEmail($email) {
-		$email = User::select('email')->where('email','=',$email)->get();
-		if (count($email) > 0) {
-			return response()->json(200);
-		}
-		else {
-			return response()->json(['message' => 'Tinkamas email']);
-		}
-	}
-	public function verifyFirstLogin($id){
-        User::where('id', $id)->update(['didLogin' => 1]);
-    }
+    
+	
     public function userPhotoUpload(Request $request) {
             try { //tikrina ar vartotojas yra prisijungęs, jeigu ne išveda klaidą
                 $user = auth()->userOrFail();
@@ -152,102 +71,7 @@ class ApiController extends Controller
         }
         return response()->json($data, 200);
     }
-    public function search(Request $request) {
-        $searchQuery = $request->input("service");
-        $skillQuery = $request->input("skill");
-        $city = $request->input("city");
-
-        $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-        ->distinct()
-        ->where('role',3)
-        ->get();
-        if($request->has('service') && !$request->has('skill') && !$request->has('city')){
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-            ->distinct()
-            ->join('services', 'services.user_id','users.id')
-            ->where('role',3)
-            ->where('services.service','LIKE','%'.$searchQuery.'%')
-            ->get();
-        } if(!$request->has('service') && $request->has('skill') && !$request->has('city')) {
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-            ->distinct()
-            ->join('skill_users', 'skill_users.user_id','users.id')
-            ->join('skill', 'skill.id','skill_users.skill_id')
-            ->where('role',3)
-            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
-            ->get();
-        } if (!$request->has('service') && !$request->has('skill') && $request->has('city')){
-            $users = User::select('*')
-            ->where('role',3)
-            ->where('location','LIKE','%'.$city.'%')
-            ->get();
-        } if ($request->has('service') && $request->has('skill') && !$request->has('city')){
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-            ->distinct()
-            ->join('skill_users', 'skill_users.user_id','users.id')
-            ->join('skill', 'skill.id','skill_users.skill_id')
-            ->join('services', 'services.user_id','users.id')
-            ->where('role',3)
-            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
-            ->where('services.service','LIKE','%'.$searchQuery.'%')
-            ->get();
-        } if ($request->has('service') && !$request->has('skill') && $request->has('city')){
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-            ->distinct()
-            ->join('skill_users', 'skill_users.user_id','users.id')
-            ->join('services', 'services.user_id','users.id')
-            ->where('role',3)
-            ->where('users.location','LIKE','%'.$city.'%')
-            ->where('services.service','LIKE','%'.$searchQuery.'%')
-            ->get();
-        } if (!$request->has('service') && $request->has('skill') && $request->has('city')){
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-            ->distinct()
-            ->join('skill_users', 'skill_users.user_id','users.id')
-            ->join('skill', 'skill.id','skill_users.skill_id')
-            ->where('role',3)
-            ->where('users.location','LIKE','%'.$city.'%')
-            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
-            ->get();
-        } if ($request->has("skill") && $request->has("city") && $request->has("service") ){
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.location', 'users.created_at', 'users.foto')
-            ->distinct()
-            ->join('skill_users', 'skill_users.user_id','users.id')
-            ->join('skill', 'skill.id','skill_users.skill_id')
-            ->join('services', 'services.user_id','users.id')
-            ->where('role',3)
-            ->where('users.location','LIKE','%'.$city.'%')
-            ->where('skill.skillName','LIKE','%'.$skillQuery.'%')
-            ->where('services.service','LIKE','%'.$searchQuery.'%')
-            ->get();
-        }
-
-        $freelancers = [];
-        foreach($users as $user) {
-            $services = Service::select('services.id','service', 'description', 'price_per_hour')
-            ->join('users','users.id','=','services.user_id')
-            ->where('user_id',$user->id)
-            ->get();
-            $skills = DB::table('skill_users')
-            ->select('skill.id','skill.skillName as skill', 'skill_users.approved')
-            ->join('skill','skill.id','=','skill_users.skill_id')
-            ->where('user_id',$user->id)
-            ->get();
-            $ban = DB::table('ban_delete_users')->select('user_id')->where('user_id',$user->id)->where('baned',1)->get();
-            if(count($ban) == 0) {
-                $freelancers[] = [
-                    'info' => $user,
-                    'portfolio' => [
-                        'skills' => $skills,
-                        'services' => $services
-                    ]
-                ];
-            }
-                $data = $this->paginate($freelancers);
-        }
-        $data = $this->paginate($freelancers);
-        return response()->json($data, 200);
-    }
+    
     public function paginate($items, $perPage = 20, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
@@ -288,17 +112,6 @@ class ApiController extends Controller
         ->join('ban_delete_users', 'users.id', 'ban_delete_users.user_id')
         ->get();
         return response()->json($users, 200);
-    }
-    public function refreshBannedToken() {
-        
-        $checkBan = DB::table('ban_delete_users')->select('*')->where('user_id',auth()->user()->id)->where('baned',1)->get();
-        if(count($checkBan) > 0) {
-            $token = auth()->refresh();
-            return response()->json(['banned' => 1]);
-                
-		} else {
-			return response()->json(200);
-		}
     }
     public function statistics() {
         $allUsers = count(User::all());

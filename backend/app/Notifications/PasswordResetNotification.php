@@ -47,7 +47,7 @@ class PasswordResetNotification extends Notification
                     ->subject(Lang::get('Workify slaptažodžio priminimas'))
                     ->line(Lang::get('Gavote šį laišką, nes gavome užklausą jog pamiršote slaptažodį.'))
                     ->action(Lang::get('Priminti slaptažodį'), $url)
-                    ->line(Lang::get('Šis link nebegalios po in :count minučių.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+                    ->line(Lang::get('Šis link nebegalios po :count minučių.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
                     ->line(Lang::get('Jeigu nenorite atnaujinti savo slaptažodžio ignoruokite šį laišką'));
     }
 

@@ -22,7 +22,6 @@ const SearchBox = () => {
     useEffect(() => {
         axios.get('/skills')
             .then(res => {
-                console.log(res);
                 setSkillNames(res.data.map(skill => skill.skillName));
             })
     },[]);

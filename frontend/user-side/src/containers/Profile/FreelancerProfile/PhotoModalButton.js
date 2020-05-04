@@ -56,6 +56,7 @@ const PhotoModalButton = (props) => {
         }
     })
 
+
     return (
         <>
         <IconButton className={props.className} component='label' onClick={handleOpen}>                            

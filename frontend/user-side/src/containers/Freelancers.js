@@ -129,7 +129,6 @@ const Freelancers = (props) => {
                         <TextField autoComplete="off" value={formik.values.service} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
-                        {console.log(skillNames)}
                         <Autocomplete
                             width="100%"
                             options={skillNames}

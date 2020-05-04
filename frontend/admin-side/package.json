@@ -13,7 +13,11 @@
     "mdbreact": "^4.26.0",
     "node-sass": "^4.14.0",
     "react": "^16.13.0",
+<<<<<<< HEAD
     "react-axios": "^2.0.3",
+=======
+    "react-autosuggest": "^10.0.1",
+>>>>>>> 1ae49f361f47a78b6cbf7f7fdbf26b078025d891
     "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.0",
     "react-fontawesome": "^1.7.1",

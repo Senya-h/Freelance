@@ -55,8 +55,10 @@ class CommentsController extends Controller
         }
 
         $comment->comment = $request->comment;
+        $comment->rating = $request->rating;
+
         $comment->save();
-        return response()->json(['message' => 'Comenteras atnaujintas'], 200);
+        return response()->json($comment, 200);
     }
 
     public function delete(Comments $id)
