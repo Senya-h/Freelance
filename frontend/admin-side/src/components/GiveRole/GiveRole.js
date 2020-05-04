@@ -40,6 +40,9 @@ class GiveRole extends Component{
                 }
             })
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
     handleSubmit(event) {
         event.preventDefault();
         if(document.querySelector('.email').value === "" || document.querySelector('.role').value === "") {
