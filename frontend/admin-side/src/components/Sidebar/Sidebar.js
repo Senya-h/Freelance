@@ -69,10 +69,14 @@ const Sidebar = (props) => {
 				</div>
 			</li>
 
+<<<<<<< HEAD
             <li><NavLink exact to="/login" className="nav-link" onClick={() => {
                 logout();
                 setZero('none')
             }}><i className="fa fa-paper-plane-o"></i>
+=======
+            <li><NavLink exact to="/login" className="nav-link" onClick={() => {logout(); setZero('none')}}><i className="fa fa-paper-plane-o"></i>
+>>>>>>> b4abcf585a763bd5fa428a49325f8af92058ee96
                 <span>Atsijungti</span></NavLink></li>
             </>
         )
