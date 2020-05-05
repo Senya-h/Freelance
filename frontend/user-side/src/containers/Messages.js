@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
-import {Link} from 'react-router-dom';
+import PrivateMessage from '../containers/privateMessage';
 //React loader inport
 import Loader from 'react-loader-spinner';
 //Material ui inport
@@ -14,10 +13,16 @@ import TableRow from '@material-ui/core/TableRow';
 import {makeStyles} from '@material-ui/core/styles';
 //User authentikacija
 import { useAuth } from '../context/auth';
+import {Button} from 'react-bootstrap'
 
-import Alert from '@material-ui/lab/Alert';
+import{
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+}from "react-router-dom";
+import axios, {baseURL} from '../axios';
 
-import axios from '../axios';
 
 //Material ui style
 const useStyles = makeStyles(theme => ({
@@ -29,6 +34,21 @@ const useStyles = makeStyles(theme => ({
     },
     TableCell: {
         fontSize: '30px'
+    },
+    profileImg: {
+        width: '50px',
+        borderRadius: '50%',
+        marginRight: '15px',
+    },
+    notifi:{
+        color:'red',
+        fontSize: '20px',
+        position:'relative',
+        bottom: '20px',
+        right: '20px'
+    },
+    text:{
+        fontSize:'20px'
     }
     
 }))
@@ -50,42 +70,27 @@ const Messages = () => {
                 setMessagesList(res.data);
             })
     },[]);
+        let newMessageList = [];
+        let numbers = [];
 
-    for (const as of messagesList) {
-    
-        //console.log(messagesList[1])
-        
-    }
-    
-    //Arange addresess
-    //var first = messagesList[0].name
-    //console.log(first)
-    var names = [];
-    messagesList.forEach(all => {
-        names.push(all.name)
-    });
-    
-    var name = [...new Set(names)];
+        messagesList.map(numb =>(
+            numbers.push(numb.notification)
+        ));
 
-    const messageList = [];
-    messageList[0] = {
-        name: [],
-        notification: [],
-        time: []
-    }
-    for (let i = 0; i < name.length; i++) {
-        messagesList.forEach(all => {
-            console.log(name);
-            if(name[i] == all.name){
-                messageList[i].name.push(all.name)
-                messageList[i].notification.push(all.notification_read)
-                messageList[i].time.push(all.created_at)
-                i++
-            }
-        });
-    }
-    console.log(messageList)
-  
+        //console.log(numbers);
+        numbers.sort();
+
+        messagesList.map(message =>(
+            newMessageList.push(message)
+        ));
+
+        for (let i = numbers.length; i > 0; i--) {
+       
+                console.log(numbers[i])
+        }
+        const messages = messagesList.map(message => <Route path={`/messages/${message.id}`}><PrivateMessage user = {message.id} userFoto = {message.foto}/></Route>)
+       
+        //const adress = messagesList.map(message => <Route path={`/sale/${message.id}`} exact><privateMessage address = {message.id}/></Route>)
     return (
         //React loader
         <>
@@ -99,35 +104,39 @@ const Messages = () => {
             />
         </div>):(
             //Material ui table
-            <TableContainer className={classes.tableContainer}>
+            <div className="container">
+            <Router>
+            <Switch>
+                <Route path="/messages" exact>
+                    
+                    <TableContainer className={classes.tableContainer}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.TableCell}></TableCell>
                             <TableCell className={classes.TableCell}>Žinute nuo</TableCell>
-                            <TableCell className={classes.TableCell}>Data</TableCell>
                         </TableRow>
                     </TableHead>     
                     <TableBody>
-<<<<<<< HEAD
                         {messagesList.map(message => (
                             <TableRow key={message.id}>
                                 {vienas}
-                                <TableCell>{message.notification_read}</TableCell>
-                                <TableCell>{message.name}</TableCell>
-                                <TableCell>{message.created_at}</TableCell>
-=======
-                        {messages.map((message, index) => (
-                            <TableRow key={index}>
-                                <TableCell><Link>Pavadinimas</Link></TableCell>
-                                <TableCell><Link to={`/profile`}>Katukas</Link></TableCell>
-                                <TableCell>2020</TableCell>
->>>>>>> 1ae49f361f47a78b6cbf7f7fdbf26b078025d891
+                                <TableCell>
+                                    <img className={classes.profileImg} src={`${baseURL}/storage/${message.foto}`} alt={`foto ${message.id}`}/>
+                                    <span className={classes.notifi}> {message.notification}</span>
+                                    <p className={classes.text}>{message.name}</p>
+                                    <Link to={`messages/${message.id}`}><Button className="m-3" variant="outline-dark" size="lg" block>{message.name}</Button></Link>
+                                </TableCell>
+                               
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer>        
+            </Route>
+            {messages}
+            </Switch>
+            </Router> 
+            </div>
         )}
         </>
     )

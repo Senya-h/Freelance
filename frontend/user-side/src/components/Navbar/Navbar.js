@@ -89,12 +89,14 @@ const Navbar = () => {
     const classe = useStyles();
     const [messagesCount, setMessagesCount] = useState([0]);
 
+
     useEffect(() => {
         axios.get('/message/' +authData.userID)
             .then(res => {
                 setMessagesCount(res.data);
             })
     },[]);
+
 
     let loginArea = null;
     // if it's a freelancer

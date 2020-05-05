@@ -77,13 +77,9 @@ Route::post('add/role&id={role_id}', 'AdminController@store'); //Prideti role us
 Route::delete('delete/role&id={role_id}/user&id={user_id}', 'AdminController@deleteRole'); //Ištrinti userui role
 
 //Message
-<<<<<<< HEAD
 Route::get('message/{receivers_id}', 'MessageController@received');
 Route::get('received/messages/{receivers_id}', 'MessageController@receivedMessages');
 Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1) 
-=======
-Route::get('message/{senders_id}/{receivers_id}', 'MessageController@fromMsg'); //Paemus išsiųstas žinutes pasikeičia notivication_read i true(1)
->>>>>>> 1ae49f361f47a78b6cbf7f7fdbf26b078025d891
 Route::post('message{id}', 'MessageController@create'); //Išsiusti žinute
 Route::delete('message/delete/{message}', 'MessageController@destroy');
 

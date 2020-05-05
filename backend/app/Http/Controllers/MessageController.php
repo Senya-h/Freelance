@@ -11,25 +11,78 @@ use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
+    
     public function fromMsg($senders_id,$receivers_id)
     {
         Message::where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->update(['notification_read' => 1]);
-        return response()->json(Message::select('*')->where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->get(),200);
+        $receiver = Message::select('*')
+                                ->where('senders_id',$senders_id)
+                                ->where('receivers_id',$receivers_id)
+                                ->get();
+
+        //$sender = Message::select('*')
+        //                        ->where('senders_id',$receivers_id)
+        //                        ->where('receivers_id',$senders_id)
+        //                        ->get();
+//
+        //$newMessages = [
+        //    $receiver,
+        //    $sender
+        //];
+
+        return response()->json($receiver,200);
     }
 
+   
     public function received($receiver_id)
     {
+       
         return response()->json(count(Message::select('*')->where('receivers_id',$receiver_id)->where('notification_read',0)->get()),200);
     }
 
+    
     public function receivedMessages($receiver_id)
     {   
-        return response()->json(Message::select('messages.id as id','notification_read','name','messages.created_at as created_at')
-                                ->distinct()
+      
+        $names = [];
+        $names = Message::select('name')
                                 ->where('receivers_id',$receiver_id)
-                                ->orderBy('name')
+                                ->distinct()
                                 ->join('users', 'users.id','messages.senders_id')
-                                ->get(),200);
+                                ->get();
+
+        $notifications = [];
+        $image = [];
+        $id = [];
+        foreach($names as $name) {
+        $notifications = count(Message::select('notification_read')
+                            ->where('name',$name->name)
+                            ->where('receivers_id',$receiver_id)
+                            ->where('notification_read',0)
+                            ->join('users', 'users.id','messages.senders_id')
+                            ->get());
+
+        $image = Message::select('foto')
+                                ->where('name',$name->name)
+                                ->distinct()
+                                ->join('users', 'users.id','messages.senders_id')
+                                ->get();
+
+        $id = Message::select('senders_id as ident')
+                                ->where('name',$name->name)
+                                ->distinct()
+                                ->join('users', 'users.id','messages.senders_id')
+                                ->get();
+
+        $msgNotification[] = [
+                'id'=>$id[0]->ident,
+                'name'=>$name->name,
+                'notification'=>$notifications,
+                'foto' => $image[0]->foto
+                ];   
+         
+        }
+        return response()->json($msgNotification,200);
     }
 
     public function create(Request $request)
