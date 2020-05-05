@@ -12,22 +12,36 @@ use Illuminate\Support\Facades\DB;
 class MessageController extends Controller
 {
     
-    public function fromMsg($senders_id,$receivers_id)
+    public function fromMsg($receivers_id)
     {
-        $allMessages = Message::select('*')
+        $senders_id = auth()->user()->id;
+        $allMessages = Message::select('messages.*', 'users.foto')
+                    ->join('users','users.id', 'messages.senders_id')
                     ->orderBy('created_at', 'asc')
                     ->get();
         $messages = [];
         foreach($allMessages as $msg) {
-            if($msg->senders_id == $senders_id) {
+            $message = [];
+            if($msg->senders_id == $senders_id || $msg->receivers_id == $senders_id) {
+                if($msg->senders_id == $senders_id) {
+                    $status = 'sended';
+                    $foto = '';
+                } else if($msg->receivers_id == $senders_id) {
+                    $foto = $msg->foto;
+                    $status = 'received';
+                }
                 $messages[] = [
-                    $msg->message
-                ];
-            } else if($msg->receivers_id == $senders_id) {
-                $messages[] = [
-                    $msg->message
+                    'id' => $msg->id,
+                    'senders_id' => $msg->senders_id,
+                    'receivers_id' => $msg->receivers_id,
+                    'sender_image' => $foto,
+                    'message' => $msg->message,
+                    'notification_read' => $msg->notification_read,
+                    'created_at' => $msg->created_at,
+                    'status'=>$status
                 ];
             }
+            
         }
         
         /*
