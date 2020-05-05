@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class FileFormat extends Model
 {
     protected $fillable = [
-        'format'
+        'format', 'fileType',
     ];
 }

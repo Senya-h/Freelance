@@ -15,40 +15,42 @@ option: {
 },
 });
 
-const CitySelect = (props) => {
+const AutoComplete = (props) => {
     const classes = useStyles();
-
     return (
         <Autocomplete
-        style={{ width: props.width || 300 }}
-        options={props.options}
-        classes={{
-            option: classes.option,
-        }}
-        value={props.value || null}
-        inputValue={props.value || null}
-        autoSelect
-        autoHighlight
-        getOptionLabel={(option) => option}
-        renderOption={(option) => option}
-        name={props.name}
-        onChange={props.change}
-        renderInput={(params) => (
-            <TextField
-            {...params}
-            label={props.label}
-            name={props.name}
-            variant="outlined"
-            inputProps={{
-                ...params.inputProps,
-                autoComplete: 'off',
-            }}          
-            />
-        )}
+            style={{ width: props.width || 300 }}
+            options={props.options}
+            classes={{
+                option: classes.option,
+            }}
+
+            value={props.value || null}
+            onChange={props.onChange}
+
+            inputValue={props.inputValue}
+            onInputChange={props.onInputchange}
+
+            autoSelect
+            autoHighlight
+            getOptionLabel={(option) => option}
+            renderOption={(option) => option}
+            renderInput={(params) => (
+                <TextField
+                {...params}
+                label={props.label}
+                name={props.name}
+                variant="outlined"
+                inputProps={{
+                    ...params.inputProps,
+                    autoComplete: 'off',
+                }}          
+                />
+            )}
         />
     )
 };
 
-export default CitySelect;
+export default AutoComplete;
 
 

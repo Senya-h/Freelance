@@ -110,7 +110,7 @@ const Message = (props) => {
                     </TableBody>
                     ))}
                     {messages.map(message => (
-                    <TableBody key={message.id}>      
+                    <TableBody className={classes.profileImg} key={message.id}>      
                             <TableRow>
                                 <TableCell>
                                     <img className={classes.profileImg} src={`${baseURL}/storage/${props.userFoto}`} alt={`foto ${message.id}`}/>

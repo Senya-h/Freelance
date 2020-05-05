@@ -21,12 +21,20 @@ class ServiceController extends Controller
         } catch(\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti']);
         }
-        return Service::create([
-            'service' => $request->input('service'),
-            'description' => $request->input('description'),
-            'price_per_hour' => $request->input('price_per_hour'),
-            'user_id' => auth()->user()->id,
-        ]);
+        $userServ = Service::where('user_id', auth()->user()->id)->get();
+        $servCount = count($userServ);
+        $limit = 6;
+        if ($servCount >= $limit) {
+            return response()->json(['error'=>['limit'=>1]], 400);
+        } else {
+            $newServ = Service::create([
+                'service' => $request->input('service'),
+                'description' => $request->input('description'),
+                'price_per_hour' => $request->input('price_per_hour'),
+                'user_id' => auth()->user()->id,
+            ]);
+            return response()->json($newServ, 201);
+        }
     }
     public function update($id, Request $request, Service $serv) {
         $service = Service::select('*')->where('id', $id)->get()[0];

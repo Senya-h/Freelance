@@ -75,12 +75,16 @@ class PortfolioController extends Controller
         $darbai = [];
         foreach ($works as $work) {
             $workApprv = DB::table('admin_work_approves')->select('*')->where('work_id',$work->id)->get();
+            $info = pathinfo(storage_path().$work->filePath);
+            $extension = $info['extension'];
+            $fileType = DB::table('file_formats')->where('format',$extension)->first();
             if(count($workApprv) > 0) {
                 $darbai[] = [
                     'id' => $work->id,
                     'title' => $work->title,
                     'description' => $work->description,
                     'filePath' => $work->filePath,
+                    'fileType' => $fileType->fileType,
                     'approved' => 1
                 ];
             } else {
@@ -89,6 +93,7 @@ class PortfolioController extends Controller
                     'title' => $work->title,
                     'description' => $work->description,
                     'filePath' => $work->filePath,
+                    'fileType' => $fileType->fileType,
                     'approved' => 0
                 ];
             }

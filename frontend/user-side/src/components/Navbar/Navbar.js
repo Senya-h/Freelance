@@ -90,12 +90,12 @@ const Navbar = () => {
     const [messagesCount, setMessagesCount] = useState([0]);
 
 
-    useEffect(() => {
-        axios.get('/message/' +authData.userID)
-            .then(res => {
-                setMessagesCount(res.data);
-            })
-    },[]);
+    //useEffect(() => {
+    //    axios.get('/message/' +authData.userID)
+    //        .then(res => {
+    //            setMessagesCount(res.data);
+    //        })
+    //},[]);
 
 
     let loginArea = null;
@@ -105,10 +105,12 @@ const Navbar = () => {
             loginArea = (
                 <>
                     <li className={cx('nav-item', classes['nav-item'])}>
+
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                                 Pranešimai
                                 <span className={classe.messageCount}>{messagesCount}</span>
                             </NavLink>
+
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>

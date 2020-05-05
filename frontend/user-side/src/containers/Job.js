@@ -19,22 +19,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
-const PORTFOLIO_TYPES = {
-    SERVICE: {
-        name: "SERVICE",
-        deleteLink: '/delete/service&id='
-    },
-    SKILL: {
-        name: "SKILL",
-        deleteLink: '/delete/'
-    },
-    WORK: {
-        name: "WORK",
-        deleteLink: '/delete/work&id='
-    }
-}
-
 const Job = (props) => {
     //Get logged in user information
     const { authData } = useAuth();
@@ -61,7 +45,7 @@ const Job = (props) => {
         //         setUserInfo({
         //             name: info.name, 
         //             location: info.location, 
-        //             photo: info.foto? info.foto: DEFAULT_PHOTO
+        //             photo: info.foto
         //         });
         //         setLoading(false);
         //     })

@@ -14,4 +14,8 @@ class PortfolioWorks extends Model
     {
         return $this->hasMany('App\AdminWorkApprove');
     }
+    public function works()
+    {
+        return $this->hasOne('App\User','work_id', 'user_id');
+    }
 }

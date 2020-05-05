@@ -82,7 +82,6 @@ render() {
         <td>{service.description}</td>
         <td>{service.price_per_hour}€/val</td>
         <td>{service.name}</td>
-        <td>0</td>
         <td><Button variant="danger" onClick={() => this.modalOpen(service.id, service.service)}>
             Pašalinti
         </Button></td>
@@ -117,7 +116,6 @@ render() {
                             <th scope="col">Aprašymas</th>
                             <th scope="col">Kaina už valandą</th>
                             <th scope="col">Paslaugos teikėjas</th>
-                            <th scope="col">Skundai</th>
                             <th scope="col">Šalinti</th>
                             </tr>
                         </thead>

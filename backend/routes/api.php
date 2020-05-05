@@ -37,7 +37,7 @@ Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 Route::post('photo-upload', 'ApiController@userPhotoUpload');
 //Services
 Route::get('services','ServiceController@list'); // Visos paslaugos
-Route::post('service', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
+Route::post('service', 'ServiceController@create'); //  Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
 Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
 Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas
 //Portfolio Works
@@ -106,7 +106,7 @@ Route::get('checkJWT','AuthController@refreshBannedToken');
 //Tikrina ar useris nėra užblokuotas
 Route::get('statistics','ApiController@statistics');
 
-Route::get('comment/{id}', 'CommentsController@index');//nesutvarkytas
+Route::get('comment', 'CommentsController@index');//nesutvarkytas
 Route::post('comment','CommentsController@create');
 Route::put('comment/{comment}','CommentsController@update');
 Route::delete('comment/{id}','CommentsController@delete');
@@ -114,7 +114,7 @@ Route::delete('comment/{id}','CommentsController@delete');
 //Userio info su role
 Route::post('user/roles','AdminController@findUserWithRoles');
 
-Route::get('project/{id}', 'ProjectApprovalController@index');//nesutvarkytas
+Route::get('project', 'ProjectApprovalController@index');//nesutvarkytas
 Route::post('project','ProjectApprovalController@create');
 Route::post('project/{project}','ProjectApprovalController@update');
 Route::delete('project/{id}','ProjectApprovalController@delete');

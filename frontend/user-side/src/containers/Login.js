@@ -73,6 +73,7 @@ const Login = (props) => {
         axios.post('/login', values)
             .then(res => {
                 console.log(res);
+                setSubmitting(false);
                 
                 if(res.status === 200 && !res.data.error) {
                     setAuthData(res.data);     
@@ -86,7 +87,6 @@ const Login = (props) => {
                 } else {
                     alertMessage = <Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>;
                 } 
-                setSubmitting(false);
 
             })
             .catch(err => {

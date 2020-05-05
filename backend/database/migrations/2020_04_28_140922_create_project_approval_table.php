@@ -16,9 +16,7 @@ class CreateProjectApprovalTable extends Migration
         Schema::create('project_approval', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('work_id');
-            $table->string('file')->nullable();
-            $table->text('comment');
+            $table->integer('work_id')->unique();
             $table->boolean('approved');
             $table->timestamps();
         });
