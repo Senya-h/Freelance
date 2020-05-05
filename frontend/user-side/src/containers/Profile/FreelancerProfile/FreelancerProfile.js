@@ -20,13 +20,13 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 import ServiceForm from './ServiceForm';
 import SkillForm from './SkillForm';
 import CommentForm from './CommentForm';
+import EditPortfolioForm from './EditPortfolioForm';
 
 import Comments from './Comments';
 import AddCommentModal from './AddCommentModal';
 
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
-import ReactPlayer from 'react-player';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -309,7 +309,7 @@ const FreelancerProfile = (props) => {
                                         <RemoveCircleIcon fontSize="default" classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary' />
                                     </IconButton>
                                     <OpenDialogButton type="edit" title="Redaguoti portfolio">
-                                        <PortfolioForm portfolioToEdit={work} token={authData.token} works={works} setWorks={setWorks} />
+                                        <EditPortfolioForm portfolioToEdit={work} token={authData.token} works={works} setWorks={setWorks} />
                                     </OpenDialogButton>
                                     </>
                                     ):null}

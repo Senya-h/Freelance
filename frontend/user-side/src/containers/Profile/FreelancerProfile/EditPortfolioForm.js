@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-
 const PortfolioForm = (props) => {
     const classes = useStyles();
     const [formats, setFormats] = useState([]);
@@ -36,29 +35,35 @@ const PortfolioForm = (props) => {
                 console.log(err);
             })
     }, []);
-
+    console.log("To edit: ", props.portfolioToEdit);
     const formik = useFormik({
         initialValues: {
-            title: '',
-            description: '',
-            localFile: '',
-            formFile: '',
+            title: props.portfolioToEdit.title,
+            description: props.portfolioToEdit.description,
+            localFile: {
+                link: props.portfolioToEdit.filePath,
+                fileType: props.portfolioToEdit.fileType
+            },
+            formFile: props.portfolioToEdit.filePath,
         },
         validateOnChange: false,
         validateOnBlur: false, 
         validationSchema: yupObject({
             title: yupString().required("Privalomas laukelis"),
             description: yupString().required("Privalomas laukelis"),
-            formFile: yupString().required("Įkelkite portfolio failą")
+            formFile: yupString().required("Įkelkite failą")
         }),
         onSubmit: values => {
             let formData = new FormData();
             formData.append('title', values.title);
             formData.append('description', values.description);
-            console.log(values);
-            formData.append('filePath', values.formFile);
+            const prevFile = props.portfolioToEdit.filePath;
 
-            axios.post('/work', formData, {
+            if(values.formFile !== prevFile) {
+                 formData.append('filePath', values.formFile);
+            }
+
+            axios.post('/update/work&id=' + props.portfolioToEdit.id, formData, {
                 headers: {
                     'Authorization': 'Bearer ' + props.token,
                     'Content-Type': 'multipart/form-data',
@@ -67,22 +72,27 @@ const PortfolioForm = (props) => {
             }).then(res => {
                 console.log(res);
                 if(!res.data.error) {
-                    
-                    console.log("Darbas pridetas", res)
-                    props.setWorks([...props.works, res.data]);
+                    const updatedPortfolio = props.works.map(work => {
+                        if(work.id === props.portfolioToEdit.id) {
+                            work = res.data;
+                        }
+                        return work;
+                    })
+
+                    props.setWorks(updatedPortfolio);
                     props.handleClose();
                 }
             })
         }
     })
 
-    const setFile = (e) => {
-        formik.setFieldTouched('formFile');
+    let shownImagePath = props.portfolioToEdit.filePath;
 
+    const setFile = (e) => {
         if(e.target.files[0]) {
             if(formats.map(format => format.fileType).includes(e.target.files[0].type)) {
                 formik.setFieldValue('localFile', {
-                    file: e.target.files[0],
+                    fileType: e.target.files[0].type,
                     link: URL.createObjectURL(e.target.files[0])
                 });
                 formik.setFieldValue('formFile', e.currentTarget.files[0]);
@@ -92,21 +102,20 @@ const PortfolioForm = (props) => {
                 formik.setFieldValue('formFile', '');
                 formik.setFieldError('formFile', "Nepalaikomas failo formatas")
             }
-            
         }
     }
 
     let portfolioDisplayMode = null;
     if(formik.values.localFile) {
-        switch(formik.values.localFile.file.type.split('/')[0]) {
+        switch(formik.values.localFile.fileType.split('/')[0]) {
             case "video":
                 portfolioDisplayMode = (
-                    <ReactPlayer url={formik.values.localFile.link} controls width="300px" height="auto"/>
+                    <ReactPlayer url={`${baseURL}/storage/${formik.values.localFile.link}`} controls width="300px" height="auto"/>
                 )
                 break;
             case "image":
                 portfolioDisplayMode = (
-                    <img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile.link} alt="portfolio" />
+                    <img style={{width: '300px', marginBottom:'15px'}} src={formik.values.localFile.link === shownImagePath? `${baseURL}/storage/${shownImagePath}`: formik.values.localFile.link} alt="portfolio" />
                 )
                 break;
             case "application":
@@ -132,11 +141,32 @@ const PortfolioForm = (props) => {
 
     return (
         <div>
+            <Button color='primary' onClick={openPopover}>Tinkami formatai</Button>
+            <Popover
+                open={anchorEl? true: false}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+            >
+                <ul style={{paddingLeft: 0}}>
+                    {formats.map(format => (
+                        <li key={format.id} style={{display: 'inline-block', listStyle: 'none', marginRight: '5px', marginLeft: '5px'}} key={format.id}>{format.format}</li>
+                    ))}
+                </ul>
+            </Popover>
+            <p>Maksimalus failo dydis: XXX MB</p>
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
                 <DialogContent className={classes.root} >
                     <div>
                         <TextField fullWidth label="Pavadinimas" variant='outlined' {...formik.getFieldProps('title')} />
-                        {formik.touched.description && formik.errors.title ? (
+                        {formik.touched.title && formik.errors.title ? (
                         <div className='text-danger'>{formik.errors.title}</div>
                         ) : null}
                     </div>
@@ -150,52 +180,20 @@ const PortfolioForm = (props) => {
                         {formik.values.localFile?
                         <>
                             {portfolioDisplayMode}
-                            <p>{formik.values.localFile.file.name} - { Math.round(((formik.values.localFile.file.size / 1000000) + Number.EPSILON) * 100) / 100} MB</p>
+                            {/* <p>{formik.values.localFile.file.name} - { Math.round(((formik.values.localFile.file.size / 1000000) + Number.EPSILON) * 100) / 100} MB</p> */}
                         </>
                         :
                         null}
                         
-                        {console.log(formik.errors)}
-                        {console.log(formik.touched)}
 
                         {formik.errors.formFile ? (
                             <div className='text-danger'>{formik.errors.formFile}</div>
-                            ) : null}
-                        <div>
-                            <input
-                                type="file"
-                                style={{display: 'none'}}
-                                id="inputFormFile"
-                                name="formFile" onChange={setFile}
-                            />
-                            <label htmlFor="inputFormFile">
-                                <Button variant='contained' component='span' color='primary'>
-                                    {formik.values.localFile? "Keisti failą": "Pridėti failą"}
-                                </Button>
-                            </label>
-                            <Button type="button" color='primary' onClick={openPopover}>Tinkami formatai</Button>
-                            <Popover
-                                open={anchorEl? true: false}
-                                anchorEl={anchorEl}
-                                onClose={handleClose}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                            >
-                                <ul style={{paddingLeft: 0}}>
-                                    {formats.map(format => (
-                                        <li key={format.id} style={{display: 'inline-block', listStyle: 'none', marginRight: '5px', marginLeft: '5px'}}>{format.format}</li>
-                                    ))}
-                                </ul>
-                            </Popover>
-                        </div>
-
-                        <p>Maksimalus failo dydis: XXX MB</p>
+                            ) : null}    
+                        <Button variant='contained' component='label' color='primary'>
+                            {formik.values.localFile? "Keisti failą": "Pridėti failą"}
+                            <input type='file' style={{display: 'none'}} name="file" onChange={setFile}/>
+                        </Button>
+ 
                     </Box>
                 </DialogContent>
                 <DialogActions>

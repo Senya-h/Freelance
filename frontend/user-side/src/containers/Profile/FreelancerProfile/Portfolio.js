@@ -137,7 +137,7 @@ const Portfolio = (props) => {
             )
             displayDialogMode = (
                 <>
-                    <a target="_blank" href={`${baseURL}/storage/${props.imageUrl}`}>Darbas</a>
+                    <a target="_blank" rel="noopener noreferrer" href={`${baseURL}/storage/${props.imageUrl}`}>Darbas</a>
                     <p>{props.description}</p>
                 </>
             )
