@@ -21,8 +21,6 @@ class CreateSkillUsersTable extends Migration
             $table->unsignedBigInteger('skill_id')->unsigned();
             $table->foreign('skill_id')->references('id')->on('skill');
 
-            $table->boolean('approved')->nullable();
-
             $table->timestamps();
             $table->primary(['user_id','skill_id']);
         });
