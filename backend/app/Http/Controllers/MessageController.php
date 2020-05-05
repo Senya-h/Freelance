@@ -14,22 +14,22 @@ class MessageController extends Controller
     
     public function fromMsg($senders_id,$receivers_id)
     {
-        $allMessages = Message::all();
-        $sendedMessages = Message::where('senders_id',$senders_id)
-                            ->where('receivers_id',$receivers_id)
-                            ->get();
-        $receivedMessages = Message::where('receivers_id',$receivers_id)
-                            ->where('senders_id',$senders_id)
-                            ->get();
+        $allMessages = Message::select('*')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
         $messages = [];
-        
         foreach($allMessages as $msg) {
-            if($msg->senders_id === $senders_id) {
-                $messages = [
-                    'message' => $msg->message
+            if($msg->senders_id == $senders_id) {
+                $messages[] = [
+                    $msg->message
                 ];
-            } 
+            } else if($msg->receivers_id == $senders_id) {
+                $messages[] = [
+                    $msg->message
+                ];
+            }
         }
+        
         /*
         Message::where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->update(['notification_read' => 1]);
         $receiver = Message::select('*')
