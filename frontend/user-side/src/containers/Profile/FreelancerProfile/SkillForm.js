@@ -32,11 +32,13 @@ const SkillForm = (props) => {
                     props.handleClose();
                 }
             } else {
+                props.setUploading(true);
                 axios.post('/skill', values.skills_id, {
                     headers: {
                         'Authorization': 'Bearer ' + props.token
                     }
                 }).then(res => {
+                    props.setUploading(false);
                     if(!res.error && res.status === 200) {
                         props.handleClose();
                         const newSkills = [];

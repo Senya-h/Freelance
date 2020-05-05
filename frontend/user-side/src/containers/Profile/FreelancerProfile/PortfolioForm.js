@@ -11,6 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import mime from 'mime-types';
 import Popover from '@material-ui/core/Popover';
+import Loader from 'react-loader-spinner';
 
 import {object as yupObject, string as yupString} from 'yup';
 
@@ -58,6 +59,8 @@ const PortfolioForm = (props) => {
             console.log(values);
             formData.append('filePath', values.formFile);
 
+            props.setUploading(true);
+
             axios.post('/work', formData, {
                 headers: {
                     'Authorization': 'Bearer ' + props.token,
@@ -70,6 +73,7 @@ const PortfolioForm = (props) => {
                     
                     console.log("Darbas pridetas", res)
                     props.setWorks([...props.works, res.data]);
+                    props.setUploading(false);
                     props.handleClose();
                 }
             })
@@ -101,7 +105,7 @@ const PortfolioForm = (props) => {
         switch(formik.values.localFile.file.type.split('/')[0]) {
             case "video":
                 portfolioDisplayMode = (
-                    <ReactPlayer url={formik.values.localFile.link} controls width="300px" height="auto"/>
+                    <ReactPlayer url={formik.values.localFile.link} width="300px" height="auto"/>
                 )
                 break;
             case "image":

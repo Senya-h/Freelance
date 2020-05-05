@@ -9,7 +9,6 @@ import axios, {baseURL} from '../../../axios';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
-import mime from 'mime-types';
 import Popover from '@material-ui/core/Popover';
 
 import {object as yupObject, string as yupString} from 'yup';
@@ -35,7 +34,6 @@ const PortfolioForm = (props) => {
                 console.log(err);
             })
     }, []);
-    console.log("To edit: ", props.portfolioToEdit);
     const formik = useFormik({
         initialValues: {
             title: props.portfolioToEdit.title,
@@ -63,6 +61,7 @@ const PortfolioForm = (props) => {
                  formData.append('filePath', values.formFile);
             }
 
+            props.setUploading(true);
             axios.post('/update/work&id=' + props.portfolioToEdit.id, formData, {
                 headers: {
                     'Authorization': 'Bearer ' + props.token,
@@ -81,8 +80,12 @@ const PortfolioForm = (props) => {
                     })
 
                     props.setWorks(updatedPortfolio);
+                    props.setUploading(false);
                     props.handleClose();
                 }
+            })
+            .catch(err => {
+                props.setUploading(false);
             })
         }
     })
@@ -94,6 +97,8 @@ const PortfolioForm = (props) => {
             if(formats.map(format => format.fileType).includes(e.target.files[0].type)) {
                 formik.setFieldValue('localFile', {
                     fileType: e.target.files[0].type,
+                    name: e.target.files[0].name,
+                    size: e.target.files[0].size,
                     link: URL.createObjectURL(e.target.files[0])
                 });
                 formik.setFieldValue('formFile', e.currentTarget.files[0]);
@@ -111,7 +116,7 @@ const PortfolioForm = (props) => {
         switch(formik.values.localFile.fileType.split('/')[0]) {
             case "video":
                 portfolioDisplayMode = (
-                    <ReactPlayer url={formik.values.localFile.link === shownImagePath? `${baseURL}/storage/${shownImagePath}`: formik.values.localFile.link} controls width="300px" height="auto"/>
+                    <ReactPlayer url={formik.values.localFile.link === shownImagePath? `${baseURL}/storage/${shownImagePath}`: formik.values.localFile.link} width="300px" height="auto"/>
                 )
                 break;
             case "image":
@@ -142,6 +147,7 @@ const PortfolioForm = (props) => {
 
     return (
         <div>
+            
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
                 <DialogContent className={classes.root} >
                     <div>
@@ -160,7 +166,7 @@ const PortfolioForm = (props) => {
                         {formik.values.localFile?
                         <>
                             {portfolioDisplayMode}
-                            {/* <p>{formik.values.localFile.file.name} - { Math.round(((formik.values.localFile.file.size / 1000000) + Number.EPSILON) * 100) / 100} MB</p> */}
+                            {formik.values.localFile.link !== shownImagePath && <p>{formik.values.localFile.name} - { Math.round(((formik.values.localFile.size / 1000000) + Number.EPSILON) * 100) / 100} MB</p>}
                         </>
                         :
                         null}
