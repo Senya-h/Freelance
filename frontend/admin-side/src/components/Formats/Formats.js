@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Formats.scss';
 import axios from '../../axios';
 import DeleteModal from '../DeleteModal';
-import {Button} from 'react-bootstrap';
+import {Button, Form} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 
 class Skills extends Component{
@@ -12,6 +12,7 @@ class Skills extends Component{
         this.state = {
             formats: [],
             formatName: "",
+            fileType: "",
             modalShow:false,
             error: "",
             formatID: "",
@@ -22,6 +23,10 @@ class Skills extends Component{
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFormatName = this.handleFormatName.bind(this);
+        this.handleChangeFileType = this.handleChangeFileType.bind(this);
+    }
+    handleChangeFileType(event){
+        this.setState({fileType: event.target.value})
     }
     handleFormatName(event){
         this.setState({formatName: event.target.value})
@@ -61,7 +66,7 @@ class Skills extends Component{
         if(document.getElementById('exampleInput').value == ""){
             document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Neįvestas joks tekstas</div>"
         }else{
-            axios.post("/format", {format: this.state.formatName}, {
+            axios.post("/format", {format: this.state.formatName, fileType: this.state.fileType}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': this.state.token,
@@ -118,12 +123,21 @@ class Skills extends Component{
         }
 
     render(){
-        
+    
+    const options = (
+        <>
+            <option value="image">Nuotraukos</option>
+            <option value="video">Video</option>
+            <option value="text">Teksto</option>
+            <option value="audio">Garso</option>
+        </>
+    );
     
     const formatsList = this.state.formats.map(format => ( 
         <tr key={format.id}>
         <th scope="row">{format.id}</th>
         <td>{format.format}</td>
+        <td>{format.fileType}</td>
         <td><Button variant="danger" onClick={() => this.modalOpen(format.id, format.format)}>
             Pašalinti
         </Button></td>
@@ -151,12 +165,16 @@ class Skills extends Component{
                         <div className="container-fluid">
                             <h1>Portfolio darbų failų formatų pridėjimas</h1>
                             <div className="error"></div>
+                            
+                            <p>mime tipus galite rasti <a href="https://www.freeformatter.com/mime-types-list.html">čia</a></p>
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.formatName} onChange={this.handleFormatName} className="form-control" id="exampleInput"
                                            placeholder="Įveskite pavadinimą"></input>
+                                    <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.fileType} onChange={this.handleChangeFileType} className="form-control" id="exampleInput"
+                                           placeholder="Įrašykite mime tipą"></input>
                                 </div>
-                                <button type="submit" value="Submit"  className="btn btn-success">Pateikti</button>
+                                <button type="submit" value="Submit"  className="btn btn-success">Įrašyti</button>
                             </form>
                             <hr/>
                             
@@ -165,7 +183,8 @@ class Skills extends Component{
                                 <thead>
                                     <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Įgūdis</th>
+                                    <th scope="col">Formatas</th>
+                                    <th scope="col">Failo tipas</th>
                                     <th scope="col">Šalinti</th>
                                     </tr>
                                 </thead>
