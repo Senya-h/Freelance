@@ -201,12 +201,14 @@ class AdminController extends Controller
     public function addFormat(Request $request) {
         $validation = Validator::make($request->all(),[
             'format' => ['required', 'string', 'max:255', 'unique:file_formats'],
+            'fileType' => ['required', 'string', 'max:255'],
         ]);
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);
         } else {
             DB::table('file_formats')->insert([
                 'format' => strtolower(request('format')),
+                'fileType' => strtolower(request('fileType')),
             ]);
             return response()->json(["message" => request('format')." formatas pridėtas"]);
         }
