@@ -1,9 +1,13 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Navbar as NavBar} from 'react-bootstrap';
 import {NavLink, Link} from 'react-router-dom';
 import classes from './Navbar.module.scss';
 import cx from 'classnames';
 import {useAuth} from '../../context/auth';
+import axios from '../../axios';
+
+import {makeStyles} from '@material-ui/core/styles';
+
 
 //Reduces the amount of time the scroll event is called
 const debounce = (callback, wait, immediate = false) => {
@@ -22,8 +26,21 @@ const debounce = (callback, wait, immediate = false) => {
     }
 }
 
+//Message count style
+const useStyles = makeStyles(theme => ({
+    messageCount: {
+        color: 'red',
+        backgroundColor: '#fff',
+        padding: '2px 6px',
+        marginLeft: '5px',
+        borderRadius: '50%',
+        position:"relative",
+        bottom: '8px'
+    }
+}))
+
 const Navbar = () => {
-    
+
     useEffect(() => {
         return () => { //Will remove the event listener if the component gets unmounted
             window.removeEventListener('scroll', () => handleScroll)
@@ -68,6 +85,19 @@ const Navbar = () => {
         removeAuthData()
     }
 
+    //const classes = useStyles();
+    const classe = useStyles();
+    const [messagesCount, setMessagesCount] = useState([0]);
+
+
+    //useEffect(() => {
+    //    axios.get('/message/' +authData.userID)
+    //        .then(res => {
+    //            setMessagesCount(res.data);
+    //        })
+    //},[]);
+
+
     let loginArea = null;
     // if it's a freelancer
     if(authData) {
@@ -75,9 +105,12 @@ const Navbar = () => {
             loginArea = (
                 <>
                     <li className={cx('nav-item', classes['nav-item'])}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
-                            Pranešimai
-                        </NavLink>
+
+                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                                Pranešimai
+                                <span className={classe.messageCount}>{messagesCount}</span>
+                            </NavLink>
+
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
@@ -122,7 +155,6 @@ const Navbar = () => {
                 </>
             )
         }
-
     } else {
         loginArea = (
             <>
@@ -176,7 +208,7 @@ const Navbar = () => {
                 </NavBar.Collapse>
             </div>
         </NavBar>
-    )
+   )
 };
 
 export default Navbar;
