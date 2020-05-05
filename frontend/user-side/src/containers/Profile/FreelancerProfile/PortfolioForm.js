@@ -154,9 +154,6 @@ const PortfolioForm = (props) => {
                         </>
                         :
                         null}
-                        
-                        {console.log(formik.errors)}
-                        {console.log(formik.touched)}
 
                         {formik.errors.formFile ? (
                             <div className='text-danger'>{formik.errors.formFile}</div>

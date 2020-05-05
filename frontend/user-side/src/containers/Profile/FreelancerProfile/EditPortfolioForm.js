@@ -75,6 +75,7 @@ const PortfolioForm = (props) => {
                     const updatedPortfolio = props.works.map(work => {
                         if(work.id === props.portfolioToEdit.id) {
                             work = res.data;
+                            work.fileType = formik.values.localFile.fileType;
                         }
                         return work;
                     })
@@ -110,7 +111,7 @@ const PortfolioForm = (props) => {
         switch(formik.values.localFile.fileType.split('/')[0]) {
             case "video":
                 portfolioDisplayMode = (
-                    <ReactPlayer url={`${baseURL}/storage/${formik.values.localFile.link}`} controls width="300px" height="auto"/>
+                    <ReactPlayer url={formik.values.localFile.link === shownImagePath? `${baseURL}/storage/${shownImagePath}`: formik.values.localFile.link} controls width="300px" height="auto"/>
                 )
                 break;
             case "image":
@@ -141,27 +142,6 @@ const PortfolioForm = (props) => {
 
     return (
         <div>
-            <Button color='primary' onClick={openPopover}>Tinkami formatai</Button>
-            <Popover
-                open={anchorEl? true: false}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-            >
-                <ul style={{paddingLeft: 0}}>
-                    {formats.map(format => (
-                        <li key={format.id} style={{display: 'inline-block', listStyle: 'none', marginRight: '5px', marginLeft: '5px'}} key={format.id}>{format.format}</li>
-                    ))}
-                </ul>
-            </Popover>
-            <p>Maksimalus failo dydis: XXX MB</p>
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
                 <DialogContent className={classes.root} >
                     <div>
@@ -189,10 +169,41 @@ const PortfolioForm = (props) => {
                         {formik.errors.formFile ? (
                             <div className='text-danger'>{formik.errors.formFile}</div>
                             ) : null}    
-                        <Button variant='contained' component='label' color='primary'>
-                            {formik.values.localFile? "Keisti failą": "Pridėti failą"}
-                            <input type='file' style={{display: 'none'}} name="file" onChange={setFile}/>
-                        </Button>
+                                              <div>
+                            <input
+                                type="file"
+                                style={{display: 'none'}}
+                                id="inputFormFile"
+                                name="formFile" onChange={setFile}
+                            />
+                            <label htmlFor="inputFormFile">
+                                <Button variant='contained' component='span' color='primary'>
+                                    {formik.values.localFile? "Keisti failą": "Pridėti failą"}
+                                </Button>
+                            </label>
+                            <Button type="button" color='primary' onClick={openPopover}>Tinkami formatai</Button>
+                            <Popover
+                                open={anchorEl? true: false}
+                                anchorEl={anchorEl}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                            >
+                                <ul style={{paddingLeft: 0}}>
+                                    {formats.map(format => (
+                                        <li key={format.id} style={{display: 'inline-block', listStyle: 'none', marginRight: '5px', marginLeft: '5px'}}>{format.format}</li>
+                                    ))}
+                                </ul>
+                            </Popover>
+                        </div>
+
+                        <p>Maksimalus failo dydis: XXX MB</p>
  
                     </Box>
                 </DialogContent>
