@@ -126,10 +126,10 @@ class Skills extends Component{
     
     const options = (
         <>
-            <option value="foto">Nuotraukos</option>
+            <option value="image">Nuotraukos</option>
             <option value="video">Video</option>
             <option value="text">Teksto</option>
-            <option value="sound">Garso</option>
+            <option value="audio">Garso</option>
         </>
     );
     
@@ -165,15 +165,16 @@ class Skills extends Component{
                         <div className="container-fluid">
                             <h1>Portfolio darbų failų formatų pridėjimas</h1>
                             <div className="error"></div>
+                            
+                            <p>mime tipus galite rasti <a href="https://www.freeformatter.com/mime-types-list.html">čia</a></p>
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.formatName} onChange={this.handleFormatName} className="form-control" id="exampleInput"
                                            placeholder="Įveskite pavadinimą"></input>
-                                    <Form.Control as="select" className="role" multiple onChange={this.handleChangeFileType}>
-                                        {options}
-                                    </Form.Control>
+                                    <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.fileType} onChange={this.handleChangeFileType} className="form-control" id="exampleInput"
+                                           placeholder="Įrašykite mime tipą"></input>
                                 </div>
-                                <button type="submit" value="Submit"  className="btn btn-success">Pateikti</button>
+                                <button type="submit" value="Submit"  className="btn btn-success">Įrašyti</button>
                             </form>
                             <hr/>
                             

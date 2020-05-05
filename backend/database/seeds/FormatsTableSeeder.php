@@ -13,49 +13,49 @@ class FormatsTableSeeder extends Seeder
     {
         DB::table('file_formats')->insert([
             'format' => 'png',
-            'fileType' => 'foto',
+            'fileType' => 'image/png',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'jpg',
-            'fileType' => 'foto',
+            'fileType' => 'image/jpeg',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'jpeg',
-            'fileType' => 'foto',
+            'fileType' => 'image/jpeg',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'gif',
-            'fileType' => 'foto',
+            'fileType' => 'image/gif',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'mpg',
-            'fileType' => 'video',
+            'fileType' => 'video/mpeg',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'mpeg',
-            'fileType' => 'video',
+            'fileType' => 'video/mpeg',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'doc',
-            'fileType' => 'text',
+            'fileType' => 'application/msword',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
         DB::table('file_formats')->insert([
             'format' => 'docx',
-            'fileType' => 'text',
+            'fileType' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
