@@ -19,21 +19,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const PORTFOLIO_TYPES = {
-    SERVICE: {
-        name: "SERVICE",
-        deleteLink: '/delete/service&id='
-    },
-    SKILL: {
-        name: "SKILL",
-        deleteLink: '/delete/'
-    },
-    WORK: {
-        name: "WORK",
-        deleteLink: '/delete/work&id='
-    }
-}
-
 const Job = (props) => {
     //Get logged in user information
     const { authData } = useAuth();

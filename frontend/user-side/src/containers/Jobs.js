@@ -195,7 +195,7 @@ const Jobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} justify="start" className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
+        <Grid container spacing={5} justify="flex-start" className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
                     <Grid key={job.offers.id} item xs={12} md={4} lg={3}>

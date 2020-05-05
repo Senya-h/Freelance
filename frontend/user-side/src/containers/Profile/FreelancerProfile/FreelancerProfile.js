@@ -26,6 +26,7 @@ import AddCommentModal from './AddCommentModal';
 
 import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../../../context/auth';
+import ReactPlayer from 'react-player';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -358,7 +359,6 @@ const FreelancerProfile = (props) => {
                     </Grid>
                 </Grid>
 
-            
             {visitingUserID === profileUserID && <ConfirmDeleteModal token={authData.token} modalInfo={deleteModalInfo} setModalInfo={setDeleteModalInfo} />}
             </div>)}
         </>
