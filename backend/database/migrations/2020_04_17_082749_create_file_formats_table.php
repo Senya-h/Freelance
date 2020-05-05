@@ -16,6 +16,7 @@ class CreateFileFormatsTable extends Migration
         Schema::create('file_formats', function (Blueprint $table) {
             $table->id();
             $table->string('format');
+            $table->string('fileType');
             $table->timestamps();
         });
     }

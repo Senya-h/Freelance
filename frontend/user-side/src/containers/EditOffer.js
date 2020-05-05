@@ -1,4 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import cities from '../cities';
+import Autocomplete from '../Autocomplete';
+
 import { useAuth } from '../context/auth';
 import {useParams, Redirect} from 'react-router-dom';
 
@@ -55,22 +58,26 @@ const NewOffer = (props) => {
     const [requiredSkills, setRequiredSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
+    const [inputCity, setInputCity] = useState('');
+
     const {id} = useParams();
 
     const formik = useFormik({
         initialValues: {
             title: '',
             description: '',
+            city: '',
             salary: '',
             skills: []
         },
         validationSchema: Yup.object({
             title: Yup.string().max(50, "Darbo pavadinimas negali viršyti 50 simbolių").required('Privalomas laukelis'),
             description: Yup.string().max(2000, 'Darbo pobūdis negali viršyti 2000 simbolių').required("Privalomas laukelis"),
+            city: Yup.string().required("Privalomas laukelis"),
             salary: Yup.number().min(0, 'Atlyginimas negali būti mažesnis už 0').required("Privalomas laukelis"),
         }),
         onSubmit: values => {  
-            console.log(values);
+            console.log("SUBMIT:",{...values, skills: values.skills.map(skill => skill.id)});
             
             axios.put('/joboffer/update/' + id, {...values, skills: values.skills.map(skill => skill.id)}, {
                 headers: {
@@ -79,7 +86,7 @@ const NewOffer = (props) => {
             })
                 .then(res => {
                     console.log(res);
-                    if(!res.data.error && res.status === 201) {
+                    if(!res.data.error && res.status === 200) {
                         props.history.push({
                             pathname: '/my-jobs',
                         });
@@ -101,6 +108,9 @@ const NewOffer = (props) => {
                 formik.setFieldValue('title', res.data.title);
                 formik.setFieldValue('description', res.data.description);
                 formik.setFieldValue('salary', res.data.salary);
+                formik.setFieldValue('city', res.data.city);
+                setInputCity(res.data.city);
+                
                 formik.setFieldValue('skills', res.data.skills);
                 setLoading(false);
             })
@@ -140,6 +150,29 @@ const NewOffer = (props) => {
                     <TextField variant='outlined' label='Darbo pobūdis' {...formik.getFieldProps('description')} fullWidth multiline rows={4}/>
                     {formik.touched.description && formik.errors.description ? (
                     <div className='text-danger'>{formik.errors.description}</div>
+                    ) : null}
+                </div>
+                <div>
+                    {console.log(formik.values)}
+                    <Autocomplete
+                        width="300px"
+                        options={cities}
+                        value={formik.values.city}
+                        inputValue={inputCity}
+                        name="city"
+                        label="Miestas"
+                        onInputchange={(e, value) => {
+                            setInputCity(value !== null? value: '');
+                        }}
+                        onChange={(e, value) => {
+                            formik.setFieldValue('city', value);
+                            if(!value) {
+                                setInputCity('');
+                            }
+                        }}
+                    />
+                    {formik.touched.city && formik.errors.city ? (
+                    <div className='text-danger'>{formik.errors.city}</div>
                     ) : null}
                 </div>
                 <div>

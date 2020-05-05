@@ -29,12 +29,15 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     mainGrid: {
-        marginBottom: '0px'
+        marginBottom: '0px',
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3)
     },
     linkButton: {
         '&:hover': {
             color: '#fff'
-        }
+        },
+        margin: '0 auto'
     },
     form: {
         marginBottom: '20px',
@@ -48,6 +51,14 @@ const useStyles = makeStyles(theme => ({
         fontSize: '30px',
         minHeight: '250px',
         backgroundColor: '#fff'
+    },
+    divider: {
+        marginLeft: '-1.5rem',
+        marginRight: '-1.5rem'
+    },
+    submitBtn: {
+        width: '100%',
+        height: '100%'
     }
 }))
 
@@ -58,6 +69,9 @@ const Jobs = (props) => {
 
     const [pageCount, setPageCount] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    
+    const [inputSkill, setInputSkill] = useState('');
+    const [inputCity, setInputCity] = useState('');
 
     const [jobs, setJobs] = useState([]);
     
@@ -90,7 +104,7 @@ const Jobs = (props) => {
                 if(!res.data.error && res.status === 200) {
                     let arr = [];
                     for(let i in res.data.data) {
-                        arr.push(res.data.data[i].offers);
+                        arr.push(res.data.data[i]);
                     }
                     console.log(arr);
                     setJobs(arr);
@@ -123,7 +137,7 @@ const Jobs = (props) => {
     return (
         <>
         <div className={classes.form} role="tabpanel">
-            <form autoComplete='chrome-off' onSubmit={formik.handleSubmit} className="search-job">
+            <form autoComplete='off' onSubmit={formik.handleSubmit} className="search-job">
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={3}>
                         <TextField autoComplete="off" value={formik.values.title} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('title')}/>
@@ -133,10 +147,17 @@ const Jobs = (props) => {
                             width="100%"
                             options={skillNames}
                             value={formik.values.skill}
+                            inputValue={inputSkill}
                             name="skill"
                             label="Gebėjimas"
-                            change={(e, value) => {
-                                formik.setFieldValue('skill', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setInputSkill(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                formik.setFieldValue('skill', value);
+                                if(!value) {
+                                    setInputSkill('');
+                                }
                             }}
                         />
                     </Grid>
@@ -145,10 +166,17 @@ const Jobs = (props) => {
                             width="100%"
                             options={cities}
                             value={formik.values.city}
+                            inputValue={inputCity}
                             name="city"
                             label="Miestas"
-                            change={(e, value) => {
-                                formik.setFieldValue('city', value !== null? value: '')
+                            onInputchange={(e, value) => {
+                                setInputCity(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                formik.setFieldValue('city', value);
+                                if(!value) {
+                                    setInputCity('');
+                                }
                             }}
                         />
                     </Grid>
@@ -167,21 +195,29 @@ const Jobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
+        <Grid container spacing={5} justify="flex-start" className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
-                    <Grid key={job.id} item xs={12}>
-                        <Grid container item className="p-4 bg-white">
-                            {/* <Grid item className="img" style={{backgroundImage: job.info.foto? `url('${baseURL}/storage/${job.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid> */}
-                            <Grid item className="text pl-md-4">
-                                {/* <span className="location mb-0">{job.info.location}</span> */}
-                                <h2 className={classes.name}>{job.title}</h2>                                
-                                <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
+                    <Grid key={job.offers.id} item xs={12} md={4} lg={3}>
+                        <Grid container item direction='column' align="center" className="p-4 bg-white">
+                            <Grid item className="img" style={{backgroundImage: job.userInfo.foto? `url('${baseURL}/storage/${job.userInfo.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '120px', height: '120px', margin: '0 auto 30px auto'}}></Grid>
+                            <Grid item className="text">
+                                <h2 className={classes.name}>{job.offers.title}</h2>                                
+                                <p>{job.offers.city}</p>
+                                <p>{job.offers.salary} €/mėn.</p>
+                                <hr className={classes.divider} />
+                                <Button className={classes.linkButton} component={Link} to={`/job/${job.offers.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>
                         </Grid>
                     </Grid>
                 )
-            }): <Grid item >Rezultatų nerasta</Grid>}
+            })
+            : 
+            <Grid item>
+                Rezultatų nerasta
+            </Grid>
+            }
+
             {pageCount > 1 && 
             <Grid item xs={12} style={{backgroundColor: '#fff'}}>
                 <Pagination

@@ -42,7 +42,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const DEFAULT_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png';
 
 
 const ClientProfile = (props) => {
@@ -63,7 +62,7 @@ const ClientProfile = (props) => {
     const [userInfo, setUserInfo] = useState({
         name: '',
         email: '',
-        photo: DEFAULT_PHOTO,
+        photo: '',
         location: '',
         role: '',
     });
@@ -80,11 +79,10 @@ const ClientProfile = (props) => {
             .then(res => {
                 console.log("Userio duomenys: ", res);
                 const info = res.data.info;
-                const portfolio = res.data.portfolio;
                 setUserInfo({
                     name: info.name, 
                     location: info.location, 
-                    photo: info.foto? info.foto: DEFAULT_PHOTO
+                    photo: info.foto
                 });
 
                 setLoading(false);

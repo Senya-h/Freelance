@@ -37,7 +37,7 @@ Route::get('user/{id}', 'PortfolioController@aboutUser'); //Userio info pagal ID
 Route::post('photo-upload', 'ApiController@userPhotoUpload');
 //Services
 Route::get('services','ServiceController@list'); // Visos paslaugos
-Route::post('service', 'ServiceController@create'); // id=userIdD   Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
+Route::post('service', 'ServiceController@create'); //  Paslaugų pridėjimas(Vartotojas gali pridėt daugiau nei vieną paslaugą)
 Route::post('update/service&id={id}', 'ServiceController@update'); // id=serviceID Paslauga gali būt redaguojama
 Route::delete('delete/service&id={service}', 'ServiceController@destroy'); // id=serviceID Paslaugos ištrynimas
 //Portfolio Works

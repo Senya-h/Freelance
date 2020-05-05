@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useAuth } from '../context/auth';
+import cities from '../cities';
+import Autocomplete from '../Autocomplete';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -38,6 +40,7 @@ const NewOffer = (props) => {
 
     const [allSkills, setAllSkills] = useState([]);
     const [requiredSkills, setRequiredSkills] = useState([]);
+    const [inputCity, setInputCity] = useState('');
 
     useEffect(() => {
         axios.get('/skills')
@@ -51,12 +54,14 @@ const NewOffer = (props) => {
         title: '',
         description: '',
         salary: '',
+        city: '',
         skills: []
     };
 
     const validationSchema = Yup.object({
         title: Yup.string().max(50, "Darbo pavadinimas negali viršyti 50 simbolių").required('Privalomas laukelis'),
         description: Yup.string().max(2000, 'Darbo pobūdis negali viršyti 2000 simbolių').required("Privalomas laukelis"),
+        city: Yup.string().required("Privalomas laukelis"),
         salary: Yup.number().min(0, 'Atlyginimas negali būti mažesnis už 0').required("Privalomas laukelis"),
     });
 
@@ -98,6 +103,26 @@ const NewOffer = (props) => {
                     <div>
                         <TextField variant='outlined' label='Darbo pobūdis' name='description' onChange={handleChange} onBlur={handleBlur} value={values.description} fullWidth multiline rows={4}/>
                         <ErrorMessage name='description' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </div>
+                    <div>
+                        <Autocomplete
+                            width="300px"
+                            options={cities}
+                            value={values.city}
+                            inputValue={inputCity}
+                            name="city"
+                            label="Miestas"
+                            onInputchange={(e, value) => {
+                                setInputCity(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                setFieldValue('city', value);
+                                if(!value) {
+                                    setInputCity('');
+                                }
+                            }}
+                        />
+                        <ErrorMessage name='city' render={msg => <div className='text-danger'>{msg}</div>} />
                     </div>
                     <div>
                         <p>Reikalingi gebėjimai

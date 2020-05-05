@@ -73,10 +73,10 @@ class AdminController extends Controller
                 $message_user->delete();
                 $service_user = Service::where('user_id',$id);
                 $service_user->delete();
-                $file = PortfolioWorks::select('filePath')->where('user_id', '=', $id)->get();
+                /*$file = PortfolioWorks::select('filePath')->where('user_id', '=', $id)->get();
                 File::delete('../storage/app/public/' . $file['filePath']);
                 $portfolioWork_user = PortfolioWorks::where('user_id',$id);
-                $portfolioWork_user->delete();
+                $portfolioWork_user->delete();*/
                 $user = User::find($id);
                 $user->delete();
                 return response()->json(['message'=>"Klientas sėkmingai ištrintas"],200);
@@ -201,12 +201,14 @@ class AdminController extends Controller
     public function addFormat(Request $request) {
         $validation = Validator::make($request->all(),[
             'format' => ['required', 'string', 'max:255', 'unique:file_formats'],
+            'fileType' => ['required', 'string', 'max:255'],
         ]);
         if ($validation->fails()) {
             return response()->json(["error" => $validation->errors()]);
         } else {
             DB::table('file_formats')->insert([
                 'format' => strtolower(request('format')),
+                'fileType' => strtolower(request('fileType')),
             ]);
             return response()->json(["message" => request('format')." formatas pridėtas"]);
         }

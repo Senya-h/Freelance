@@ -52,7 +52,7 @@ const Register = (props) => {
     const referer = props.location.state? props.location.state.referer: '/'; 
 
     const classes = useStyles();
-
+    const [inputCity, setInputCity] = useState('');
     const [showPassword, setShowPassword] = useState(false)
     //if is logged in, redirect to previous page
     if( authTokens ) {
@@ -145,16 +145,22 @@ const Register = (props) => {
                     </FormGroup>
                     <FormGroup>
                         <Autocomplete 
-                        width="300px"
-                        name='location'
-                        label='Miestas'
-                        options={cities}
-                        change={(e, value) => {
-                            setFieldValue(
-                            "location",
-                            value !== null ? value : initialValues.location
-                            );
-                        }}/>
+                            width="300px"
+                            name='location'
+                            label='Miestas'
+                            options={cities}
+                            value={values.location}
+                            inputValue={inputCity}
+                            onInputchange={(e, value) => {
+                                setInputCity(value !== null? value: '');
+                            }}
+                            onChange={(e, value) => {
+                                setFieldValue('location', value);
+                                if(!value) {
+                                    setInputCity('');
+                                }
+                            }}
+                        />
                         <ErrorMessage name='location' render={msg => <div className='text-danger'>{msg}</div>} />
                     </FormGroup>
                     <FormGroup>

@@ -74,6 +74,11 @@ const Navbar = () => {
         if(authData.userRole === 3) {
             loginArea = (
                 <>
+                    <li className={cx('nav-item', classes['nav-item'])}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                            Pranešimai
+                        </NavLink>
+                    </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
                              Profilis
@@ -97,6 +102,11 @@ const Navbar = () => {
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/my-jobs' activeClassName={classes['active']}>
                              Mano Skelbimai
+                        </NavLink>
+                    </li>
+                    <li className={cx('nav-item', classes['nav-item'])}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                            Pranešimai
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
@@ -159,11 +169,6 @@ const Navbar = () => {
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
                                 Kontaktai
-                            </NavLink>
-                        </li>
-                        <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
-                                Pranešimai
                             </NavLink>
                         </li>
                         { loginArea }

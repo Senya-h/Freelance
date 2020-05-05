@@ -1,4 +1,5 @@
 export default [
+    "Nuotolinis",
     "Vilnius", 
     "Kaunas", 
     "Klaip\u0117da", 
