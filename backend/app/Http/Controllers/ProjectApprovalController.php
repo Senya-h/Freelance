@@ -27,27 +27,22 @@ class ProjectApprovalController extends Controller
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $project = new ProjectApproval;
-        $project->user_id = auth()->user()->id;
-        $project->work_id = $request->work_id;
-        $project->approved = 0;
-        $project->save();
-        return response()->json($project);
-    }
+        $validation = Validator::make($request->all(),[
+            'work_id' => 'required|unique:project_approval'
 
-    public function update(Request $request, ProjectApproval $project)
-    {
-        try {
-            $user = auth()->userOrFail();
-        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['error' => 'Prašome prisijungti'], 401);
+        ]);
+        if ($validation->fails()) {
+            return response()->json(["error" => $validation->errors()]);
         }
-            $project->approved = $request->approved;
-            $project->save();
-
-        return response()->json($project);
+        else{
+                $project = new ProjectApproval;
+                $project->user_id = auth()->user()->id;
+                $project->work_id = $request->work_id;
+                $project->approved = 1;
+                $project->save();
+            }
+            return response()->json($project);
     }
-
     public function delete(ProjectApproval $id)
     {
         try {
