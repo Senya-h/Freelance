@@ -98,7 +98,7 @@ class SearchController extends Controller
             ->where('user_id',$user->id)
             ->get();
             $skills = DB::table('skill_users')
-            ->select('skill.id','skill.skillName as skill', 'skill_users.approved')
+            ->select('skill.id','skill.skillName as skill')
             ->join('skill','skill.id','=','skill_users.skill_id')
             ->where('user_id',$user->id)
             ->get();

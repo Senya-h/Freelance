@@ -47,7 +47,7 @@ class PortfolioController extends Controller
 
         //skills
         $skills = DB::table('skill_users')
-        ->select('skill.id','skill.skillName as skill', 'skill_users.approved')
+        ->select('skill.id','skill.skillName as skill')
         ->join('skill','skill.id','=','skill_users.skill_id')
         ->where('user_id',$id)
         ->get();
@@ -78,48 +78,51 @@ class PortfolioController extends Controller
             $info = pathinfo(storage_path().$work->filePath);
             $extension = $info['extension'];
             $fileType = DB::table('file_formats')->where('format',$extension)->first();
+            $clientApprv = DB::table('project_approval')
+                            ->select('*')
+                            ->join('users','users.id','project_approval.user_id')
+                            ->where('work_id',$work->id)
+                            ->first();
+
+            $clientApprove = 0;
+            $approve = 0;
+            $clientName = '';
             if(count($workApprv) > 0) {
+                $approve = 1;
+            }
+            if($clientApprv) {
+                $clientName = $clientApprv->name;
+                $clientApprove = 1;
+            }
                 $darbai[] = [
                     'id' => $work->id,
                     'title' => $work->title,
                     'description' => $work->description,
                     'filePath' => $work->filePath,
                     'fileType' => $fileType->fileType,
-                    'approved' => 1
-                ];
-            } else {
-                $darbai[] = [
-                    'id' => $work->id,
-                    'title' => $work->title,
-                    'description' => $work->description,
-                    'filePath' => $work->filePath,
-                    'fileType' => $fileType->fileType,
-                    'approved' => 0
+                    'approved' => $approve,
+                    'clientApprove' => [
+                        'approve' => $clientApprove,
+                        'clientName' => $clientName,
+                    ]
                 ];
             }
-        }
 
         $paslaugos = [];
-        foreach ($services as $service) {
-            $workApprv = DB::table('admin_service_approves')->select('*')->where('service_id',$service->id)->get();
-            if(count($workApprv) > 0) {
-                $paslaugos[] = [
-                    'id' => $service->id,
-                    'title' => $service->service,
-                    'description' => $service->description,
-                    'price_per_hour' => $service->price_per_hour,
-                    'approved' => 1
-                ];
-            } else {
-                $paslaugos[] = [
-                    'id' => $service->id,
-                    'title' => $service->service,
-                    'description' => $service->description,
-                    'price_per_hour' => $service->price_per_hour,
-                    'approved' => 0
-                ];
+            foreach ($services as $service) {
+                $workApprv = DB::table('admin_service_approves')->select('*')->where('service_id',$service->id)->get();
+                $approve = 0;
+                if(count($workApprv) > 0) {
+                    $approve = 1;
+                }
+                    $paslaugos[] = [
+                        'id' => $service->id,
+                        'title' => $service->service,
+                        'description' => $service->description,
+                        'price_per_hour' => $service->price_per_hour,
+                        'approved' => $approve
+                    ];
             }
-        }
         $ratings = Comments::select('rating')->where('receiver_id',$id)->get();
         $ratingArr = [];
         for ($i = 0; $i<count($ratings); $i++) {

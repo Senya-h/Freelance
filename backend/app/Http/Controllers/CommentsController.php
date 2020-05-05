@@ -9,14 +9,16 @@ use App\SkillApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
 class CommentsController extends Controller
 {
     public function index()
     {
-            $comment = Comments::all();
-            return response()->json($comment,200);
+        $comment = Comments::all();
+        return response()->json($comment, 200);
     }
+
     public function create(Request $request, Comments $comment)
     {
         try {
@@ -24,27 +26,38 @@ class CommentsController extends Controller
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
-        $comment = new Comments;
-        $comment->comment = $request->comment;
-        $comment->user_id = auth()->user()->id;
-        $comment->receiver_id = $request->receiver_id;
-        $comment->rating = $request->rating;
-        $comment->save();
+        $validation = Validator::make($request->all(), [
+            'receiver_id' => 'required',
+            'rating' => 'required',
+        ]);
+        $comment = Comments::select('*')->where('user_id', auth()->user()->id)->where('receiver_id', $request->receiver_id)->get();
+        if (count($comment)<1){
 
-        $user = User::select('name', 'foto')
-            ->where('users.id', $comment->user_id)
-            ->get();
-        $comRes = [
-            'id' => $comment->id,
-            'comment' => $comment->comment,
-            'user_id' => $comment->user_id,
-            'receiver_id' => $comment->receiver_id,
-            'rating' => $comment->rating,
-            'name' => $user[0]->name,
-            'foto' => $user[0]->foto,
-        ];
-        return response()->json($comRes, 200);
+
+            $comment = new Comments;
+            $comment->comment = $request->comment;
+            $comment->user_id = auth()->user()->id;
+            $comment->receiver_id = $request->receiver_id;
+            $comment->rating = $request->rating;
+            $comment->save();
+
+            $user = User::select('name', 'foto')
+                ->where('users.id', $comment->user_id)
+                ->get();
+            $comRes = [
+                'id' => $comment->id,
+                'comment' => $comment->comment,
+                'user_id' => $comment->user_id,
+                'receiver_id' => $comment->receiver_id,
+                'rating' => $comment->rating,
+                'name' => $user[0]->name,
+                'foto' => $user[0]->foto,
+            ];
+            return response()->json($comRes, 200);
+        }
+        return response()->json(['error'=>['limit'=>1]], 400);
     }
+
 
     public function update(Request $request, Comments $comment)
     {
@@ -53,6 +66,10 @@ class CommentsController extends Controller
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
             return response()->json(['error' => 'Prašome prisijungti'], 401);
         }
+        $validation = Validator::make($request->all(), [
+            'comment' => 'required',
+            'rating' => 'required',
+        ]);
 
         $comment->comment = $request->comment;
         $comment->rating = $request->rating;

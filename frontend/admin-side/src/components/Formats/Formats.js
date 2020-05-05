@@ -82,7 +82,6 @@ class Skills extends Component{
                     }
                 } else {
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-success\" role=\"alert\">Formatas pridėtas</div>"
-                    this.mainInput.value = "";
                     this.setState({refetch: true});
                 }
             }).catch(error => {
@@ -169,9 +168,9 @@ class Skills extends Component{
                             <p>mime tipus galite rasti <a href="https://www.freeformatter.com/mime-types-list.html">čia</a></p>
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
-                                    <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.formatName} onChange={this.handleFormatName} className="form-control" id="exampleInput"
+                                    <input type="text" value={this.state.formatName} onChange={this.handleFormatName} className="form-control" id="exampleInput"
                                            placeholder="Įveskite pavadinimą"></input>
-                                    <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.fileType} onChange={this.handleChangeFileType} className="form-control" id="exampleInput"
+                                    <input type="text" value={this.state.fileType} onChange={this.handleChangeFileType} className="form-control" id="exampleInput"
                                            placeholder="Įrašykite mime tipą"></input>
                                 </div>
                                 <button type="submit" value="Submit"  className="btn btn-success">Įrašyti</button>
