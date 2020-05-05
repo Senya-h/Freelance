@@ -36,7 +36,7 @@ const PORTFOLIO_TYPES = {
 
 const PortfolioForm = (props) => {
     const classes = useStyles();
-    const [formats, setFormats] = useState(["Kraunama..."]);
+    const [formats, setFormats] = useState([]);
 
     useEffect(() => {
         axios.get('/format-list')
@@ -130,10 +130,7 @@ const PortfolioForm = (props) => {
 
     const setFile = (e) => {
         if(e.target.files[0]) {
-            console.log(e.target.files[0].type.split('/')[1]);
-            console.log(e.target.files[0].type.split('/')[1].toString());
-            console.log(e.target.files[0]);
-            if(formats.map(format => format.format).includes(e.target.files[0].type.split('/')[1])) {
+            if(formats.map(format => format.fileType).includes(e.target.files[0].type)) {
                 formik.setFieldValue('localFile', {
                     file: e.target.files[0],
                     link: URL.createObjectURL(e.target.files[0])
@@ -155,7 +152,7 @@ const PortfolioForm = (props) => {
         switch(formik.values.localFile.file.type.split('/')[0]) {
             case "video":
                 portfolioDisplayMode = (
-                    <ReactPlayer url={formik.values.localFile.link} controls width="100%" height="auto"/>
+                    <ReactPlayer url={formik.values.localFile.link} controls width="300px" height="auto"/>
                 )
                 break;
             case "image":
@@ -165,7 +162,7 @@ const PortfolioForm = (props) => {
                 break;
             case "application":
                 portfolioDisplayMode = (
-                    <img className={classes.portfolioImage} style={{objectFit: 'scale-down'}} src={`${baseURL}/storage/portfolioWorks/textFile.png`} alt={props.title}/>
+                    <img style={{width: '50px', display: 'inline', marginBottom:'15px'}} src={`${baseURL}/storage/portfolioWorks/textFile.png`} alt={props.title}/>
                 )
                 break;
             default:
@@ -202,7 +199,7 @@ const PortfolioForm = (props) => {
             >
                 <ul style={{paddingLeft: 0}}>
                     {formats.map(format => (
-                        <li style={{display: 'inline-block', listStyle: 'none', marginRight: '5px', marginLeft: '5px'}} key={format.id}>{format.format}</li>
+                        <li key={format.id} style={{display: 'inline-block', listStyle: 'none', marginRight: '5px', marginLeft: '5px'}} key={format.id}>{format.format}</li>
                     ))}
                 </ul>
             </Popover>
