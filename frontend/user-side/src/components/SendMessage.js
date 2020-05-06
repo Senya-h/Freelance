@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import classes from './SendMessage.module.scss';
 
 import MessageIcon from '@material-ui/icons/Message';
 import SendIcon from '@material-ui/icons/Send';
@@ -15,10 +14,31 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {useFormik} from 'formik';
 import {object as yupObject, string as yupString} from 'yup';
+import {makeStyles} from '@material-ui/core/styles';
 
-import axios from '../../../../axios';
+import axios from '../axios';
+
+const useStyles = makeStyles(theme => ({
+    dialog: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: '#eee',
+        borderRadius: '5px',
+        width: '900px',
+        height: '500px',
+        padding: '20px 40px',
+    },
+    closeBtn: {
+        position: 'absolute',
+        top: '5px',
+        right: '5px'
+    }
+}))
 
 const SendMessage = props => {
+    const classes = useStyles();
     let alertMessage = null;
     const [open, setOpen] = useState(false)
 
@@ -72,9 +92,9 @@ const SendMessage = props => {
                 Siųsti žinutę
             </Button>
             <Dialog open={open} onClose={handleClose} fullWidth>
-                <div style={{left: '50%', top: '50%', translate: 'transformX(-50%,-50%)'}} className={classes.Modal}>
+                <div style={{left: '50%', top: '50%', translate: 'transformX(-50%,-50%)'}} className={classes.dialog}>
                     <DialogTitle>Adresatas: {props.recipientName}</DialogTitle>
-                    <IconButton onClick={handleClose} className={classes.CloseButton}>
+                    <IconButton onClick={handleClose} className={classes.closeBtn}>
                         <CloseIcon />
                     </IconButton>
                     <form onSubmit={formik.handleSubmit}>

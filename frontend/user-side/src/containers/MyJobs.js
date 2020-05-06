@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import ConfirmDeleteModal from './Profile/FreelancerProfile/ConfirmDeleteModal';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 import {Link} from 'react-router-dom';
 import Loader from 'react-loader-spinner';

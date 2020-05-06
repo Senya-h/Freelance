@@ -3,7 +3,7 @@ import PrivateRoute from './PrivateRoute';
 import RoleRoute from './RoleRoute';
 
 import Navbar from './components/Navbar/Navbar';
-import FreelancerProfile from './containers/Profile/FreelancerProfile/FreelancerProfile';
+import FreelancerProfile from './containers/Profile/FreelancerProfile';
 import ClientProfile from './containers/Profile/ClientProfile/ClientProfile';
 import Profile from './containers/Profile/Profile';
 

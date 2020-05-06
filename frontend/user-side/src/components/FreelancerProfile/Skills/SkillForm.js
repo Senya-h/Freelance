@@ -16,7 +16,6 @@ const SkillForm = (props) => {
         },
         onSubmit: values => {
             //Submitting user's skills to the server
-            console.log("Submitting skills: ", values)
             if(props.noAxios) {
                 if(props.setFieldValue) {
                     const newSkills = [];

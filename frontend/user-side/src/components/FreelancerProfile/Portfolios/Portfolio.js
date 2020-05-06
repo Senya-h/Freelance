@@ -9,7 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles} from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
 import mime from 'mime-types';
-import FileViewer from 'react-file-viewer';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,22 +57,6 @@ const useStyles = makeStyles(theme => ({
             objectFit: 'cover'
         }
     },
-    fileViewer: {
-        height: '100%',
-
-        '& > .pg-viewer-wrapper': {
-            overflowY: 'hidden',
-            height: '100%'
-        },
-        '& canvas': {
-            width: '100%',
-            overflowY: 'hidden'
-        },
-        '& .pdf-canvas, & .pdf-viewer-container, & .pdf-viewer': {
-            width: '100%',
-            height: '100%'
-        }
-    }
 }))
 
 
@@ -145,7 +128,6 @@ const Portfolio = (props) => {
         default:
             break;
     }
-
     return (
         <>
         <div className={classes.portfolio} >

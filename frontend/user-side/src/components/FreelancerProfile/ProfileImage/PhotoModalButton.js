@@ -45,7 +45,7 @@ const PhotoModalButton = (props) => {
             }).then(res => {
                 console.log(res);
                 if(!res.error) {
-                    props.setUserInfo({...props.userInfo, photo: res.data.file})
+                    props.setProfileImage(res.data.file)
                     handleClose();
                 }
                 
@@ -67,7 +67,7 @@ const PhotoModalButton = (props) => {
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
                 <DialogContent>
                     <FormGroup>
-                        <img style={{width: '300px'}} src={formik.values.localFile? formik.values.localFile: `${baseURL}/storage/${props.userInfo.photo}`} alt="portfolio" />
+                        <img style={{width: '300px'}} src={formik.values.localFile? formik.values.localFile: `${baseURL}/storage/${props.profileImage}`} alt="portfolio" />
                         {formik.errors.formFile ? (
                         <div className='text-danger'>{formik.errors.formFile}</div>
                         ) : null}
