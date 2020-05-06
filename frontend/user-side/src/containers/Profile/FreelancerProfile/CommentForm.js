@@ -41,7 +41,7 @@ const CommentForm = (props) => {
             rating: yupString().min(1).max(5),
         }),
         onSubmit: values => {
-            props.isUploading(true);
+            props.setUploading(true);
 
             if(toEdit) {
                 axios.put('comment/' + props.commentToEdit.id, values, {
@@ -49,7 +49,7 @@ const CommentForm = (props) => {
                         'Authorization': 'Bearer ' + props.token
                     }
                 }).then(res => {
-                    props.isUploading(false);
+                    props.setUploading(false);
 
                     if(!res.error) {
                         props.handleClose();
@@ -63,7 +63,7 @@ const CommentForm = (props) => {
                         props.setComments(newComments)
                     }
                 }).catch(err => {
-                    props.isUploading(false);
+                    props.setUploading(false);
                     console.log(err);
                 })
             } else {
@@ -72,7 +72,7 @@ const CommentForm = (props) => {
                         'Authorization': 'Bearer ' + props.token,
                     }
                 }).then(res => {
-                    props.isUploading(false);
+                    props.setUploading(false);
 
                     if(!res.error && res.status === 200) {
                         props.handleClose();
@@ -80,7 +80,7 @@ const CommentForm = (props) => {
                     }
                 })
                 .catch(err => {
-                    props.isUploading(false);
+                    props.setUploading(false);
 
                     console.log(err);
                 })

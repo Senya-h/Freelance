@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Box from '@material-ui/core/Box';
 import {useFormik} from 'formik';
-import axios, {baseURL} from '../../../axios';
+import axios, {baseURL, maxFileSize} from '../../../axios';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
@@ -72,6 +72,11 @@ const PortfolioForm = (props) => {
                 if(!res.data.error) {
                     
                     console.log("Darbas pridetas", res)
+                    const newWork = res.data;
+                    newWork.clientApprove = {
+                        approve: 0,
+                        clientName: ''
+                    };
                     props.setWorks([...props.works, res.data]);
                     props.setUploading(false);
                     props.handleClose();
@@ -85,16 +90,22 @@ const PortfolioForm = (props) => {
 
         if(e.target.files[0]) {
             if(formats.map(format => format.fileType).includes(e.target.files[0].type)) {
-                formik.setFieldValue('localFile', {
-                    file: e.target.files[0],
-                    link: URL.createObjectURL(e.target.files[0])
-                });
-                formik.setFieldValue('formFile', e.currentTarget.files[0]);
-                formik.setFieldError('formFile', '');
+                if(e.target.files[0].size > maxFileSize) {
+                    formik.setFieldValue('localFile', '');
+                    formik.setFieldValue('formFile', '');
+                    formik.setFieldError('formFile', "Failas per didelis");
+                } else {
+                    formik.setFieldValue('localFile', {
+                        file: e.target.files[0],
+                        link: URL.createObjectURL(e.target.files[0])
+                    });
+                    formik.setFieldValue('formFile', e.currentTarget.files[0]);
+                    formik.setFieldError('formFile', '');
+                }
             } else {
                 formik.setFieldValue('localFile', '');
                 formik.setFieldValue('formFile', '');
-                formik.setFieldError('formFile', "Nepalaikomas failo formatas")
+                formik.setFieldError('formFile', "Nepalaikomas failo formatas");
             }
             
         }
@@ -137,7 +148,7 @@ const PortfolioForm = (props) => {
     return (
         <div>
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
-                <DialogContent className={classes.root} >
+                <DialogContent className={classes.root} dividers>
                     <div>
                         <TextField fullWidth label="Pavadinimas" variant='outlined' {...formik.getFieldProps('title')} />
                         {formik.touched.description && formik.errors.title ? (
@@ -196,7 +207,7 @@ const PortfolioForm = (props) => {
                             </Popover>
                         </div>
 
-                        <p>Maksimalus failo dydis: XXX MB</p>
+                        <p>Maksimalus failo dydis: 50 MB</p>
                     </Box>
                 </DialogContent>
                 <DialogActions>
