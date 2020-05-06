@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Box from '@material-ui/core/Box';
 import {useFormik} from 'formik';
-import axios, {baseURL} from '../../../axios';
+import axios, {baseURL, maxFileSize} from '../../../axios';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 import ReactPlayer from 'react-player';
@@ -69,18 +69,21 @@ const PortfolioForm = (props) => {
                     'Access-Control-Allow-Origin': '*'
                 }
             }).then(res => {
-                console.log(res);
+                props.setUploading(false);
                 if(!res.data.error) {
                     const updatedPortfolio = props.works.map(work => {
                         if(work.id === props.portfolioToEdit.id) {
                             work = res.data;
                             work.fileType = formik.values.localFile.fileType;
+                            work.clientApprove = {
+                                approve: 0,
+                                clientName: ''
+                            }
                         }
                         return work;
                     })
 
                     props.setWorks(updatedPortfolio);
-                    props.setUploading(false);
                     props.handleClose();
                 }
             })
@@ -95,14 +98,22 @@ const PortfolioForm = (props) => {
     const setFile = (e) => {
         if(e.target.files[0]) {
             if(formats.map(format => format.fileType).includes(e.target.files[0].type)) {
-                formik.setFieldValue('localFile', {
-                    fileType: e.target.files[0].type,
-                    name: e.target.files[0].name,
-                    size: e.target.files[0].size,
-                    link: URL.createObjectURL(e.target.files[0])
-                });
-                formik.setFieldValue('formFile', e.currentTarget.files[0]);
-                formik.setFieldError('formFile', '');
+                console.log(e.target.files[0]);
+                if(e.target.files[0].size > maxFileSize) {
+                    
+                    formik.setFieldValue('localFile', '');
+                    formik.setFieldValue('formFile', '');
+                    formik.setFieldError('formFile', "Failas per didelis")
+                } else {
+                    formik.setFieldValue('localFile', {
+                        fileType: e.target.files[0].type,
+                        name: e.target.files[0].name,
+                        size: e.target.files[0].size,
+                        link: URL.createObjectURL(e.target.files[0])
+                    });
+                    formik.setFieldValue('formFile', e.currentTarget.files[0]);
+                    formik.setFieldError('formFile', '');
+                }
             } else {
                 formik.setFieldValue('localFile', '');
                 formik.setFieldValue('formFile', '');
@@ -209,7 +220,7 @@ const PortfolioForm = (props) => {
                             </Popover>
                         </div>
 
-                        <p>Maksimalus failo dydis: XXX MB</p>
+                        <p>Maksimalus failo dydis: 50 MB</p>
  
                     </Box>
                 </DialogContent>

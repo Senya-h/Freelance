@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
+import ClientApproval from './ClientApproval';
 
 import Loader from 'react-loader-spinner';
 
@@ -74,7 +75,8 @@ const useStyles = makeStyles(theme => ({
     },
     skill: {
         borderBottom: '1px solid black',
-        fontSize: '19px'
+        fontSize: '19px',
+        marginRight: '5px'
     },
     red: {
         color: 'red'
@@ -105,6 +107,20 @@ const useStyles = makeStyles(theme => ({
     },
     sendMsgBtn: {
         marginBottom: theme.spacing(1)
+    },
+    iconClientApproved: {
+        color: '#3cff00'
+    },
+    iconClientNotApproved: {
+        color: '#9dff80'
+    },
+    skillsList: {
+        listStyle: 'none',
+        paddingLeft: '0',
+        display: 'flex',
+        '& > li > span': {
+            
+        }
     }
 }));
 
@@ -280,9 +296,11 @@ const FreelancerProfile = (props) => {
                                 </OpenDialogButton>
                                 : null}
                             </h4>
-                            <ul style={{listStyle: 'none'}}>
+                            <ul className={classes.skillsList} style={{listStyle: 'none'}} className="d-flex ">
                                 {skills.map(skill => (
-                                    <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
+                                    <li key={skill.id}>
+                                        <span className={classes.skill}>{skill.skill}</span>
+                                    </li>
                                 ))}
                             </ul>
                         </div>   
@@ -311,6 +329,8 @@ const FreelancerProfile = (props) => {
                                     <OpenDialogButton type="edit" title="Redaguoti portfolio">
                                         <EditPortfolioForm portfolioToEdit={work} token={authData.token} works={works} setWorks={setWorks} />
                                     </OpenDialogButton>
+                                    
+                                    <ClientApproval work={work} token={authData.token} />                   
                                     </>
                                     ):null}
                                 </Grid>

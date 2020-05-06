@@ -75,7 +75,7 @@ const OpenDialogButton = (props) => {
     return (
         <>
         {iconType}
-        <Dialog style={{position: 'relative'}} open={open} onClose={handleClose} fullWidth>                          
+        <Dialog scroll="paper" open={open} onClose={handleClose} fullWidth>                          
             <DialogTitle>{props.title}</DialogTitle>
             {childWithProps}
 
