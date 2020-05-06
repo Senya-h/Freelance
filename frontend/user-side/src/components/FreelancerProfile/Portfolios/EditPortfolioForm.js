@@ -74,7 +74,7 @@ const PortfolioForm = (props) => {
                     const updatedPortfolio = props.works.map(work => {
                         if(work.id === props.portfolioToEdit.id) {
                             work = res.data;
-                            work.fileType = formik.values.localFile.fileType;
+                            work.id = props.portfolioToEdit.id;
                             work.clientApprove = {
                                 approve: 0,
                                 clientName: ''
@@ -97,7 +97,6 @@ const PortfolioForm = (props) => {
     const setFile = (e) => {
         if(e.target.files[0]) {
             if(formats.map(format => format.fileType).includes(e.target.files[0].type)) {
-                console.log(e.target.files[0]);
                 if(e.target.files[0].size > maxFileSize) {
                     
                     formik.setFieldValue('localFile', '');

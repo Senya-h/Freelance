@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 const CommentForm = (props) => {
     const classes = useStyles();
+
     const toEdit = props.commentToEdit? true: false;
 
     const formik = useFormik({

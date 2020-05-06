@@ -4,6 +4,7 @@ import OpenDialogButton from '../../OpenDialogButton';
 import Portfolio from './Portfolio';
 import ClientApproval from './ClientApproval';
 import EditPortfolioForm from './EditPortfolioForm';
+import { useAuth } from '../../../context/auth';
 
 
 
@@ -25,8 +26,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Portfolios = ({visitingUserID, profileUserID, token, userPortfolios, startDeleteModal}) => {
+const Portfolios = ({visitingUserID, profileUserID, userPortfolios, startDeleteModal}) => {
     const classes = useStyles();
+    const { authData } = useAuth();
+
     const [portfolios, setPortfolios] = useState([]);
 
     useEffect(() => {
@@ -40,16 +43,22 @@ const Portfolios = ({visitingUserID, profileUserID, token, userPortfolios, start
                 Portfolio
                 {visitingUserID === profileUserID?
                     <OpenDialogButton type="add" title="Pridėti portfolio">
-                        <PortfolioForm token={token} works={portfolios} setWorks={setPortfolios} />
+                        <PortfolioForm token={authData.token} works={portfolios} setWorks={setPortfolios} />
                     </OpenDialogButton>
                     : null}
             </h2>
             </Grid>
             
-            {portfolios.filter(portfolio => portfolio.approved || visitingUserID === profileUserID).map(portfolio => (
+            {portfolios.filter(portfolio => portfolio.approved === 1 || visitingUserID === profileUserID).map(portfolio => (
             <Grid item className={classes.portfolio} key={portfolio.id} xs={12} md={5}>
-                <Portfolio title={portfolio.title} imageUrl={portfolio.filePath} description={portfolio.description} approved={portfolio.approved} />
-                {visitingUserID === profileUserID? (
+                <Portfolio 
+                    title={portfolio.title} 
+                    imageUrl={portfolio.filePath} 
+                    description={portfolio.description} 
+                    approved={portfolio.approved}
+                    clientApproveName={portfolio.clientApprove.clientName} 
+                />
+                {visitingUserID === profileUserID && (
                 <>
                 <IconButton 
                     style={{position: 'absolute', right: '0', top: '0'}} 
@@ -62,15 +71,11 @@ const Portfolios = ({visitingUserID, profileUserID, token, userPortfolios, start
                 </IconButton>
 
                 <OpenDialogButton type="edit" title="Redaguoti portfolio">
-                    <EditPortfolioForm portfolioToEdit={portfolio} token={token} works={portfolios} setWorks={setPortfolios} />
+                    <EditPortfolioForm portfolioToEdit={portfolio} token={authData.token} works={portfolios} setWorks={setPortfolios} />
                 </OpenDialogButton>
-                
                 </>
-                
-                )
-                :
-                <ClientApproval portfolio={portfolio} token={token} work={portfolio} />                   
-                }
+                )}
+                <ClientApproval portfolio={portfolio} portfolios={portfolios} setPortfolios={setPortfolios} />
             </Grid>
             )
         )}

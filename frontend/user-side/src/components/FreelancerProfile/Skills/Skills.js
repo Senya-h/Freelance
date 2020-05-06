@@ -4,6 +4,7 @@ import OpenDialogButton from '../../OpenDialogButton';
 
 import {makeStyles} from '@material-ui/core/styles';
 import axios from '../../../axios';
+import { useAuth } from '../../../context/auth';
 
 const useStyles = makeStyles(theme => ({
     skillsList: {
@@ -17,8 +18,10 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const Skills = ({visitingUserID, profileUserID, token, userSkills}) => {
+const Skills = ({visitingUserID, profileUserID, userSkills}) => {
     const classes = useStyles();
+    const { authData } = useAuth();
+
     const [allSkills, setAllSkills] = useState([]);
     const [currSkills, setCurrSkills] = useState([]);
 
@@ -46,7 +49,7 @@ const Skills = ({visitingUserID, profileUserID, token, userSkills}) => {
                 Gebėjimai
                 {visitingUserID === profileUserID?
                 <OpenDialogButton type="edit" form="skill" title="Mano gebėjimai" >
-                    <SkillForm token={token} allSkills={allSkills} checkedSkills={currSkills.map(skill => skill.id.toString())} setSkills={setCurrSkills}/>
+                    <SkillForm token={authData.token} allSkills={allSkills} checkedSkills={currSkills.map(skill => skill.id.toString())} setSkills={setCurrSkills}/>
                 </OpenDialogButton>
                 : null}
             </h4>

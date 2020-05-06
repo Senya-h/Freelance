@@ -68,7 +68,7 @@ const useStyles = makeStyles(theme => ({
 const FreelancerProfile = (props) => {
     const classes = useStyles();
     //Get logged in user information
-    let { authData } = useAuth();
+    const { authData } = useAuth();
     const {id} = useParams();
 
     //if the visiting user is authenticated
@@ -118,7 +118,6 @@ const FreelancerProfile = (props) => {
         <Comments 
             visitingUserID={visitingUserID}
             profileUserID={profileUserID}
-            token={authData.token}
             comments={userInfo.comments}
         />
     )
@@ -159,7 +158,6 @@ const FreelancerProfile = (props) => {
                             <Services 
                                 visitingUserID={visitingUserID}
                                 profileUserID={profileUserID}
-                                token={authData.token}
                                 userServices={userInfo.services}
                                 startDeleteModal={startDeleteModal}
                             />
@@ -167,7 +165,6 @@ const FreelancerProfile = (props) => {
                             <Skills
                                 visitingUserID={visitingUserID}
                                 profileUserID={profileUserID}
-                                token={authData.token} 
                                 userSkills={userInfo.skills}
                             />
                         </Grid>
@@ -177,7 +174,6 @@ const FreelancerProfile = (props) => {
                             <Portfolios
                                 visitingUserID={visitingUserID}
                                 profileUserID={profileUserID}
-                                token={authData.token}
                                 userPortfolios={userInfo.portfolios}
                                 startDeleteModal={startDeleteModal}
                             />
@@ -192,7 +188,6 @@ const FreelancerProfile = (props) => {
                         <ProfileImage 
                             visitingUserID={visitingUserID}
                             profileUserID={profileUserID}
-                            token={authData.token}
                             userPhoto={userInfo.photo}
                         />
                         <div className={classes.desktop}>

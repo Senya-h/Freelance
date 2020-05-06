@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PhotoModalButton from './PhotoModalButton';
 import {baseURL} from '../../../axios';
+import { useAuth } from '../../../context/auth';
 
 import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
@@ -25,8 +26,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ProfileImage = ({visitingUserID, profileUserID, userPhoto, token}) => {
+const ProfileImage = ({visitingUserID, profileUserID, userPhoto}) => {
     const classes = useStyles();
+    const {authData} = useAuth();
     const [profileImage, setProfileImage] = useState("");
 
     useEffect(() => {
@@ -42,7 +44,7 @@ const ProfileImage = ({visitingUserID, profileUserID, userPhoto, token}) => {
                     className={classes.imageAddIcon}
                     profileImage={profileImage} 
                     setProfileImage={setProfileImage}
-                    token={token} 
+                    token={authData.token} 
                 />
                 : null}
             </div>

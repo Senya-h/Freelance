@@ -57,6 +57,12 @@ const useStyles = makeStyles(theme => ({
             objectFit: 'cover'
         }
     },
+    dialogTitle: {
+        '& > h2 > p': {
+            fontSize: '15px',
+            marginBottom: 0
+        }
+    }
 }))
 
 
@@ -143,7 +149,14 @@ const Portfolio = (props) => {
             }
         </div>
         <Dialog open={open} onClose={handleClose} fullWidth>                          
-            <DialogTitle>{props.title}</DialogTitle>
+            <DialogTitle className={classes.dialogTitle}>
+                {props.title}
+                {props.clientApproveName? 
+                    <p>Darbo nuosavybę patvirtino: {props.clientApproveName}</p>
+                    :
+                    <p>Darbo nuosavybė nepatvirtinta</p>
+                }
+            </DialogTitle>
             <DialogContent className={classes.root} >
                 {displayDialogMode}
             </DialogContent>

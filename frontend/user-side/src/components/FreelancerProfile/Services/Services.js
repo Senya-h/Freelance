@@ -4,6 +4,7 @@ import OpenDialogButton from '../../OpenDialogButton';
 import {makeStyles} from '@material-ui/core';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import IconButton from '@material-ui/core/IconButton';
+import { useAuth } from '../../../context/auth';
 
 const useStyles = makeStyles(theme => ({
     service: {
@@ -22,8 +23,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Services = ({visitingUserID, profileUserID, userServices, token, startDeleteModal}) => {
+const Services = ({visitingUserID, profileUserID, userServices, startDeleteModal}) => {
     const classes = useStyles();
+    const { authData } = useAuth();
 
     const [services, setServices] = useState([]);
 
@@ -37,7 +39,7 @@ const Services = ({visitingUserID, profileUserID, userServices, token, startDele
                 Siūlomos paslaugos
                 {visitingUserID === profileUserID? 
                 <OpenDialogButton type="add" title="Pridėti paslaugą">
-                    <ServiceForm services={services} setServices={setServices} token={token} />
+                    <ServiceForm services={services} setServices={setServices} token={authData.token} />
                 </OpenDialogButton>
                 : null}             
             </h4>
@@ -59,7 +61,7 @@ const Services = ({visitingUserID, profileUserID, userServices, token, startDele
                             <RemoveCircleIcon classes={{root: classes.iconBg, colorPrimary: classes.red}} color='primary'/>
                         </IconButton>
                         <OpenDialogButton type="edit" title="Redaguoti paslaugą">
-                            <ServiceForm serviceToEdit={service} services={services} setServices={setServices} token={token} />
+                            <ServiceForm serviceToEdit={service} services={services} setServices={setServices} token={authData.token} />
                         </OpenDialogButton>
                         </>
                         ): null}

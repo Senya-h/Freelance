@@ -3,6 +3,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {makeStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import axios from '../../../axios';
+import {useAuth} from '../../../context/auth';
 
 const useStyles = makeStyles(theme => ({
     iconBg: {
@@ -18,25 +19,43 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const ClientApproval = (props) => {
+const ClientApproval = ({portfolio, portfolios, setPortfolios}) => {
     const classes = useStyles();
+    const {authData} = useAuth();
 
     const approvePortfolio = (id) => {
-        console.log("ID: ", id);
+        // if client and id not equal to profile id
+        if(!authData || authData.userRole !== 2) {
+            return;
+        }
         axios.post('/project', {work_id: id}, {
             headers: {
-                'Authorization': 'Bearer ' + props.token
+                'Authorization': 'Bearer ' + authData.token
             }
         })
         .then(res => {
-            console.log(res);
-            props.work.clientApprove.approve = 1;
+            if(!res.data.error) {
+                setPortfolios(portfolios.map(portf => {
+                    if(portf.id === portfolio.id) {
+                        portf.clientApprove.approve = 1;
+                    }
+                    return portf;
+                }))
+            }
         })
     };
 
     return (
-        <IconButton style={{position: 'absolute', left: '0', top: '0'}} onClick={() => approvePortfolio(props.work.id)}>
-            <CheckCircleIcon fontSize="large" classes={{root: classes.iconBg, colorPrimary: props.work.clientApprove.approve? classes.iconClientApproved: classes.iconClientNotApproved}} color='primary' />
+        <IconButton 
+            disabled={portfolio.clientApprove.approve === 1 || !authData || authData.userRole !== 2} 
+            style={{position: 'absolute', left: '0', top: '0'}} 
+            onClick={() => approvePortfolio(portfolio.id)}
+        >
+            <CheckCircleIcon 
+                fontSize="large" 
+                classes={{root: classes.iconBg, colorPrimary: portfolio.clientApprove.approve? classes.iconClientApproved: classes.iconClientNotApproved}} 
+                color='primary' 
+            />
         </IconButton>
     )
 };
