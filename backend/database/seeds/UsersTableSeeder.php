@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
         $faker = Faker::create('App\User');
 
         $user = New User([
-            'name' => 'admin',
+            'name' => 'Workify administratorius',
             'email' => 'info@freelance.lt',
             'location' => 'Kaunas',
             'role' => 1,
