@@ -4,7 +4,10 @@ import axios, {baseURL} from '../../axios';
 import {Button, Card} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 import DeleteModal from '../DeleteModal';
+import PortfolioModal from './PortfolioModal';
 import {Link} from "react-router-dom";
+import ReactPlayer from 'react-player';
+import mime from 'mime-types';
 
 class Portfolio extends Component{
     _isMounted = false
@@ -17,8 +20,12 @@ class Portfolio extends Component{
             refetch: false,
             deleteModalShow:false,
             approveModalShow:false,
+            PortfolioModalShow:false,
             workID: "",
             modalWorkName: "",
+            imagePath: "",
+            description: "",
+            format: ""
         }
     }
     componentDidMount(){
@@ -73,6 +80,20 @@ class Portfolio extends Component{
                 approveModalShow:false
             })
     }
+    PortfolioModalOpen = (id, name, img, desc) => {
+        this.setState({
+            PortfolioModalShow:true,
+            workID:id,
+            modalWorkName: name,
+            imagePath: img,
+            description: desc
+    })
+    }
+    PortfolioModalClose = () => {
+            this.setState({
+                PortfolioModalShow:false
+            })
+    }
     
         delete = (id) => {
             axios.delete(`admin/delete/work&id=${this.state.workID}`, {
@@ -105,10 +126,31 @@ class Portfolio extends Component{
             
             this.approveModalClose();
         }
+        fileFormat(img) {
+            if(mime.lookup(img)) {
+                this.setState({
+                    format: mime.lookup(img).split('/')[0]
+                })
+                console.log(this.state.format)
+            }
+        }
 render() {
     const worksList = this.state.works.map(work => ( 
         <Card key={work.id} className="col-lg-4" style={{ width: '18rem' }}>
-        <Card.Img variant="top" className="imgMax" src={`${baseURL}/storage/${work.filePath}`} />
+        {
+            mime.lookup(work.filePath).split('/')[0] === "image" ? 
+            (
+                <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax" src={`${baseURL}/storage/${work.filePath}`} />
+            ) :
+            mime.lookup(work.filePath).split('/')[0] === "video" ? 
+            (
+                <ReactPlayer onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} className="imgMax" url={`${baseURL}/storage/${work.filePath}`} />
+            ) 
+            : 
+            (
+                <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax" src={`${baseURL}/storage/portfolioWorks/textFile.png`} />
+            )
+        }
         <Card.Body>
             <Card.Title>{work.title}</Card.Title>
             <Card.Text>
@@ -160,6 +202,13 @@ render() {
                                 text={`Ar tikrai norite patvirtinti šį darbą? ( ${this.state.modalWorkName} )`}
                                 token={this.state.token}
                                 btn={"Patvirtinti"}
+                            />
+                            <PortfolioModal
+                                title = {this.state.modalWorkName}
+                                show={this.state.PortfolioModalShow}
+                                onHide={this.PortfolioModalClose}
+                                filePath={this.state.imagePath}
+                                description={this.state.description}
                             />
                         <div className="row">
                             {worksList}

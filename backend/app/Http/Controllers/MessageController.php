@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\DB;
 class MessageController extends Controller
 {
     
-    public function fromMsg($receivers_id)
+    public function fromMsg($senders_id)
     {
-        $senders_id = auth()->user()->id;
+        $receivers_id = auth()->user()->id;
         $allMessages = Message::select('messages.*', 'users.foto')
                     ->join('users','users.id', 'messages.senders_id')
                     ->orderBy('created_at', 'asc')
@@ -22,12 +22,13 @@ class MessageController extends Controller
         $messages = [];
         foreach($allMessages as $msg) {
             $message = [];
-            if($msg->senders_id == $senders_id || $msg->receivers_id == $senders_id) {
+            if($msg->senders_id == $senders_id && $msg->receivers_id == $receivers_id
+                || $msg->senders_id == $receivers_id && $msg->receivers_id == $senders_id) {
                 if($msg->senders_id == $senders_id) {
                     $status = 'sended';
-                    $foto = '';
-                } else if($msg->receivers_id == $senders_id) {
                     $foto = $msg->foto;
+                } else if($msg->receivers_id == $senders_id) {
+                    $foto = '';
                     $status = 'received';
                 }
                 $messages[] = [
@@ -40,27 +41,9 @@ class MessageController extends Controller
                     'created_at' => $msg->created_at,
                     'status'=>$status
                 ];
-            }
-            
+            }   
         }
-        
-        /*
         Message::where('senders_id',$senders_id)->where('receivers_id',$receivers_id)->update(['notification_read' => 1]);
-        $receiver = Message::select('*')
-                                ->where('senders_id',$senders_id)
-                                ->where('receivers_id',$receivers_id)
-                                ->get();
-        */
-        //$sender = Message::select('*')
-        //                        ->where('senders_id',$receivers_id)
-        //                        ->where('receivers_id',$senders_id)
-        //                        ->get();
-//
-        //$newMessages = [
-        //    $receiver,
-        //    $sender
-        //];
-
         return response()->json($messages,200);
     }
 

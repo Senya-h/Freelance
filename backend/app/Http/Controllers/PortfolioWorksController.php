@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PortfolioWorks;
+use App\ProjectApproval;
 use Illuminate\Http\Request;
 use File;
 use Gate;
@@ -130,6 +131,7 @@ class PortfolioWorksController extends Controller
                 'user_id' => $updated->user_id,
                 'fileType' => $fileType->fileType
             ];
+            ProjectApproval::where('work_id',$updated->id)->delete();
         } else if (Gate::denies('authorization', $work)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
