@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import AddCommentModal from './AddCommentModal';
 import CommentForm from './CommentForm';
+import {useAuth} from '../../../context/auth';
 
 const useStyles = makeStyles(theme => ({
     scrollableComments: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 const UserComments = (props) => {
     const classes = useStyles();
-
+    const {authData} = useAuth();
     let commentAuthorIndex = -1;
     let comments = [];
 
@@ -64,9 +65,9 @@ const UserComments = (props) => {
                 <p className={classes.commentName}>
                     {authorComment.name}
                     <Rating name='read-only' precision={0.25} value={authorComment.rating} readOnly />
-                    {authorComment.user_id === props.visitingUserID &&
+                    {authorComment.user_id === props.visitingUserID && authData &&
                     <AddCommentModal type="edit">
-                        <CommentForm setComments={props.setComments} allComments={props.allComments} token={props.token} commentToEdit={authorComment} />
+                        <CommentForm setComments={props.setComments} allComments={props.allComments} token={authData.token} commentToEdit={authorComment} />
                     </AddCommentModal>
                     }
                 </p>

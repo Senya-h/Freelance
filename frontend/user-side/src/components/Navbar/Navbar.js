@@ -108,12 +108,10 @@ const Navbar = () => {
             loginArea = (
                 <>
                     <li className={cx('nav-item', classes['nav-item'])}>
-
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
-                                Pranešimai
-                                <span className={classe.messageCount}>{messagesCount}</span>
-                            </NavLink>
-
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                            Pranešimai
+                            <span className={classe.messageCount}>{messagesCount}</span>
+                        </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
@@ -130,6 +128,11 @@ const Navbar = () => {
         } else if(authData.userRole === 2) {
             loginArea = (
                 <>
+                    <li className={cx('nav-item', classes['nav-item'])}>
+                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                            Pranešimai
+                        </NavLink>
+                    </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/new-offer' activeClassName={classes['active']}>
                              Sukurti skelbimą
@@ -138,11 +141,6 @@ const Navbar = () => {
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
                         <NavLink className={cx('nav-link', classes['nav-link'])} to='/my-jobs' activeClassName={classes['active']}>
                              Mano Skelbimai
-                        </NavLink>
-                    </li>
-                    <li className={cx('nav-item', classes['nav-item'])}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
-                            Pranešimai
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
