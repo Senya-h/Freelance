@@ -1,0 +1,21 @@
+
+
+.sended{
+    background-color: rgba(255, 0, 0, 0.397);
+    float: left;
+}
+
+.received{
+    background-color: rgba(0, 0, 255, 0.301);
+    float: right;
+}
+
+.received_disable{
+    display: none;
+}
+
+.both{
+    width: 50%;
+    margin: 5px;
+    border-radius: 20px;
+}
