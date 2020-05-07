@@ -65,7 +65,7 @@ const NewOffer = (props) => {
         salary: Yup.number().min(0, 'Atlyginimas negali būti mažesnis už 0').required("Privalomas laukelis"),
     });
 
-    const handleSubmit = values => {  
+    const handleSubmit = (values, {setSubmitting}) => {  
         console.log(values);
         
         axios.post('/joboffer', {...values, skills: values.skills.map(skill => skill.id)}, {
@@ -74,6 +74,7 @@ const NewOffer = (props) => {
             }
         })
             .then(res => {
+                setSubmitting(false);
                 console.log(res);
                 if(!res.data.error && res.status === 201) {
                     props.history.push({
@@ -82,6 +83,7 @@ const NewOffer = (props) => {
                 }
             })
             .catch(err => {
+                setSubmitting(false);
                 console.log(err);
             })
     }
@@ -137,7 +139,7 @@ const NewOffer = (props) => {
                         </ul>
                     </div>
                     <div>
-                        <TextField label='Atlyginimas' name='salary' placeholder="0" type="number" color='primary' onChange={handleChange} onBlur={handleBlur} value={values.salary} />
+                        <TextField label='Mėnesinis atlyginimas' name='salary' placeholder="0" type="number" color='primary' onChange={handleChange} onBlur={handleBlur} value={values.salary} />
                         <ErrorMessage name='salary' render={msg => <div className='text-danger'>{msg}</div>} />
                     </div>
 

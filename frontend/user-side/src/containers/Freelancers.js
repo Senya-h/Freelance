@@ -189,21 +189,20 @@ const Freelancers = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={`${classes.mainGrid} ${freelancers.length? null: classes.noResults}`}>
+        <Grid container spacing={4} className={`${classes.mainGrid} ${freelancers.length? null: classes.noResults}`}>
             {freelancers.length? freelancers.map(freelancer => {
-                const services = freelancer.portfolio.services.map(service => <span key={service.id}>{service.service} , </span>)
-                const skills = freelancer.portfolio.skills.map(skill => <span key={skill.id}>{skill.skill}, </span>)
+                const services = freelancer.portfolio.services.map((service, index) => <span key={service.id}>{service.service} {freelancer.portfolio.services.length === (index + 1) ? '': '|'} </span>)
+                const skills = freelancer.portfolio.skills.map((skill, index) => <span key={skill.id}>{skill.skill}{freelancer.portfolio.skills.length === (index + 1) ? '': ','} </span>)
                 return (
                     <Grid key={freelancer.info.id} item xs={12}>
-                        <Grid container item className="p-4 bg-white">
+                        <Grid container item className="pr-4 pt-4 pl-4 bg-white">
                             <Grid item className="img" style={{backgroundImage: freelancer.info.foto? `url('${baseURL}/storage/${freelancer.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid>
-                            <Grid item className="text pl-md-4">
+                            <Grid item className="text pl-4">
                                 <span className="location mb-0">{freelancer.info.location}</span>
                                 <h2 className={classes.name}>{freelancer.info.name}</h2>
                                 
                                 <h4 className="mb-2">{services}</h4>
-                                <h5 className="mb-2">{skills}</h5>
-                                <p className="seen">Last Activity 4 months ago</p>
+                                <h5 className="mb-2">Gebėjimai: {skills}</h5>
                                 <Button className={classes.linkButton} component={Link} to={`/freelancer/${freelancer.info.id}`} variant='contained' color='primary'>Daugiau</Button>
                             </Grid>
                         </Grid>

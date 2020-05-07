@@ -80,7 +80,7 @@ const Message = (props) => {
                 setMessagesList(res.data);
                 
             });
-    },[]);
+    },[authData.token, props.user]);
 
     const handleSubmit = values => {  
         console.log(values);

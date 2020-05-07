@@ -86,6 +86,7 @@ const NewOffer = (props) => {
                 }
             })
                 .then(res => {
+                    formik.setSubmitting(false);
                     console.log(res);
                     if(!res.data.error && res.status === 200) {
                         props.history.push({
@@ -94,6 +95,7 @@ const NewOffer = (props) => {
                     }
                 })
                 .catch(err => {
+                    formik.setSubmitting(false);
                     console.log(err);
                 })
             }

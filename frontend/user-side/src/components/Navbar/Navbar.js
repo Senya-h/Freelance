@@ -98,7 +98,7 @@ const Navbar = () => {
             })
         }
 
-    },[]);
+    },[authData]);
 
 
     let loginArea = null;
@@ -176,7 +176,7 @@ const Navbar = () => {
     return (
         <NavBar bg="dark" expand="lg" className={classes.FtcoNavbarLight} id="ftco-navbar" ref={navbar}>
             <div className="container-fluid px-md-4	">
-                <Link to='/' className={cx('navbar-brand', classes['navbar-brand'])}>Workify</Link>
+                <Link to='/' className={cx('navbar-brand',  classes['navbar-brand'])}>Workify</Link>
                 <NavBar.Toggle className={classes['navbar-toggler']} data-toggle="collapse" data-target="#ftco-nav"
                         aria-controls="ftco-nav">
                     <span className="oi oi-menu"></span> Menu

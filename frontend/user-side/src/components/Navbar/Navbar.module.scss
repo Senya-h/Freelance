@@ -9,7 +9,11 @@
     .navbar-brand {
         color: #fff; 
         &:hover {
-            color: #000000
+            color: #000;
+        }
+
+        &:active, &:focus {
+            color: #fff !important;
         }
     }
 
@@ -165,10 +169,6 @@
             transition: .3s all ease-out; 
         }
 
-        .navbar-brand {
-            color: #000000; 
-        }
-
     }
 }
 
@@ -215,6 +215,10 @@
     } 
     .FtcoNavbarLight .navbar-brand {
         color: #fff; 
+
+        &:hover {
+            color: #ddd;
+        }
     } 
     .FtcoNavbarLight .navbar-nav {
         padding-bottom: 10px; 

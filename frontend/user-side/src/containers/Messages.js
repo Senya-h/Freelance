@@ -13,7 +13,6 @@ import TableRow from '@material-ui/core/TableRow';
 import {makeStyles} from '@material-ui/core/styles';
 //User authentikacija
 import { useAuth } from '../context/auth';
-import {Button} from 'react-bootstrap'
 
 import{
     BrowserRouter as Router,
@@ -77,7 +76,7 @@ const Messages = () => {
                 setMessagesList(res.data);
                 
             });
-    },[]);
+    },[authData.userID, authData.token]);
 
         let newMessageList = [];
         let numbers = [];

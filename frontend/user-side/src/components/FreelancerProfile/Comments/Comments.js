@@ -4,15 +4,15 @@ import CommentForm from './CommentForm';
 import UserComments from './UserComments';
 
 import Grid from '@material-ui/core/Grid';
-import {makeStyles} from '@material-ui/core/styles';
+// import {makeStyles} from '@material-ui/core/styles';
 import { useAuth } from '../../../context/auth';
 
-const useStyles = makeStyles(theme => ({
+// const useStyles = makeStyles(theme => ({
 
-}));
+// }));
 
 const Comments = ({visitingUserID, profileUserID, userComments}) => {
-    const classes = useStyles();
+    // const classes = useStyles();
     const [comments, setComments] = useState([]);
     const {authData} = useAuth();
 

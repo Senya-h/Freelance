@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import Loader from 'react-loader-spinner';
 
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Dialog from '@material-ui/core/Dialog';
-import EditIcon from '@material-ui/icons/Edit';
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';

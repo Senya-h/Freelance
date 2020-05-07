@@ -7,17 +7,12 @@ import Loader from 'react-loader-spinner';
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 
 import {useFormik} from 'formik';
-import axios, {baseURL} from '../axios';
-
-
-import Autocomplete from '../Autocomplete';
-import cities from '../cities';
+import axios from '../axios';
 import {useAuth} from '../context/auth';
 
 const useStyles = makeStyles(theme => ({
@@ -54,6 +49,22 @@ const useStyles = makeStyles(theme => ({
     submitBtn: {
         width: '100%',
         height: '100%'
+    },
+    buttons: {
+        display: 'flex',
+        justifyContent: 'space-around'
+    },
+    red: {
+        backgroundColor: 'red',
+        '&:hover': {
+            backgroundColor: 'red'
+        }
+    },
+    salad: {
+        backgroundColor: '#66e002',
+        '&:hover': {
+            backgroundColor: '#66e002'
+        }
     }
 }))
 
@@ -86,16 +97,13 @@ const MyJobs = (props) => {
 
     useEffect(() => {
         setLoading(true);
-        const query = new URLSearchParams(props.location.search);
-        const page = query.get('page') || '1';
-        const service = query.get('service') || '';
-        const skill = query.get('skill') || '';
-        const city = query.get('city') || '';
+        // const query = new URLSearchParams(props.location.search);
+        // const page = query.get('page') || '1';
 
-        let urlParams = page !== '1'? `page=${page}&`: '';
-        urlParams += skill? `skill=${skill}&`: '';
-        urlParams += service? `service=${service}&`: '';
-        urlParams += city? `city=${city}&`: '';
+        // let urlParams = page !== '1'? `page=${page}&`: '';
+        // urlParams += skill? `skill=${skill}&`: '';
+        // urlParams += title? `title=${title}&`: '';
+        // urlParams += city? `city=${city}&`: '';
 
 
         axios.get(`/myoffers`, {
@@ -123,18 +131,18 @@ const MyJobs = (props) => {
         }, [props.location.search, props.history, authData.token]);
 
     const query = new URLSearchParams(props.location.search);
-    const service = query.get('service') || '';
+    const title = query.get('title') || '';
     const skill = query.get('skill') || '';
     const city = query.get('city') || '';
 
     const formik = useFormik({
-        initialValues: {service, skill, city},
+        initialValues: {title, skill, city},
         onSubmit: values => {          
             setCurrentPage(1);
-            const service = values.service;
+            const title = values.title;
             const skill = values.skill;
             const city = values.city;
-            props.history.push(`/my-jobs?service=${service}&skill=${skill}&city=${city}`);
+            props.history.push(`/my-jobs?title=${title}&skill=${skill}&city=${city}`);
 
         }
     })
@@ -150,43 +158,6 @@ const MyJobs = (props) => {
 
     return (
         <>
-        <div className={classes.form} role="tabpanel">
-            <form autoComplete='chrome-off' onSubmit={formik.handleSubmit} className="search-job">
-                <Grid container spacing={1}>
-                    <Grid item xs={12} md={3}>
-                        <TextField autoComplete="off" value={formik.values.service} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('service')}/>
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        {console.log(skillNames)}
-                        <Autocomplete
-                            width="100%"
-                            options={skillNames}
-                            value={formik.values.skill}
-                            name="skill"
-                            label="Gebėjimas"
-                            change={(e, value) => {
-                                formik.setFieldValue('skill', value !== null? value: '')
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        <Autocomplete 
-                            width="100%"
-                            options={cities}
-                            value={formik.values.city}
-                            name="city"
-                            label="Miestas"
-                            change={(e, value) => {
-                                formik.setFieldValue('city', value !== null? value: '')
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3}>
-                        <Button className={classes.submitBtn} color='primary' type='submit' variant='contained'>Ieškoti</Button>
-                    </Grid>
-                </Grid>
-            </form>
-        </div>
         {isLoading?(          
         <div style={{backgroundColor: '#fff', textAlign: 'center', height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Loader 
@@ -199,15 +170,19 @@ const MyJobs = (props) => {
         <Grid container spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
-                    <Grid key={job.id} item xs={12}>
-                        <Grid container item className="p-4 bg-white">
-                            {/* <Grid item className="img" style={{backgroundImage: job.info.foto? `url('${baseURL}/storage/${job.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid> */}
-                            <Grid item className="text pl-md-4">
-                                <span className="location mb-0">{job.location}</span>
+                    <Grid key={job.id} item xs={12} md={4}>
+                        <Grid container item direction='column' align="center" className="p-4 bg-white">
+                            <Grid item className="text">
                                 <h2 className={classes.name}>{job.title}</h2>                                
-                                <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
-                                <Button className={classes.linkButton} component={Link} to={`/edit/job/${job.id}`} variant='contained' color='primary'>Redaguoti</Button>
-                                <Button className={classes.linkButton} onClick={() => handleDelete(job.id)} variant='contained' color='primary'>Šalinti</Button>
+                                <p>{job.city}</p>
+                                <p>{job.salary} €/mėn.</p>
+                                <p>{job.description}</p>
+                                <hr className={classes.divider} />
+                                <div className={classes.buttons} >
+                                    <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
+                                    <Button className={classes.linkButton} classes={{containedPrimary: classes.salad}}  component={Link} to={`/edit/job/${job.id}`} variant='contained' color='primary'>Redaguoti</Button>
+                                    <Button className={classes.linkButton} classes={{containedPrimary: classes.red}} onClick={() => handleDelete(job.id)} variant='contained' color='primary'>Šalinti</Button>
+                                </div>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -225,7 +200,7 @@ const MyJobs = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/my-jobs?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
+                            to={`/my-jobs?${item.page === 1 ? '': `page=${item.page}`}&title=${title}&skill=${skill}&city=${city}`}
                             {...item}
                         />
                     )}
