@@ -118,7 +118,7 @@ const FreelancerProfile = (props) => {
         <Comments 
             visitingUserID={visitingUserID}
             profileUserID={profileUserID}
-            comments={userInfo.comments}
+            userComments={userInfo.comments}
         />
     )
 

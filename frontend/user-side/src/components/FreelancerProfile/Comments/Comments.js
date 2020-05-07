@@ -24,13 +24,12 @@ const Comments = ({visitingUserID, profileUserID, userComments}) => {
         <Grid item>
             <h3>
                 <span>Atsiliepimai</span> 
-                {/* If is logged in and the visiting user is not the profile owner */}
                 {visitingUserID !== profileUserID && authData && authData.userRole === 2?
                 <AddCommentModal type="add" allComments={comments} visitingUserID={visitingUserID}>
                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                 </AddCommentModal>: null}
             </h3>
-            {/* <UserComments profileUserID={profileUserID} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID} /> */}
+            <UserComments profileUserID={profileUserID} token={authData.token} allComments={comments} setComments={setComments} visitingUserID={visitingUserID} />
         </Grid>
     )
 };
