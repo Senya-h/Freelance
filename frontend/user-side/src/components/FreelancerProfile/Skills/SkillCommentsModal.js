@@ -8,6 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DialogTitle from '@material-ui/core/DialogTitle'
 import {makeStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
+import {useAuth} from '../../../context/auth';
 
 const useStyles = makeStyles(theme => ({
     iconBg: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 const OpenDialogButton = (props) => {
     const classes = useStyles();
+    const {authData} = useAuth();
     const [isUploading, setUploading] = useState(false);
 
     const handleClose = () => {
@@ -65,9 +67,12 @@ const OpenDialogButton = (props) => {
         <>
         <Dialog scroll="paper" open={props.open} onClose={handleClose} fullWidth>                          
             <DialogTitle>{props.title}</DialogTitle>
-            {childWithProps}
+            {authData && authData.userRole === 2 &&
+                <>
+                    {childWithProps}
+                    <hr style={{width: '100%'}} />
+                </>}
 
-            <hr style={{width: '100%'}} />
             <ul style={{listStyle: 'none'}}>
                 {props.comments.map(comment => {
 

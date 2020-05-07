@@ -92,7 +92,7 @@ const Navbar = () => {
 
     useEffect(() => {
         if(authData) {
-            axios.get('/message/count/' +authData.userID)
+            axios.get('/message/count/' + authData.userID)
             .then(res => {
                 setMessagesCount(res.data);
             })

@@ -25,7 +25,7 @@ const Comments = ({visitingUserID, profileUserID, userComments}) => {
             <h3>
                 <span>Atsiliepimai</span> 
                 {/* If is logged in and the visiting user is not the profile owner */}
-                {visitingUserID !== profileUserID && authData?
+                {visitingUserID !== profileUserID && authData && authData.userRole === 2?
                 <AddCommentModal type="add" allComments={comments} visitingUserID={visitingUserID}>
                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                 </AddCommentModal>: null}
