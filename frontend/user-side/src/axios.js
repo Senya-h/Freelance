@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-export const baseURL = 'http://freelance.test';
+export const baseURL = 'http://localhost';
 
 export const maxFileSize = 50000000;
 
