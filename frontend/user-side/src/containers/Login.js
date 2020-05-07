@@ -37,13 +37,14 @@ const Login = (props) => {
 
     let referer = '/';
     const [alertMessage, setAlertMessage] = useState([]);
-
+    console.log("LOGINE");
     if(props.location.state) {
         if(props.location.state.referer) {
             referer = props.location.state.referer
         }
         if(props.location.state.registrationSuccesful) {
             setAlertMessage(<Alert severity="success">Paskyra sėkmingai sukurta!</Alert>);
+            props.location.state = {};
         }
     }
     

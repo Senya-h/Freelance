@@ -97,9 +97,9 @@ const Register = (props) => {
         axios.post('/register', values)
             .then(res => {
                 console.log(res);
+                setSubmitting(false);
                 //Response is good, but the given values were incorrent
                 if(res.status === 200) {
-                    setSubmitting(false);
                     if(res.data.error) {
                         if(res.data.error.email) {
                             setErrors({email: "Šis el. paštas jau buvo užregistruotas!"})

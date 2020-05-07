@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 const SendMessage = props => {
     const classes = useStyles();
-    let alertMessage = null;
+    const [alertMessage, setAlertMessage] = useState([]);
     const [open, setOpen] = useState(false)
 
     const handleOpen = () => {
@@ -53,11 +53,9 @@ const SendMessage = props => {
 
     const formik = useFormik({
         initialValues: {
-            title: '',
             content: ''
         },
         validationSchema: yupObject({
-            title: yupString().required("Privalomas laukelis"),
             content: yupString().required("Privalomas laukelis")
         }),
         onSubmit: values => {
@@ -72,16 +70,15 @@ const SendMessage = props => {
             })
             .then(res => {
                 console.log(res);
-                alertMessage = <Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>;
                 if(!res.data.error && res.status === 201) {
-                    // handleClose();
+                    handleClose();
                 } else {
-                    alertMessage = <Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>;
+                    setAlertMessage(<Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>);
                 }
                 console.log("Alert message: ", alertMessage);
             })
             .catch(err => {
-                alertMessage = <Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>;
+                setAlertMessage(<Alert severity="error">Nežinoma klaida! Bandykite vėliau dar kartą arba susisiekite su administratoriumi</Alert>);
             })
         }
     })
@@ -99,9 +96,6 @@ const SendMessage = props => {
                     </IconButton>
                     <form onSubmit={formik.handleSubmit}>
                         <DialogContent>
-                            <FormGroup>
-                                <TextField id='standard-secondary' label='Tema' color='primary' {...formik.getFieldProps('title')}/>
-                            </FormGroup>
                             <FormGroup classes={{root: 'my-3'}}>
                                 <TextField variant='outlined' color='primary' label='Turinys' {...formik.getFieldProps('content')} multiline rows={10}/>
                             </FormGroup>
