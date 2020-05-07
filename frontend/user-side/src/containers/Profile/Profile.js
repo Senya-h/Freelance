@@ -1,7 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
-import FreelancerProfile from './FreelancerProfile/FreelancerProfile';
+import FreelancerProfile from './FreelancerProfile';
 import ClientProfile from './ClientProfile/ClientProfile';
 
 import { useAuth } from '../../context/auth';

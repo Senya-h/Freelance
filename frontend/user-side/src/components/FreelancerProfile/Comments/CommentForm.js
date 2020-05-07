@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 const CommentForm = (props) => {
     const classes = useStyles();
+
     const toEdit = props.commentToEdit? true: false;
 
     const formik = useFormik({
@@ -41,12 +42,16 @@ const CommentForm = (props) => {
             rating: yupString().min(1).max(5),
         }),
         onSubmit: values => {
+            props.setUploading(true);
+
             if(toEdit) {
                 axios.put('comment/' + props.commentToEdit.id, values, {
                     headers: {
                         'Authorization': 'Bearer ' + props.token
                     }
                 }).then(res => {
+                    props.setUploading(false);
+
                     if(!res.error) {
                         props.handleClose();
                         const newComments = props.allComments.map(comment => {
@@ -59,6 +64,7 @@ const CommentForm = (props) => {
                         props.setComments(newComments)
                     }
                 }).catch(err => {
+                    props.setUploading(false);
                     console.log(err);
                 })
             } else {
@@ -67,12 +73,16 @@ const CommentForm = (props) => {
                         'Authorization': 'Bearer ' + props.token,
                     }
                 }).then(res => {
+                    props.setUploading(false);
+
                     if(!res.error && res.status === 200) {
                         props.handleClose();
                         props.setComments([res.data, ...props.allComments])
                     }
                 })
                 .catch(err => {
+                    props.setUploading(false);
+
                     console.log(err);
                 })
             }

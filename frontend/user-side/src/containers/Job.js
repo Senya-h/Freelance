@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
 import axios, {baseURL} from '../axios';
-import SendMessage from './Profile/FreelancerProfile/SendMessage/SendMessage';
+import SendMessage from '../components/SendMessage';
 
 import {makeStyles} from '@material-ui/core';
 

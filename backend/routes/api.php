@@ -85,7 +85,6 @@ Route::delete('message/delete/{message}', 'MessageController@destroy');
 
 //index parodo pagal id userius isveda user visus duomenys
 Route::get('skill&id={id}/list', 'SkillController@aboutskillApproval');  //Patvirtintas skill pagal skill id
-Route::post('skill&id={skill_id}/user&id={user_id}','SkillController@skillApproval');  //Skill patvirtinimas
 Route::get('skills', 'SkillController@skillsList'); // Skillu listas
 Route::delete('skill/delete/{skill}', 'SkillController@skillDelete'); // Skill delete
 
@@ -131,5 +130,11 @@ Route::get('joboffer/{id}','JobOfferController@singleOffer'); //Vienas pasiūlym
 Route::post('joboffer','JobOfferController@create'); //Sukurti paslaugą
 Route::put('joboffer/update/{id}','JobOfferController@update'); //Atnaujinti paslaugą
 Route::delete('joboffer/delete/{id}','JobOfferController@destroy'); //Atnaujinti paslaugą
+
+//Klientai patvirtina freelancerio skillsus
+Route::post('client/approve','SkillApproveController@create'); //Klientas rašo atsiliepimą apie skill
+Route::get('client/approves-list/{skill_id}/{user_id}', 'SkillApproveController@list');
+Route::delete('client/delete-approve/{skill_id}/{user_id}', 'SkillApproveController@delete');//Atsiliepimo trynimas
+Route::put('client/update-approve', 'SkillApproveController@update');//Atsiliepimo redagavimas, redaguoti gali tik atsiliepimo autorius
 
 Route::get('search/clients', 'SearchController@clientsSearch');

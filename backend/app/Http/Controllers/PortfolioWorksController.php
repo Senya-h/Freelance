@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PortfolioWorks;
+use App\ProjectApproval;
 use Illuminate\Http\Request;
 use File;
 use Gate;
@@ -77,7 +78,17 @@ class PortfolioWorksController extends Controller
                     'filePath' => $filename,
                     'user_id' => auth()->user()->id
                 ]);
-                return response()->json($work);
+                $info = pathinfo(storage_path().$filename);
+                $extension = $info['extension'];
+                $fileType = DB::table('file_formats')->where('format',$extension)->first();
+                $newWork = [
+                    'title' => request('title'),
+                    'description' => request('description'),
+                    'filePath' => $filename,
+                    'user_id' => auth()->user()->id,
+                    'fileType' => $fileType->fileType
+                ];
+                return response()->json($newWork);
             }
         }
     }
@@ -109,10 +120,22 @@ class PortfolioWorksController extends Controller
             }
             $updated = PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
             $updated = PortfolioWorks::where('id', $id)->first();
+            
+            $info = pathinfo(storage_path().$updated->filePath);
+            $extension = $info['extension'];
+            $fileType = DB::table('file_formats')->where('format',$extension)->first();
+            $newItem = [
+                'title' => $updated->title,
+                'description' => $updated->description,
+                'filePath' => $updated->filePath,
+                'user_id' => $updated->user_id,
+                'fileType' => $fileType->fileType
+            ];
+            ProjectApproval::where('work_id',$updated->id)->delete();
         } else if (Gate::denies('authorization', $work)){
             return response()->json(["error" => "Jūs neturite teisės"], 403);
         }
-        return response()->json($updated, 201);
+        return response()->json($newItem, 201);
 
     }
     public function destroy(Request $request, PortfolioWorks $work) {

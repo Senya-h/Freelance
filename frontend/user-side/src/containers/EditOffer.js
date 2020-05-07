@@ -9,7 +9,8 @@ import Loader from 'react-loader-spinner';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import OpenDialogButton from './Profile/FreelancerProfile/OpenDialogButton';
+import OpenDialogButton from '../components/OpenDialogButton';
+
 import SkillForm from './Profile/ClientProfile/SkillForm';
 
 import {useFormik} from 'formik';

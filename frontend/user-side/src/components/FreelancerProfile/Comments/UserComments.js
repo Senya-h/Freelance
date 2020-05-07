@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-const Comments = (props) => {
+const UserComments = (props) => {
     const classes = useStyles();
 
     let commentAuthorIndex = -1;
@@ -74,7 +74,6 @@ const Comments = (props) => {
             </div>
         )
     }
-    console.log("Patys komentarai: ", comments);
     return (
         <div className={classes.scrollableComments}>
             {comments}                  
@@ -82,4 +81,4 @@ const Comments = (props) => {
     )
 };
 
-export default Comments;
+export default UserComments;

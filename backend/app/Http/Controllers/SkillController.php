@@ -29,7 +29,6 @@ class SkillController extends Controller
                 $skill = new SkillUser;
                 $skill->user_id = auth()->user()->id;
                 $skill->skill_id = $skillArr[$i];
-                $skill->approved = 0;
                 $skill->save();
         }
 
@@ -54,17 +53,5 @@ class SkillController extends Controller
         {
             return response()->json(SkillUser::select('*')->where('user_id',$id)->get(),200);
         }
-
-    public function SkillApproval(Request $request, $skill_id, $user_id)
-    {
-        $skill = Skill::where('id', $skill_id)->first();
-        $user = User::where('id', $user_id)->first();
-        $skill->users()->attach($user);
-        $validatedData = $request->validate([
-            'approved' => 'required'
-        ]);
-        SkillUser::where('user_id', $user_id)->where('skill_id', $skill_id)->update(['approved' => $request->input('approved')]);
-        return response()->json(["message" => "Skilas sekmingai patvirtintas",200]);
-    }
     
 }

@@ -16,7 +16,6 @@ const SkillForm = (props) => {
         },
         onSubmit: values => {
             //Submitting user's skills to the server
-            console.log("Submitting skills: ", values)
             if(props.noAxios) {
                 if(props.setFieldValue) {
                     const newSkills = [];
@@ -32,11 +31,13 @@ const SkillForm = (props) => {
                     props.handleClose();
                 }
             } else {
+                props.setUploading(true);
                 axios.post('/skill', values.skills_id, {
                     headers: {
                         'Authorization': 'Bearer ' + props.token
                     }
                 }).then(res => {
+                    props.setUploading(false);
                     if(!res.error && res.status === 200) {
                         props.handleClose();
                         const newSkills = [];

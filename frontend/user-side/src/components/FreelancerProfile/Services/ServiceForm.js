@@ -37,6 +37,8 @@ const ServiceForm = (props) => {
         }),
         onSubmit: values => {
             values.price_per_hour = Math.round((values.price_per_hour + Number.EPSILON) * 100) / 100;
+            props.setUploading(true);
+
             if(toEdit) {
                 axios.post('/update/service&id=' + props.serviceToEdit.id, values, {
                     headers: {
@@ -44,6 +46,8 @@ const ServiceForm = (props) => {
                     }
                 })
                 .then(res => {
+                    props.setUploading(false);
+
                     if(!res.error && res.status === 200) {
                         props.handleClose();
                         const updatedServices = props.services.map(service => {
@@ -54,7 +58,6 @@ const ServiceForm = (props) => {
                             }
                             return service;
                         })
-
                         props.setServices(updatedServices);
                     }
                 })
@@ -64,6 +67,8 @@ const ServiceForm = (props) => {
                         'Authorization': 'Bearer ' + props.token,
                     }
                 }).then(res => {
+                    props.setUploading(false);
+
                     if(!res.error && res.status === 201) {
                         props.handleClose();
                         props.setServices([...props.services, {
@@ -72,9 +77,7 @@ const ServiceForm = (props) => {
                             description: values.description, 
                             price_per_hour: values.price_per_hour
                         }]);
-                    } else {
-
-                    }
+                    } 
                 })
                 .catch(err => {
                     console.log(err);
