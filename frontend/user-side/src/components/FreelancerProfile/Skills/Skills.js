@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import SkillForm from './SkillForm';
 import OpenDialogButton from '../../OpenDialogButton';
-
+import SkillCommentsModal from './SkillCommentsModal';
+import SkillCommentsForm from './SkillCommentsForm';
 import {makeStyles} from '@material-ui/core/styles';
 import axios from '../../../axios';
 import { useAuth } from '../../../context/auth';
@@ -25,6 +26,13 @@ const Skills = ({visitingUserID, profileUserID, userSkills}) => {
     const [allSkills, setAllSkills] = useState([]);
     const [currSkills, setCurrSkills] = useState([]);
 
+    const [comments, setComments] = useState([]);
+
+    const [commentsModalOpen, setCommentsModalOpen] = useState({
+        open: false,
+        skill_id: 0
+    });
+
     useEffect(() => {
         axios.get('/skills')
             .then(res => {
@@ -39,7 +47,19 @@ const Skills = ({visitingUserID, profileUserID, userSkills}) => {
     const showSkillCommentModal = (id) => {
         axios.get(`/client/approves-list/${id}/${profileUserID}`)
             .then(res => {
-                
+                setComments(res.data);
+                setCommentsModalOpen({
+                    open: true,
+                    skill_id: id
+                });
+                console.log(res);
+            })
+    };
+
+    const refreshComments = (id) => {
+        axios.get(`/client/approves-list/${id}/${profileUserID}`)
+            .then(res => {
+                setComments(res.data);
             })
     };
 
@@ -60,6 +80,19 @@ const Skills = ({visitingUserID, profileUserID, userSkills}) => {
                     </li>
                 ))}
             </ul>
+            <SkillCommentsModal
+                open={commentsModalOpen.open} 
+                setOpen={setCommentsModalOpen} 
+                title="Gebėjimų įvertinimai"
+                visitingUserID={visitingUserID}
+                profileUserID={profileUserID}
+                skill_id={commentsModalOpen.skill_id}
+                user_id={profileUserID}
+                comments={comments}
+                refreshComments={refreshComments}
+                >
+                <SkillCommentsForm />
+            </SkillCommentsModal>
         </section>
     )
 };
