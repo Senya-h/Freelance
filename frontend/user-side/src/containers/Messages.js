@@ -48,9 +48,13 @@ const useStyles = makeStyles(theme => ({
         right: '20px'
     },
     text:{
-        fontSize:'20px'
+        fontSize:'20px',
+        color: 'black'
+    },
+    scroll:{
+        overflow: 'scroll',
+        height: '100vh'
     }
-    
 }))
 
 const Messages = () => {
@@ -64,12 +68,17 @@ const Messages = () => {
     const [vienas, setVienas] = useState([]);
 
     useEffect(() => {
-        axios.get('received/messages/' +authData.userID)
-            .then(res => {
+        axios.get('received/messages/' +authData.userID,{
+            headers: {
+                'Authorization': 'Bearer ' + authData.token
+            }
+        }).then(res => {
                 setLoading(false);
                 setMessagesList(res.data);
-            })
+                
+            });
     },[]);
+
         let newMessageList = [];
         let numbers = [];
 
@@ -89,8 +98,6 @@ const Messages = () => {
                 console.log(numbers[i])
         }
         const messages = messagesList.map(message => <Route path={`/messages/${message.id}`}><PrivateMessage user = {message.id} userFoto = {message.foto}/></Route>)
-       
-        //const adress = messagesList.map(message => <Route path={`/sale/${message.id}`} exact><privateMessage address = {message.id}/></Route>)
     return (
         //React loader
         <>
@@ -109,7 +116,7 @@ const Messages = () => {
             <Switch>
                 <Route path="/messages" exact>
                     
-                    <TableContainer className={classes.tableContainer}>
+                    <TableContainer className={`${classes.tableContainer} ${classes.scroll}`}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -123,10 +130,9 @@ const Messages = () => {
                                 <TableCell>
                                     <img className={classes.profileImg} src={`${baseURL}/storage/${message.foto}`} alt={`foto ${message.id}`}/>
                                     <span className={classes.notifi}> {message.notification}</span>
-                                    <p className={classes.text}>{message.name}</p>
-                                    <Link to={`messages/${message.id}`}><Button className="m-3" variant="outline-dark" size="lg" block>{message.name}</Button></Link>
+                                    
+                                    <Link to={`messages/${message.id}`} className={classes.text}>{message.name}</Link>
                                 </TableCell>
-                               
                             </TableRow>
                         ))}
                     </TableBody>

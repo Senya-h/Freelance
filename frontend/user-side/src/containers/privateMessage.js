@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import PrivateMessage from '../containers/privateMessage';
+import '../assets/css/messages.css';
 //React loader inport
 import Loader from 'react-loader-spinner';
 //Material ui inport
@@ -7,14 +7,17 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
 //Material ui style import
 import {makeStyles} from '@material-ui/core/styles';
 //User authentikacija
 import { useAuth } from '../context/auth';
-
 import axios, {baseURL} from '../axios';
+import {Formik, Form, ErrorMessage} from 'formik';
+import Button from '@material-ui/core/Button';
+import * as Yup from 'yup';
+
 
 const useStyles = makeStyles(theme => ({
     tableContainer: {
@@ -40,46 +43,65 @@ const useStyles = makeStyles(theme => ({
     },
     text:{
         fontSize:'20px'
+    },
+    scroll:{
+        display: 'flex',
+        flexDirection:'column-reverse',
+        overflow: 'scroll',
+        height: '80vh'
     }
-    
 }))
+
+const initialValues = {
+    message: '',
+};
+
+const validationSchema = Yup.object({
+    message: Yup.string().max(2000, 'Darbo pobūdis negali viršyti 2000 simbolių').required("Privalomas laukelis"),
+});
 
 const Message = (props) => {
 
     ////Get logged in user information
     let { authData } = useAuth();
-    console.log(authData)
 
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
     const [messagesList, setMessagesList] = useState(['Kraunama...']);
-    const [messages, setMessages] = useState(['Kraunama...']);
+
 
     useEffect(() => {
-        axios.get('message/'+props.user+'/'+authData.userID)
-            .then(res => {
+        axios.get('message/'+props.user,{
+            headers: {
+                'Authorization': 'Bearer ' + authData.token
+            }
+        }).then(res => {
                 setLoading(false);
                 setMessagesList(res.data);
                 
-            })
+            });
     },[]);
 
-    useEffect(() => {
-        axios.get('message/'+authData.userID+'/'+props.user)
+    const handleSubmit = values => {  
+        console.log(values);
+        
+        axios.post('/message', {...values, senders_id: authData.id, receivers_id: props.user}, {
+            headers: {
+                'Authorization': 'Bearer ' + authData.token
+            }
+        })
             .then(res => {
-                setLoading(false);
-                setMessages(res.data);
-                
+                console.log(res);
+                if(!res.data.error && res.status === 201) {
+                    props.history.push({
+                        pathname: '/my-jobs',
+                    });
+                }
             })
-    },[]);
-    
-    const mesage = [setMessages];
-    
-
-    //console.log(messagesList);
-    console.log(mesage);
-    //message/{senders_id}/{receivers_id}
-        //const adress = adres.map(adres => <Route path={`/rent/${adres}`} exact><SingleRent address = {adres}/></Route>)
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     return (
         //React loader
@@ -95,34 +117,39 @@ const Message = (props) => {
         </div>):(
             //Material ui table
             <div className="container">
-            <TableContainer className={classes.tableContainer}>
+            <TableContainer className={`${classes.tableContainer} ${classes.scroll}`}>
                 <Table>
                 {messagesList.map(message => (
                     <TableBody key={message.id}>      
                             <TableRow>
-                                <TableCell>
-                                    <img className={classes.profileImg} src={`${baseURL}/storage/${props.userFoto}`} alt={`foto ${message.id}`}/>
-                                    {message.message}
-                                    <p>{message.id}</p>
+                                <TableCell  className={`${message.status} both`}>
+                                    <img className={`${classes.profileImg} ${message.status}_disable`} src={`${baseURL}/storage/${message.sender_image}`} alt={`foto ${message.id}`}/>
+                                    <p className={classes.text}>{message.message}</p>
                                    <p>{message.created_at}</p>
                                 </TableCell>
                             </TableRow>
                     </TableBody>
                     ))}
-                    {messages.map(message => (
-                    <TableBody className={classes.profileImg} key={message.id}>      
-                            <TableRow>
-                                <TableCell>
-                                    <img className={classes.profileImg} src={`${baseURL}/storage/${props.userFoto}`} alt={`foto ${message.id}`}/>
-                                    {message.message}
-                                    <p>{message.id}</p>
-                                   <p>{message.created_at}</p>
-                                </TableCell>
-                            </TableRow>
-                    </TableBody>
-                    ))}
+                
                 </Table>
-            </TableContainer>        
+            </TableContainer>
+            <Formik 
+                initialValues={initialValues} 
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+                >
+            {({ handleChange, values, setFieldValue, handleBlur, isSubmitting }) => (
+                <Form className={classes.tableContainer}>
+                    <div>
+                        <TextField variant='outlined' label='Jusu žinute' name='message' onChange={handleChange} onBlur={handleBlur} fullWidth multiline rows={1}/>
+                        <ErrorMessage name='message' render={msg => <div className='text-danger'>{msg}</div>} />
+                    </div>
+                    <Button type='submit' disabled={isSubmitting} variant='contained' color='primary' >
+                        Siusti
+                    </Button>
+                </Form>
+            )}
+            </Formik>
             </div>
         )}
         </>

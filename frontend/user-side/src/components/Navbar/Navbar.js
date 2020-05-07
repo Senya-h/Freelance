@@ -90,12 +90,12 @@ const Navbar = () => {
     const [messagesCount, setMessagesCount] = useState([0]);
 
 
-    //useEffect(() => {
-    //    axios.get('/message/' +authData.userID)
-    //        .then(res => {
-    //            setMessagesCount(res.data);
-    //        })
-    //},[]);
+    useEffect(() => {
+        axios.get('/message/count/' +authData.userID)
+            .then(res => {
+                setMessagesCount(res.data);
+            })
+    },[]);
 
 
     let loginArea = null;
