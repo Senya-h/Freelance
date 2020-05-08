@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ProjectApproval;
+use App\PortfolioWorks;
+use App\Message;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +42,19 @@ class ProjectApprovalController extends Controller
                 $project->work_id = $request->work_id;
                 $project->approved = 1;
                 $project->save();
+            
+
+                $receiver = PortfolioWorks::where('portfolio_works.id',intval($project->work_id))
+                                        ->join('users','portfolio_works.user_id','users.id')
+                                        ->first(); 
+                $client = User::where('id',auth()->user()->id)
+                            ->first();
+                Message::create([
+                    'senders_id' => 1,
+                    'receivers_id' => $receiver->id,
+                    'message' => 'Jūsų darbo('.$receiver->title.') nuosavybę patvirtino('.$client->name.').',
+                ]);
+
             }
             return response()->json($project);
     }
