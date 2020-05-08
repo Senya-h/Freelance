@@ -141,8 +141,31 @@ html.fullscreen-bg #wrapper {
 
 .vertical-align-middle {
   display: table-cell;
-  vertical-align: middle; }
-
-.loading {
-  margin: 300px;
+  vertical-align: middle; 
+}
+@media screen and (min-width: 1024px) {
+  .loading {
+    margin: 300px 0 0 180px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .loading {
+    margin-top: 300px;
+  }
+}
+.btn {
+  margin-top: 5px;
+  border-radius: .15rem !important;
+}
+.btn-success {
+  background-color: rgb(85, 141, 29) !important;
+}
+.btn-primary {
+  background-color: rgb(29, 137, 141) !important;
+}
+.btn-danger {
+  background-color: rgb(141, 26, 26) !important;
+}
+.modal-content {
+  border-radius: 0 !important;
 }

@@ -136,7 +136,7 @@ class Portfolio extends Component{
         }
 render() {
     const worksList = this.state.works.map(work => ( 
-        <Card key={work.id} className="col-lg-4" style={{ width: '18rem' }}>
+        <Card key={work.id} className="col-lg-3" style={{ width: '18rem' }}>
         {
             mime.lookup(work.filePath).split('/')[0] === "image" ? 
             (
@@ -148,7 +148,7 @@ render() {
             ) 
             : 
             (
-                <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax" src={`${baseURL}/storage/portfolioWorks/textFile.png`} />
+                <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax file" src={`${baseURL}/storage/portfolioWorks/textFile.png`} />
             )
         }
         <Card.Body>
@@ -176,7 +176,7 @@ render() {
         ));
     if(this.state.loading) {
         return(
-            <img className="loading" src={load} alt="loading..." />
+                <img className="loading" src={load} alt="loading..." />
         )
     }
     return(
@@ -210,9 +210,9 @@ render() {
                                 filePath={this.state.imagePath}
                                 description={this.state.description}
                             />
-                        <div className="row">
-                            {worksList}
-                        </div>
+                                <div className="row">
+                                        {worksList}
+                                </div>
                     </div>
                 </div>
             </div>

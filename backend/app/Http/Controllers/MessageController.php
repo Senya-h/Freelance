@@ -67,7 +67,8 @@ class MessageController extends Controller
 
         $notifications = [];
         $image = [];
-        $id = [];
+        $id = []; 
+        $msgNotification = [];
         foreach($names as $name) {
         $notifications = count(Message::select('notification_read')
                             ->where('name',$name->name)
