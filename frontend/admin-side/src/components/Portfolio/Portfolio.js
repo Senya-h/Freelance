@@ -8,6 +8,7 @@ import PortfolioModal from './PortfolioModal';
 import {Link} from "react-router-dom";
 import ReactPlayer from 'react-player';
 import mime from 'mime-types';
+import Pagination from "react-js-pagination";
 
 class Portfolio extends Component{
     _isMounted = false
@@ -25,8 +26,12 @@ class Portfolio extends Component{
             modalWorkName: "",
             imagePath: "",
             description: "",
-            format: ""
+            format: "",
+            activePage: 1,
+            itemsCountPerPage: 1,
+            total: 1
         }
+        this.handlePageChange=this.handlePageChange.bind(this)
     }
     componentDidMount(){
         this._isMounted = true;
@@ -34,10 +39,31 @@ class Portfolio extends Component{
             .then(data => {
                 if(this._isMounted) {
                     this.setState({
-                        works: data.data,
-                        loading: false
+                        works: data.data.data,
+                        loading: false,
+                        itemsCountPerPage: data.data.per_page,
+                        total: data.data.total,
+                        loading: false,
+                        activePage: data.data.current_page
                     })
                 }
+            })
+    }
+    handlePageChange(pageNumber) {
+        this.setState({loading: true})
+        axios.get(`/works?page=${pageNumber}`, {
+            headers: {
+                    'Authorization': this.state.token,
+                }
+        })
+            .then(data => {
+                    this.setState({
+                        works: Object.values(data.data.data),
+                        itemsCountPerPage: data.data.per_page,
+                        total: data.data.total,
+                        loading: false,
+                        activePage: data.data.current_page
+                    })
             })
     }
     componentWillUnmount() {
@@ -48,7 +74,7 @@ class Portfolio extends Component{
             axios.get(`/works`)
                 .then(data => {
                     this.setState({
-                        works: data.data,
+                        works: data.data.data,
                         loading: false,
                         refetch: false
                     })
@@ -137,20 +163,22 @@ class Portfolio extends Component{
 render() {
     const worksList = this.state.works.map(work => ( 
         <Card key={work.id} className="col-lg-3" style={{ width: '18rem' }}>
-        {
-            mime.lookup(work.filePath).split('/')[0] === "image" ? 
-            (
-                <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax" src={`${baseURL}/storage/${work.filePath}`} />
-            ) :
-            mime.lookup(work.filePath).split('/')[0] === "video" ? 
-            (
-                <ReactPlayer onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} className="imgMax" url={`${baseURL}/storage/${work.filePath}`} />
-            ) 
-            : 
-            (
-                <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax file" src={`${baseURL}/storage/portfolioWorks/textFile.png`} />
-            )
-        }
+            <div className="card-img">
+                {
+                    mime.lookup(work.filePath).split('/')[0] === "image" ? 
+                    (
+                        <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax" src={`${baseURL}/storage/${work.filePath}`} />
+                    ) :
+                    mime.lookup(work.filePath).split('/')[0] === "video" ? 
+                    (
+                        <ReactPlayer onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} className="imgMax" url={`${baseURL}/storage/${work.filePath}`} />
+                    ) 
+                    : 
+                    (
+                        <Card.Img onClick={() => this.PortfolioModalOpen(work.id, work.title, work.filePath, work.description)} variant="top" className="imgMax file" src={`${baseURL}/storage/portfolioWorks/textFile.png`} />
+                    )
+                }
+            </div>
         <Card.Body>
             <Card.Title>{work.title}</Card.Title>
             <Card.Text>
@@ -212,6 +240,17 @@ render() {
                             />
                                 <div className="row">
                                         {worksList}
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <Pagination
+                                        activePage={this.state.activePage}
+                                        itemsCountPerPage={this.state.itemsCountPerPage}
+                                        totalItemsCount={this.state.total}
+                                        pageRangeDisplayed={5}
+                                        onChange={this.handlePageChange.bind(this)}
+                                        itemClass="page-item"
+                                        linkClass="page-link"
+                                    />
                                 </div>
                     </div>
                 </div>

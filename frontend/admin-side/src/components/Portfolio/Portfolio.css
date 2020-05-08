@@ -1,6 +1,11 @@
 .imgMax {
-    height: 300px !important;
     max-width: 100%;
+}
+.card-img {
+    height: 300px;
+}
+.card-body {
+    background-color: #fff;
 }
 .insideRow {
     margin: 0 auto;

@@ -71,13 +71,6 @@ class ApiController extends Controller
         }
         return response()->json($data, 200);
     }
-    
-    public function paginate($items, $perPage = 20, $page = null, $options = [])
-    {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-    }
     public function usersList() {
         try {
             $user = auth()->userOrFail();
@@ -100,8 +93,18 @@ class ApiController extends Controller
             }
                 
         }
-        return response()->json($users, 200);
+        $data = $this->paginate($users);
+        return response()->json($data, 200);
     }
+    
+    
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+
     public function bannedUsersList() {
         try {
             $user = auth()->userOrFail();

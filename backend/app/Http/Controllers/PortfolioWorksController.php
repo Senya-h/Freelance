@@ -9,6 +9,9 @@ use File;
 use Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PortfolioWorksController extends Controller
 {
@@ -42,7 +45,16 @@ class PortfolioWorksController extends Controller
                 ];
             }
         }
-        return response()->json($newWork, 200);
+        $data = $this->paginate($newWork);
+        return response()->json($data, 200);
+    }
+    
+    
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
     public function create(Request $request)
     {

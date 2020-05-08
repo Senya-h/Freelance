@@ -4,6 +4,7 @@ import axios from '../../axios';
 import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 import DeleteModal from '../DeleteModal';
+import Pagination from "react-js-pagination";
 
 class Services extends Component{
     _isMounted = false
@@ -15,9 +16,11 @@ class Services extends Component{
             loading: true,
             refetch: false,
             modalShow:false,
-            serviceID: "",
-            modalServiceName: "",
+            activePage: 1,
+            itemsCountPerPage: 1,
+            total: 1
         }
+        this.handlePageChange=this.handlePageChange.bind(this)
     }
     componentDidMount(){
         this._isMounted = true;
@@ -25,10 +28,26 @@ class Services extends Component{
             .then(data => {
                 if(this._isMounted) {
                     this.setState({
-                        services: data.data,
-                        loading: false
+                        services: data.data.data,
+                        itemsCountPerPage: data.data.per_page,
+                        total: data.data.total,
+                        loading: false,
+                        activePage: data.data.current_page
                     })
                 }
+            })
+    }
+    handlePageChange(pageNumber) {
+        this.setState({loading: true})
+        axios.get(`/services?page=${pageNumber}`)
+            .then(data => {
+                    this.setState({
+                        services: Object.values(data.data.data),
+                        itemsCountPerPage: data.data.per_page,
+                        total: data.data.total,
+                        loading: false,
+                        activePage: data.data.current_page
+                    })
             })
     }
     componentWillUnmount() {
@@ -39,7 +58,7 @@ class Services extends Component{
             axios.get(`/services`)
                 .then(data => {
                     this.setState({
-                        services: data.data,
+                        services: data.data.data,
                         loading: false,
                         refetch: false
                     })
@@ -123,6 +142,17 @@ render() {
                             {servicesList}
                         </tbody>
                     </table>
+                    <div className="d-flex justify-content-center">
+                        <Pagination
+                            activePage={this.state.activePage}
+                            itemsCountPerPage={this.state.itemsCountPerPage}
+                            totalItemsCount={this.state.total}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange.bind(this)}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                        />
+                    </div>
                 </div>
             </div>
         </div>

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ServiceController extends Controller
 {
@@ -12,7 +15,14 @@ class ServiceController extends Controller
         $services = Service::select('services.id as id','services.service','services.description','services.price_per_hour','users.name','services.user_id')
                 ->join('users', 'users.id', 'services.user_id')
                 ->get();
-        return response()->json($services, 200);
+        $data = $this->paginate($services);
+        return response()->json($data, 200);
+    }
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
     public function create(Request $request)
     {

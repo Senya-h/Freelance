@@ -6,6 +6,7 @@ import UserBanModal from '../UserBanModal';
 import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 import {Link} from "react-router-dom";
+import Pagination from "react-js-pagination";
 
 class Users extends Component{
     _isMounted = false;
@@ -20,8 +21,12 @@ class Users extends Component{
             modalUserName: "",
             refetch: false,
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token,
-            loading: true
+            loading: true,
+            activePage: 1,
+            itemsCountPerPage: 1,
+            total: 1
         }
+        this.handlePageChange=this.handlePageChange.bind(this)
     }
     componentDidMount(){
         this._isMounted = true;
@@ -31,12 +36,30 @@ class Users extends Component{
                 }
         })
             .then(data => {
-                if(this._isMounted) {
-                    this.setState({
-                        users: data.data,
-                        loading: false
-                    })
+                this.setState({
+                    users: data.data.data,
+                    itemsCountPerPage: data.data.per_page,
+                    total: data.data.total,
+                    loading: false,
+                    activePage: data.data.current_page
+                })
+            })
+    }
+    handlePageChange(pageNumber) {
+        this.setState({loading: true})
+        axios.get(`/users?page=${pageNumber}`, {
+            headers: {
+                    'Authorization': this.state.token,
                 }
+        })
+            .then(data => {
+                    this.setState({
+                        users: Object.values(data.data.data),
+                        itemsCountPerPage: data.data.per_page,
+                        total: data.data.total,
+                        loading: false,
+                        activePage: data.data.current_page
+                    })
             })
     }
     componentWillUnmount() {
@@ -51,7 +74,7 @@ class Users extends Component{
             })
                 .then(data => {
                     this.setState({
-                        users: data.data,
+                        users: data.data.data,
                         loading: false,
                         refetch: false
                     })
@@ -59,6 +82,8 @@ class Users extends Component{
                 })
             }
     }
+    
+    
     deleteModalOpen = (id, name) => {
         this.setState({
             deleteModalShow:true,
@@ -92,7 +117,6 @@ class Users extends Component{
             })
             .then(data => {
                 this.setState({refetch:true})
-                console.log(data)
                 document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Ištrintas</div>"
             }).catch(error => {
                 console.log(error.response)
@@ -116,7 +140,7 @@ class Users extends Component{
         this.banModalClose()
     }
 render() {
-    const usersList = this.state.users.map(user => ( 
+   let usersList = this.state.users.map(user => ( 
         <tr key={user.id}>
         <th scope="row">{user.id}</th>
         <td>{user.name}</td>
@@ -138,7 +162,7 @@ render() {
                 <img className="loading" src={load} alt="loading..." />
             )
         }
-    
+    console.log(this.state.users)
     return(
         <div className="Users">
             <div className="main">
@@ -164,8 +188,8 @@ render() {
                             token={this.state.token}
                         />
                         <table className="table">
-                                <thead>
-                                    <tr>
+                            <thead>
+                                <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Vardas</th>
                                     <th scope="col">El.Paštas</th>
@@ -173,13 +197,25 @@ render() {
                                     <th scope="col">Prisiregistravęs</th>
                                     <th scope="col"></th>
                                     <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {usersList}
-                                </tbody>
-                                </table>
+                            </tbody>
+                        </table>
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                activePage={this.state.activePage}
+                                itemsCountPerPage={this.state.itemsCountPerPage}
+                                totalItemsCount={this.state.total}
+                                pageRangeDisplayed={5}
+                                onChange={this.handlePageChange.bind(this)}
+                                itemClass="page-item"
+                                linkClass="page-link"
+                            />
+                        </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

@@ -161,11 +161,20 @@ html.fullscreen-bg #wrapper {
   background-color: rgb(85, 141, 29) !important;
 }
 .btn-primary {
-  background-color: rgb(29, 137, 141) !important;
+  background-color: rgb(82, 13, 76) !important;
+  border-color: rgb(82, 13, 76) !important;
 }
 .btn-danger {
   background-color: rgb(141, 26, 26) !important;
 }
 .modal-content {
   border-radius: 0 !important;
+}
+.page-item.active .page-link {
+  background-color: rgb(82, 13, 76) !important;
+  border-color: rgb(82, 13, 76) !important;
+  color: rgb(255, 255, 255) !important;
+}
+.page-link {
+  color: rgb(82, 13, 76) !important;
 }
