@@ -90,9 +90,9 @@ const Freelancers = (props) => {
         const city = query.get('city') || '';
 
         let urlParams = page !== '1'? `page=${page}&`: '';
-        urlParams += skill? `skill=${skill}&`: '';
-        urlParams += service? `service=${service}&`: '';
-        urlParams += city? `city=${city}&`: '';
+        urlParams += skill? `skill=${skill || ''}&`: '';
+        urlParams += service? `service=${service || ''}&`: '';
+        urlParams += city? `city=${city || ''}&`: '';
 
 
         axios.get(`/search?${urlParams}`)
@@ -123,7 +123,7 @@ const Freelancers = (props) => {
             const service = values.service;
             const skill = values.skill;
             const city = values.city;
-            props.history.push(`/freelancers?service=${service}&skill=${skill}&city=${city}`);
+            props.history.push(`/freelancers?service=${service || ''}&skill=${skill || ''}&city=${city || ''}`);
 
         }
     })
@@ -221,7 +221,7 @@ const Freelancers = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/freelancers?${item.page === 1 ? '': `page=${item.page}`}&service=${service}&skill=${skill}&city=${city}`}
+                            to={`/freelancers?${item.page === 1 ? '': `page=${item.page}`}&service=${service || ''}&skill=${skill || ''}&city=${city || ''}`}
                             {...item}
                         />
                     )}

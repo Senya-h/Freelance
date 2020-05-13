@@ -92,9 +92,9 @@ const Jobs = (props) => {
         const city = query.get('city') || '';
 
         let urlParams = page !== '1'? `page=${page}&`: '';
-        urlParams += skill? `skill=${skill}&`: '';
-        urlParams += title? `title=${title}&`: '';
-        urlParams += city? `city=${city}&`: '';
+        urlParams += skill? `skill=${skill || ''}&`: '';
+        urlParams += title? `title=${title || ''}&`: '';
+        urlParams += city? `city=${city || ''}&`: '';
 
 
         axios.get(`search/clients?${urlParams}`)
@@ -130,7 +130,7 @@ const Jobs = (props) => {
             const title = values.title;
             const skill = values.skill;
             const city = values.city;
-            props.history.push(`/jobs?title=${title}&skill=${skill}&city=${city}`);
+            props.history.push(`/jobs?title=${title || ''}&skill=${skill || ''}&city=${city || ''}`);
 
         }
     })
@@ -230,7 +230,7 @@ const Jobs = (props) => {
                     renderItem={item => (
                         <PaginationItem
                             component={Link}
-                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&title=${title}&skill=${skill}&city=${city}`}
+                            to={`/jobs?${item.page === 1 ? '': `page=${item.page}`}&title=${title || ''}&skill=${skill || ''}&city=${city || ''}`}
                             {...item}
                         />
                     )}

@@ -86,7 +86,7 @@ const Register = (props) => {
             "Slaptažodžiai turi sutapti"
             )
         }).required("Privalomas laukelis"),
-        location: Yup.string().required("Privalomas laukelis"),
+        location: Yup.string().nullable().required("Privalomas laukelis"),
         role: Yup.string().required("Privalomas laukelis"),
         recaptcha: Yup.string().nullable().required("Privalomas laukelis")
     });
