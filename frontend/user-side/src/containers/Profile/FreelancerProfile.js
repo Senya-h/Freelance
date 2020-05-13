@@ -10,6 +10,7 @@ import SendMessage from '../../components/SendMessage';
 import {makeStyles} from '@material-ui/core';
 
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
+import ConfirmPortfolioModal from '../../components/FreelancerProfile/Portfolios/ConfirmPortfolioModal';
 import Skills from '../../components/FreelancerProfile/Skills/Skills';
 import Services from '../../components/FreelancerProfile/Services/Services';
 import Comments from '../../components/FreelancerProfile/Comments/Comments';
@@ -89,6 +90,15 @@ const FreelancerProfile = (props) => {
             setState: null
         }
     });
+    const [confirmInfo, setConfirmInfo] = useState({
+        open: false,
+        link: '0',
+        data: null,
+        stateRef: {
+            state: null,
+            setState: null
+        }
+    })
     
 
     useEffect(() => {
@@ -130,6 +140,17 @@ const FreelancerProfile = (props) => {
             stateRef
         })
     }
+
+    const startConfirmModal = (link, data, stateRef) => {
+        setConfirmInfo({
+            open: true,
+            link,
+            data,
+            stateRef
+        })
+    }
+
+    
 
     return (
         <>
@@ -176,6 +197,7 @@ const FreelancerProfile = (props) => {
                                 profileUserID={profileUserID}
                                 userPortfolios={userInfo.portfolios}
                                 startDeleteModal={startDeleteModal}
+                                startConfirmModal={startConfirmModal}
                             />
                             <div className={classes.mobile}>
                                 {comments}
@@ -197,7 +219,7 @@ const FreelancerProfile = (props) => {
                 </Grid>
 
             {visitingUserID === profileUserID && <ConfirmDeleteModal token={authData.token} modalInfo={deleteInfo} setModalInfo={setDeleteInfo} />}
-            
+            {authData && authData.userRole === 2 && <ConfirmPortfolioModal authData={authData} modalInfo={confirmInfo} setModalInfo={setConfirmInfo} />}
             </div>)}
         </>
     )
