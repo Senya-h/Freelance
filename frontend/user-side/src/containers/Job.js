@@ -12,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import LastPage from '@material-ui/icons/LastPage';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
-import Grid from '@material-ui/core/Grid';
 import { useAuth } from '../context/auth';
 
 const useStyles = makeStyles(theme => ({
@@ -57,7 +56,7 @@ const Job = (props) => {
     const visitingUserID = authData? authData.userID: 0;
 
     //The id can either be the visiting user ID, or the id from the url params
-    let profileUserID = id? id: visitingUserID;
+    // let profileUserID = id? id: visitingUserID;
     
     const [isLoading, setLoading] = useState(true);
     const [jobData, setJobData] = useState({});

@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import Message from './Message';
 //React loader inport
 import Loader from 'react-loader-spinner';
 //Material ui inport
@@ -51,14 +50,18 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Messages = () => {
-
+const Messages = (props) => {
+    console.log("RENDER");  
     //Get logged in user information
     let { authData } = useAuth();
 
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
-    const [messagesList, setMessagesList] = useState(['Kraunama...']);
+    const [messagesList, setMessagesList] = useState([]);
+
+    useEffect(() => {
+        props.setMessagesCount(0);
+    }, [props]);
 
     useEffect(() => {
         axios.get('received/messages/' +authData.userID,{
@@ -66,7 +69,6 @@ const Messages = () => {
                 'Authorization': 'Bearer ' + authData.token
             }
         }).then(res => {
-                console.log(res);
                 setLoading(false);
                 setMessagesList(res.data);
             });
@@ -100,7 +102,6 @@ const Messages = () => {
                                 <TableCell>
                                     <img className={classes.profileImg} src={`${baseURL}/storage/${message.foto}`} alt={`foto ${message.id}`}/>
                                     <span className={classes.notifi}> {message.notification}</span>
-                                    
                                     <Link to={`messages/${message.id}`} className={classes.text}>{message.name}</Link>
                                 </TableCell>
                             </TableRow>

@@ -66,10 +66,11 @@ const App = () => {
     setAuthData(undefined);
   }
 
+  const [messagesCount, setMessagesCount] = useState(0);
 
   return (
     <AuthContext.Provider value={{authData, setAuthData: setTokens, removeAuthData: removeTokens}}>
-      <Navbar />
+      <Navbar messagesCount={messagesCount} setMessagesCount={setMessagesCount} />
       <HeroWrap>
         <ScrollToTop>
           <Switch>
@@ -86,8 +87,8 @@ const App = () => {
             <Route path='/jobs' component={Jobs} />
             <Route path='/job/:id' component={Job} />
             <Route path='/freelancers' component={Freelancers} />
-            <PrivateRoute path='/messages' exact component={Messages} />
-            <PrivateRoute path="/messages/:id" component={Message} />
+            <PrivateRoute path='/messages' exact render={(props) => <Messages {...props} setMessagesCount={setMessagesCount} />}  />
+            <PrivateRoute path="/messages/:id" exact component={Message} />
             <RoleRoute role={2} path='/new-offer' component={NewOffer} />
             <RoleRoute role={2} path="/edit/job/:id" component={EditOffer} />
             <RoleRoute role={2} path='/my-jobs' component={MyJobs} />

@@ -77,23 +77,23 @@ const FreelancerProfile = (props) => {
     const [userInfo, setUserInfo] = useState({});
     const [isLoading, setLoading] = useState(true);
 
-    const [deleteInfo, setDeleteInfo] = useState({
-        open: false,
-        deleteLink: '',
-        stateRef: {
-            state: null,
-            setState: null
-        }
-    });
-    const [confirmInfo, setConfirmInfo] = useState({
-        open: false,
-        link: '0',
-        data: null,
-        stateRef: {
-            state: null,
-            setState: null
-        }
-    })
+    // const [deleteInfo, setDeleteInfo] = useState({
+    //     open: false,
+    //     deleteLink: '',
+    //     stateRef: {
+    //         state: null,
+    //         setState: null
+    //     }
+    // });
+    // const [confirmInfo, setConfirmInfo] = useState({
+    //     open: false,
+    //     link: '0',
+    //     data: null,
+    //     stateRef: {
+    //         state: null,
+    //         setState: null
+    //     }
+    // })
     
 
     useEffect(() => {
@@ -127,23 +127,23 @@ const FreelancerProfile = (props) => {
         />
     )
 
-    const startDeleteModal = (deleteLink, id, stateRef) => {
-        setDeleteInfo({
-            open: true,
-            deleteLink,
-            id,
-            stateRef
-        })
-    }
+    // const startDeleteModal = (deleteLink, id, stateRef) => {
+    //     setDeleteInfo({
+    //         open: true,
+    //         deleteLink,
+    //         id,
+    //         stateRef
+    //     })
+    // }
 
-    const startConfirmModal = (link, data, stateRef) => {
-        setConfirmInfo({
-            open: true,
-            link,
-            data,
-            stateRef
-        })
-    }
+    // const startConfirmModal = (link, data, stateRef) => {
+    //     setConfirmInfo({
+    //         open: true,
+    //         link,
+    //         data,
+    //         stateRef
+    //     })
+    // }
 
     
 

@@ -56,7 +56,6 @@ const NewOffer = (props) => {
     const classes = useStyles();
 
     const [allSkills, setAllSkills] = useState([]);
-    const [requiredSkills, setRequiredSkills] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
     const [inputCity, setInputCity] = useState('');
@@ -117,6 +116,7 @@ const NewOffer = (props) => {
                 formik.setFieldValue('skills', res.data.skills);
                 setLoading(false);
             })
+    // eslint-disable-next-line
     }, [authData.userID, id])
 
     useEffect(() => {
@@ -181,7 +181,7 @@ const NewOffer = (props) => {
                 <div>
                     <p>Reikalingi gebėjimai
                         <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
-                                <SkillForm checkedSkills={formik.values.skills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={formik.setFieldValue} setSkills={setRequiredSkills}/>
+                            <SkillForm checkedSkills={formik.values.skills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={formik.setFieldValue} />
                         </OpenDialogButton>
                     </p>
                     <ul style={{listStyle: 'none'}}>

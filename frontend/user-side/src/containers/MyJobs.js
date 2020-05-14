@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 
-import {useFormik} from 'formik';
 import axios from '../axios';
 import {useAuth} from '../context/auth';
 
@@ -71,7 +70,6 @@ const useStyles = makeStyles(theme => ({
 const MyJobs = (props) => {
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
-    const [skillNames, setSkillNames] = useState(['Kraunama...']);
 
     const [deleteModalInfo, setDeleteModalInfo] = useState({
         open: false,
@@ -86,25 +84,10 @@ const MyJobs = (props) => {
     const [jobs, setJobs] = useState([]);
 
     const {authData} = useAuth();
-    
-    useEffect(() => {
-        axios.get('/skills')
-            .then(res => {
-                setSkillNames(res.data.map(skill => skill.skillName));
-            })
-        
-    },[]);
+
 
     useEffect(() => {
         setLoading(true);
-        // const query = new URLSearchParams(props.location.search);
-        // const page = query.get('page') || '1';
-
-        // let urlParams = page !== '1'? `page=${page}&`: '';
-        // urlParams += skill? `skill=${skill}&`: '';
-        // urlParams += title? `title=${title}&`: '';
-        // urlParams += city? `city=${city}&`: '';
-
 
         axios.get(`/myoffers`, {
             headers: {
@@ -134,18 +117,6 @@ const MyJobs = (props) => {
     const title = query.get('title') || '';
     const skill = query.get('skill') || '';
     const city = query.get('city') || '';
-
-    const formik = useFormik({
-        initialValues: {title, skill, city},
-        onSubmit: values => {          
-            setCurrentPage(1);
-            const title = values.title;
-            const skill = values.skill;
-            const city = values.city;
-            props.history.push(`/my-jobs?title=${title}&skill=${skill}&city=${city}`);
-
-        }
-    })
 
     const handleDelete = (id) => {
         let stateRef = {

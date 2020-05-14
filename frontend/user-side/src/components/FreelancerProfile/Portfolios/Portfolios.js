@@ -5,7 +5,6 @@ import Portfolio from './Portfolio';
 import ClientApproval from './ClientApproval';
 import EditPortfolioForm from './EditPortfolioForm';
 import { useAuth } from '../../../context/auth';
-import ConfirmPortfolioModal from './ConfirmPortfolioModal';
 
 
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';

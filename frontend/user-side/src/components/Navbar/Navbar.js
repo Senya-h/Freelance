@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Navbar = () => {
+const Navbar = (props) => {
 
     useEffect(() => {
         return () => { //Will remove the event listener if the component gets unmounted
@@ -87,18 +87,16 @@ const Navbar = () => {
 
     //const classes = useStyles();
     const classe = useStyles();
-    const [messagesCount, setMessagesCount] = useState([0]);
-
 
     useEffect(() => {
         if(authData) {
             axios.get('/message/count/' + authData.userID)
             .then(res => {
-                setMessagesCount(res.data);
+                props.setMessagesCount(res.data);
             })
         }
 
-    },[authData]);
+    },[authData, props]);
 
 
     let loginArea = null;
@@ -110,7 +108,7 @@ const Navbar = () => {
                     <li className={cx('nav-item', classes['nav-item'])}>
                         <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                             Pranešimai
-                            <span className={classe.messageCount}>{messagesCount}</span>
+                            <span className={classe.messageCount}>{props.messagesCount}</span>
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
@@ -119,7 +117,7 @@ const Navbar = () => {
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                        <Link onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
+                        <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={() => {logOut(); setShowMenu(false)}}>
                             Atsijungti
                         </Link>
                     </li>
@@ -131,7 +129,7 @@ const Navbar = () => {
                     <li className={cx('nav-item', classes['nav-item'])}>
                         <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                             Pranešimai
-                            <span className={classe.messageCount}>{messagesCount}</span>
+                            <span className={classe.messageCount}>{props.messagesCount}</span>
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
@@ -150,7 +148,7 @@ const Navbar = () => {
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                        <Link onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
+                        <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={() => {logOut();setShowMenu(false)}}>
                             Atsijungti
                         </Link>
                     </li>
