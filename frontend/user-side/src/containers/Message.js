@@ -92,7 +92,7 @@ const Message = (props) => {
                 setLoading(false);
                 setMessagesList(res.data);
             });
-    },[authData.token, props.user]);
+    },[authData.token, id]);
 
     const handleSubmit = (values, {resetForm}) => {    
         axios.post('/message', {...values, senders_id: authData.userID, receivers_id: id}, {
@@ -108,6 +108,7 @@ const Message = (props) => {
                         status: 'received'
                     }
                     setMessagesList([...messagesList, newMessage]);
+                    tableContainerRef.current.scrollTop = tableContainerRef.current.scrollHeight;
                 }
             })
             .catch(err => {
@@ -115,6 +116,8 @@ const Message = (props) => {
                 console.log(err);
             })
     }
+
+    const tableContainerRef = React.useRef(null);
 
     return (
         <>
@@ -128,7 +131,7 @@ const Message = (props) => {
             />
         </div>):(
             <div>
-            <TableContainer className={`${classes.tableContainer} ${classes.scroll}`}>
+            <TableContainer ref={tableContainerRef} className={`${classes.tableContainer} ${classes.scroll}`}>
                 <Table>
                     <TableBody> 
                     {messagesList.map(message => (
