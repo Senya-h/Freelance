@@ -33,7 +33,13 @@ const Login = (props) => {
                     setAuthData(data.data);
                     props.history.push('/');
                 } else {
+                    console.log("401")
                     document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">"+data.data.error+"</div>"
+                }
+            }).catch(error => {
+                console.log(error.response.status)
+                if(error.response.status === 401) {
+                    document.querySelector('.error').innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">Čia prisijungti neturite teisės</div>"
                 }
             })
             

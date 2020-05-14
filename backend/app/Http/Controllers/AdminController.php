@@ -106,6 +106,14 @@ class AdminController extends Controller
     public function workApproval(Request $request,$id)
     {
         if($request->user()->authorizeRoles('Admin')){
+            $receiver = PortfolioWorks::where('portfolio_works.id',$id)
+                                        ->join('users','portfolio_works.user_id','users.id')
+                                        ->first();
+            Message::create([
+                'senders_id' => auth()->user()->id,
+                'receivers_id' => $receiver->id,
+                'message' => 'Jūsų darbas('.$receiver->title.') buvo patvirtintas administratoriaus, nuo šiol jį galės matyti klientai.',
+            ]);
             return AdminWorkApprove::create([
                 'work_id' => $id,
                 'approved' => $request->input('approved'),

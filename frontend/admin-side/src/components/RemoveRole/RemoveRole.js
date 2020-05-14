@@ -6,11 +6,13 @@ import {Button} from 'react-bootstrap';
 import load from '../../img/loading.gif';
 
 class RemoveRole extends Component{
+    _isMounted = false
     constructor() {
         super()
         this.state = {
             roles: [],
             email: "",
+            users: [],
             modalShow:false,
             roleID: "",
             modalRole: "",
@@ -100,7 +102,6 @@ class RemoveRole extends Component{
         }
 
     render(){
-        
     let results = "";
     let userInfo = "";
     if(this.state.roles.roles !== undefined) {
@@ -143,6 +144,7 @@ class RemoveRole extends Component{
                                 <div className="form-group">
                                     <input ref={(ref) => this.mainInput= ref} type="text" value={this.state.email} onChange={this.handleChangeEmail} className="form-control" id="exampleInput"
                                            placeholder="vardas@pavyzdys.lt"></input>
+
                                 </div>
                                 <button type="submit" value="Submit"  className="btn btn-success">Ieškoti</button>
                             </form>

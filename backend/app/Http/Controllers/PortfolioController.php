@@ -9,6 +9,7 @@ use App\Rating;
 use App\Service;
 use App\Comments;
 use App\PortfolioWorks;
+use App\JobOffer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -123,6 +124,18 @@ class PortfolioController extends Controller
                         'approved' => $approve
                     ];
             }
+        $allOffers = JobOffer::where('user_id',$id)
+                            ->get();
+        $offers = [];
+        foreach($allOffers as $offer) {
+            $offers[] = [
+                'id' => $offer->id,
+                'title' => $offer->title,
+                'description' => $offer->description,
+                'salary' => $offer->salary,
+                'city' => $offer->city
+            ];
+        }
         $ratings = Comments::select('rating')->where('receiver_id',$id)->get();
         $ratingArr = [];
         for ($i = 0; $i<count($ratings); $i++) {
@@ -133,7 +146,7 @@ class PortfolioController extends Controller
             $ratingAvg = array_sum($ratingArr)/count($ratings);
         }
         
-        if ($role_id != 1 && $role_id = 2) { //jeigu useris yra freelanceris
+        if ($role_id != 1 && $role_id = 3 && $role_id != 2) { //jeigu useris yra freelanceris
             $info = [
                 'info' => [
                     'name' => $usr[0]['name'],
@@ -143,7 +156,7 @@ class PortfolioController extends Controller
                     'location' => $usr[0]['location'],
                     'roles' => $role,
                     'comments' => $comments
-            ],
+                ],
                 'portfolio' => [
                     'services' => $paslaugos, //Paslaugos
                     'works' => $darbai, //Atlikti darbai
@@ -152,11 +165,18 @@ class PortfolioController extends Controller
             ];
         } else { //jeigu useris nera freelanceris
             $info = [
-                'name' => $usr[0]['name'],
-                'email' => $usr[0]['email'],
-                'foto' => $usr[0]['foto'],
-                'location' => $usr[0]['location'],
-                'roles' => $role,
+                'info' => [
+                    'name' => $usr[0]['name'],
+                    'ratingAverage' => round($ratingAvg, 2),
+                    'email' => $usr[0]['email'],
+                    'foto' => $usr[0]['foto'],
+                    'location' => $usr[0]['location'],
+                    'roles' => $role,
+                    'comments' => $comments
+                ],
+                'job_offers' => [
+                    'offers' => $offers
+                ]
             ];
         }
         return response()->json($info, 200);

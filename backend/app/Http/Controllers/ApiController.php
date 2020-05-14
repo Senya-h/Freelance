@@ -131,5 +131,8 @@ class ApiController extends Controller
         ];
         return response()->json($statistic, 200);
     }
+    public function usersForDatalist() {
+        return response()->json(User::select('id','email')->get(),200);
+    }
 
 }

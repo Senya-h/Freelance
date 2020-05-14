@@ -178,3 +178,6 @@ html.fullscreen-bg #wrapper {
 .page-link {
   color: rgb(82, 13, 76) !important;
 }
+.alert {
+  border-radius: 1px !important;
+}
