@@ -22,6 +22,7 @@ import EditOffer from './containers/EditOffer';
 import Jobs from './containers/Jobs';
 import Job from './containers/Job';
 import MyJobs from './containers/MyJobs';
+import Message from './containers/Message';
 
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopIcon from './components/ScrollToTopIcon';
@@ -85,7 +86,8 @@ const App = () => {
             <Route path='/jobs' component={Jobs} />
             <Route path='/job/:id' component={Job} />
             <Route path='/freelancers' component={Freelancers} />
-            <PrivateRoute path='/messages' component={Messages} />
+            <PrivateRoute path='/messages' exact component={Messages} />
+            <PrivateRoute path="/messages/:id" component={Message} />
             <RoleRoute role={2} path='/new-offer' component={NewOffer} />
             <RoleRoute role={2} path="/edit/job/:id" component={EditOffer} />
             <RoleRoute role={2} path='/my-jobs' component={MyJobs} />

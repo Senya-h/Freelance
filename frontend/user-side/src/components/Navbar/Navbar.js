@@ -108,18 +108,18 @@ const Navbar = () => {
             loginArea = (
                 <>
                     <li className={cx('nav-item', classes['nav-item'])}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                        <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                             Pranešimai
                             <span className={classe.messageCount}>{messagesCount}</span>
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
+                        <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
                              Profilis
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                        <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
+                        <Link onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
                             Atsijungti
                         </Link>
                     </li>
@@ -129,27 +129,28 @@ const Navbar = () => {
             loginArea = (
                 <>
                     <li className={cx('nav-item', classes['nav-item'])}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
+                        <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                             Pranešimai
+                            <span className={classe.messageCount}>{messagesCount}</span>
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/new-offer' activeClassName={classes['active']}>
+                        <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/new-offer' activeClassName={classes['active']}>
                              Sukurti skelbimą
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/my-jobs' activeClassName={classes['active']}>
+                        <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/my-jobs' activeClassName={classes['active']}>
                              Mano Skelbimai
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                        <NavLink className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
+                        <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/profile' activeClassName={classes['active']}>
                              Profilis
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                        <Link className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
+                        <Link onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/' onClick={logOut}>
                             Atsijungti
                         </Link>
                     </li>
@@ -160,12 +161,12 @@ const Navbar = () => {
         loginArea = (
             <>
                 <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
-                    <NavLink className={cx('nav-link', classes['nav-link'])} to='/login' activeClassName={classes['active']}>
+                    <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/login' activeClassName={classes['active']}>
                         Prisijungti
                     </NavLink>
                 </li>
                 <li className={cx('nav-item', classes['nav-item'], classes.cta, classes['cta-colored'])}>
-                    <NavLink className={cx('nav-link', classes['nav-link'])} to='/register' activeClassName={classes['active']}>
+                    <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/register' activeClassName={classes['active']}>
                         Registruotis
                     </NavLink>
                 </li>
@@ -173,34 +174,36 @@ const Navbar = () => {
             )
     }
 
+    const [showMenu, setShowMenu] = useState(false);
+
     return (
-        <NavBar bg="dark" expand="lg" className={classes.FtcoNavbarLight} id="ftco-navbar" ref={navbar}>
+        <NavBar expanded={showMenu} bg="dark" expand="lg" className={classes.FtcoNavbarLight} id="ftco-navbar" ref={navbar}>
             <div className="container-fluid px-md-4	">
                 <Link to='/' className={cx('navbar-brand',  classes['navbar-brand'])}>Workify</Link>
                 <NavBar.Toggle className={classes['navbar-toggler']} data-toggle="collapse" data-target="#ftco-nav"
-                        aria-controls="ftco-nav">
+                        aria-controls="ftco-nav" onClick={() => setShowMenu(showMenu? false: 'expanded')}>
                     <span className="oi oi-menu"></span> Menu
                 </NavBar.Toggle>
 
                 <NavBar.Collapse id="ftco-nav">
                     <ul className={cx("navbar-nav ml-auto", classes['navbar-nav'])}>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/' exact activeClassName={classes['active']}>
+                            <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/' exact activeClassName={classes['active']}>
                                 Pagrindinis
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/jobs' activeClassName={classes['active']}>
+                            <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/jobs' activeClassName={classes['active']}>
                                 Skelbimai
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/freelancers' activeClassName={classes['active']}>
+                            <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/freelancers' activeClassName={classes['active']}>
                                 Freelanceriai
                             </NavLink>
                         </li>
                         <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
+                            <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
                                 Kontaktai
                             </NavLink>
                         </li>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import PrivateMessage from '../containers/privateMessage';
+import Message from './Message';
 //React loader inport
 import Loader from 'react-loader-spinner';
 //Material ui inport
@@ -14,12 +14,7 @@ import {makeStyles} from '@material-ui/core/styles';
 //User authentikacija
 import { useAuth } from '../context/auth';
 
-import{
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-}from "react-router-dom";
+import{Link} from "react-router-dom";
 import axios, {baseURL} from '../axios';
 
 
@@ -64,7 +59,6 @@ const Messages = () => {
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
     const [messagesList, setMessagesList] = useState(['Kraunama...']);
-    const [vienas, setVienas] = useState([]);
 
     useEffect(() => {
         axios.get('received/messages/' +authData.userID,{
@@ -72,33 +66,16 @@ const Messages = () => {
                 'Authorization': 'Bearer ' + authData.token
             }
         }).then(res => {
+                console.log(res);
                 setLoading(false);
                 setMessagesList(res.data);
-                
             });
     },[authData.userID, authData.token]);
 
-        let newMessageList = [];
-        let numbers = [];
-
-        messagesList.map(numb =>(
-            numbers.push(numb.notification)
-        ));
-
-        //console.log(numbers);
+        let numbers = messagesList.map(numb => numb.notification);
         numbers.sort();
 
-        messagesList.map(message =>(
-            newMessageList.push(message)
-        ));
-
-        for (let i = numbers.length; i > 0; i--) {
-       
-                console.log(numbers[i])
-        }
-        const messages = messagesList.map(message => <Route path={`/messages/${message.id}`}><PrivateMessage user = {message.id} userFoto = {message.foto}/></Route>)
     return (
-        //React loader
         <>
         {isLoading?(          
         <div style={{backgroundColor: '#fff', textAlign: 'center', height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -109,23 +86,17 @@ const Messages = () => {
                 width={200}
             />
         </div>):(
-            //Material ui table
-            <div className="container">
-            <Router>
-            <Switch>
-                <Route path="/messages" exact>
-                    
-                    <TableContainer className={`${classes.tableContainer} ${classes.scroll}`}>
+            <div className="container">                    
+                <TableContainer className={`${classes.tableContainer} ${classes.scroll}`}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.TableCell}>Žinute nuo</TableCell>
+                            <TableCell className={classes.TableCell}>Žinutė nuo</TableCell>
                         </TableRow>
                     </TableHead>     
                     <TableBody>
                         {messagesList.map(message => (
                             <TableRow key={message.id}>
-                                {vienas}
                                 <TableCell>
                                     <img className={classes.profileImg} src={`${baseURL}/storage/${message.foto}`} alt={`foto ${message.id}`}/>
                                     <span className={classes.notifi}> {message.notification}</span>
@@ -136,11 +107,7 @@ const Messages = () => {
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>        
-            </Route>
-            {messages}
-            </Switch>
-            </Router> 
+                </TableContainer>        
             </div>
         )}
         </>
@@ -148,7 +115,3 @@ const Messages = () => {
 };
 
 export default Messages;
-
-//REIKALINGI API:
-//Rodo visas zinutes, zinuciu turinys: {id, tema, gavejas, gavejo id, paskutine_zinute_parasyta}
-//Vienos zinutes turinys: {}
