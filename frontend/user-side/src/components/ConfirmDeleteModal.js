@@ -25,6 +25,7 @@ const ConfirmDeleteModal = (props) => {
         })
     }
 
+
     return (
         <Dialog open={props.modalInfo.open} onClose={handleClose} fullWidth>                          
             <DialogTitle>Ar tikrai norite ištrinti?</DialogTitle>

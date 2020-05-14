@@ -34,7 +34,7 @@ const FindFreelancerForm = (props) => {
         onSubmit: values => {
             props.history.push({
                 pathname: '/freelancers',
-                search: `?service=${values.service}&skill=${values.skill}&city=${values.city}`
+                search: `?service=${values.service || ''}&skill=${values.skill || ''}&city=${values.city || ''}`
             });
         }
     });

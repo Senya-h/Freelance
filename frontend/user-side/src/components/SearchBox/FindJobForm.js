@@ -32,7 +32,7 @@ const FindJobForm = (props) => {
         onSubmit: values => {
             props.history.push({
                 pathname: '/jobs',
-                search: `?title=${values.title}&skill=${values.skill}&city=${values.city}`
+                search: `?title=${values.title || ''}&skill=${values.skill || ''}&city=${values.city || ''}`
             });
         }
     });

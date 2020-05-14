@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
-
+import {useParams, Link} from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
 import axios, {baseURL} from '../axios';
@@ -37,6 +36,14 @@ const useStyles = makeStyles(theme => ({
     description: {
         marginTop: '1rem',
         fontSize: '18px'
+    },
+    authorLink: {
+        textDecoration: 'none',
+        color: 'inherit',
+        fontStyle: 'italic',
+        '&:hover': {
+            textDecoration: 'none'
+        }
     }
 }));
 
@@ -58,7 +65,6 @@ const Job = (props) => {
     const [userInfo, setUserInfo] = useState([]);
 
     useEffect(() => {
-        setLoading(false);
         axios.get('/joboffer/' + id)
             .then(res => {
                 console.log("Darbo duomenys", res);
@@ -86,8 +92,9 @@ const Job = (props) => {
                 <div className={classes.baseData}>
                     <img src={`${baseURL}/storage/${userInfo.foto}`} alt="Profilio nuotrauka"/>
                     <div>
+                        <Link className={classes.authorLink} to={`/client/${userInfo.id}`}><h5>{userInfo.name}</h5></Link>
                         <h2>{jobData.title}</h2>
-                        <h2>{jobData.city}</h2>
+                        <h3>{jobData.city}</h3>
                         <h4>{jobData.salary} €/mėn</h4>
                     </div>
                 </div>
@@ -107,6 +114,7 @@ const Job = (props) => {
                         ))}
                     </List>
                 </div>
+                {authData && visitingUserID !== userInfo.id && <SendMessage token={authData.token} recipientID={userInfo.id} recipientName={userInfo.name} />}
             </div>
             )}
         </>

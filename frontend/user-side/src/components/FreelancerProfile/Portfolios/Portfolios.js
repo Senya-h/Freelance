@@ -5,7 +5,7 @@ import Portfolio from './Portfolio';
 import ClientApproval from './ClientApproval';
 import EditPortfolioForm from './EditPortfolioForm';
 import { useAuth } from '../../../context/auth';
-
+import ConfirmPortfolioModal from './ConfirmPortfolioModal';
 
 
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Portfolios = ({visitingUserID, profileUserID, userPortfolios, startDeleteModal}) => {
+const Portfolios = ({visitingUserID, profileUserID, userPortfolios, startDeleteModal, startConfirmModal}) => {
     const classes = useStyles();
     const { authData } = useAuth();
 
@@ -75,7 +75,15 @@ const Portfolios = ({visitingUserID, profileUserID, userPortfolios, startDeleteM
                 </OpenDialogButton>
                 </>
                 )}
-                <ClientApproval portfolio={portfolio} portfolios={portfolios} setPortfolios={setPortfolios} />
+                <ClientApproval
+                    clicked={() => startConfirmModal('/project', {work_id: portfolio.id}, {
+                        state: portfolios,
+                        setState: setPortfolios
+                    })}
+                    portfolio={portfolio} 
+                    portfolios={portfolios} 
+                    setPortfolios={setPortfolios} 
+                />
             </Grid>
             )
         )}
@@ -84,5 +92,3 @@ const Portfolios = ({visitingUserID, profileUserID, userPortfolios, startDeleteM
 };
 
 export default Portfolios;
-
-//onClick={() => openModal(portfolio.id, PORTFOLIO_TYPES.portfolio.name)
