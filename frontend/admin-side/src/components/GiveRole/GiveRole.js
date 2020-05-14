@@ -13,6 +13,7 @@ class GiveRole extends Component{
         this.state = {
             roles: [],
             role: '',
+            users: [],
             userEmail: '',
             loading: false,
             token: 'Bearer '+JSON.parse(localStorage.getItem('login')).token, 

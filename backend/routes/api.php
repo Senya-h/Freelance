@@ -112,6 +112,7 @@ Route::delete('comment/{id}','CommentsController@delete');
 
 //Userio info su role
 Route::post('user/roles','AdminController@findUserWithRoles');
+Route::get('users/datalist', 'ApiController@usersForDatalist');
 
 Route::get('project', 'ProjectApprovalController@index');//nesutvarkytas
 Route::post('project','ProjectApprovalController@create');
