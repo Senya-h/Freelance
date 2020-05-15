@@ -50,18 +50,17 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Messages = (props) => {
-    console.log("RENDER");  
+const Messages = () => {
     //Get logged in user information
-    let { authData } = useAuth();
-
+    let { authData, setMessagesCount } = useAuth();
+    
     const classes = useStyles();
     const [isLoading, setLoading] = useState(true);
     const [messagesList, setMessagesList] = useState([]);
 
     useEffect(() => {
-        props.setMessagesCount(0);
-    }, [props]);
+        setMessagesCount(0);
+    }, [setMessagesCount])
 
     useEffect(() => {
         axios.get('received/messages/' +authData.userID,{

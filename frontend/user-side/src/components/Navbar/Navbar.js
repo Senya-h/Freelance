@@ -4,7 +4,6 @@ import {NavLink, Link} from 'react-router-dom';
 import classes from './Navbar.module.scss';
 import cx from 'classnames';
 import {useAuth} from '../../context/auth';
-import axios from '../../axios';
 
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -39,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const Navbar = (props) => {
+const Navbar = () => {
 
     useEffect(() => {
         return () => { //Will remove the event listener if the component gets unmounted
@@ -79,7 +78,7 @@ const Navbar = (props) => {
     
     window.addEventListener("scroll", debounce(handleScroll));
 
-    const {removeAuthData, authData} = useAuth()
+    const {removeAuthData, authData, messagesCount} = useAuth()
 
     const logOut = () => {
         removeAuthData()
@@ -87,16 +86,6 @@ const Navbar = (props) => {
 
     //const classes = useStyles();
     const classe = useStyles();
-
-    useEffect(() => {
-        if(authData) {
-            axios.get('/message/count/' + authData.userID)
-            .then(res => {
-                props.setMessagesCount(res.data);
-            })
-        }
-
-    },[authData, props]);
 
 
     let loginArea = null;
@@ -108,7 +97,7 @@ const Navbar = (props) => {
                     <li className={cx('nav-item', classes['nav-item'])}>
                         <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                             Pranešimai
-                            <span className={classe.messageCount}>{props.messagesCount}</span>
+                            <span className={classe.messageCount}>{messagesCount}</span>
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>
@@ -129,7 +118,7 @@ const Navbar = (props) => {
                     <li className={cx('nav-item', classes['nav-item'])}>
                         <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/messages' activeClassName={classes['active']}>
                             Pranešimai
-                            <span className={classe.messageCount}>{props.messagesCount}</span>
+                            <span className={classe.messageCount}>{messagesCount}</span>
                         </NavLink>
                     </li>
                     <li className={cx('nav-item', classes['nav-item'], classes.cta,'mr-md-1')}>

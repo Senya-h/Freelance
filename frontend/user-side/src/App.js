@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PrivateRoute from './PrivateRoute';
 import RoleRoute from './RoleRoute';
 
@@ -55,6 +55,17 @@ const App = () => {
       })
   }
 
+  const [messagesCount, setMessagesCount] = useState(0);
+
+  useEffect(() => {
+    if(authData) {
+        axios.get('/message/count/' + authData.userID)
+        .then(res => {
+            setMessagesCount(res.data);
+        })
+    }
+  }, [authData])
+
 
   const setTokens = (data) => {
     Cookies.set('access_token', data);
@@ -66,37 +77,36 @@ const App = () => {
     setAuthData(undefined);
   }
 
-  const [messagesCount, setMessagesCount] = useState(0);
 
   return (
-    <AuthContext.Provider value={{authData, setAuthData: setTokens, removeAuthData: removeTokens}}>
-      <Navbar messagesCount={messagesCount} setMessagesCount={setMessagesCount} />
-      <HeroWrap>
-        <ScrollToTop>
-          <Switch>
-            <Route path='/' exact component={Main} />
-            <Route path='/register' component={Register} />
-            <Route path='/login' component={Login} />
-            <Route path='/password-reminder' component={RemindPassword} />
-            <Route path='/password/reset/' component={ForgotChangePassword} />
+    <AuthContext.Provider value={{authData, setAuthData: setTokens, removeAuthData: removeTokens, messagesCount, setMessagesCount}}>
+        <Navbar messagesCount={messagesCount} setMessagesCount={setMessagesCount} />
+        <HeroWrap>
+          <ScrollToTop>
+            <Switch>
+              <Route path='/' exact component={Main} />
+              <Route path='/register' component={Register} />
+              <Route path='/login' component={Login} />
+              <Route path='/password-reminder' component={RemindPassword} />
+              <Route path='/password/reset/' component={ForgotChangePassword} />
 
-            <Route path='/profile' exact component={Profile} />
-            <Route path='/freelancer/:id' component={FreelancerProfile} />
-            <Route path='/client/:id' component={ClientProfile} />
+              <Route path='/profile' exact component={Profile} />
+              <Route path='/freelancer/:id' component={FreelancerProfile} />
+              <Route path='/client/:id' component={ClientProfile} />
 
-            <Route path='/jobs' component={Jobs} />
-            <Route path='/job/:id' component={Job} />
-            <Route path='/freelancers' component={Freelancers} />
-            <PrivateRoute path='/messages' exact render={(props) => <Messages {...props} setMessagesCount={setMessagesCount} />}  />
-            <PrivateRoute path="/messages/:id" exact component={Message} />
-            <RoleRoute role={2} path='/new-offer' component={NewOffer} />
-            <RoleRoute role={2} path="/edit/job/:id" component={EditOffer} />
-            <RoleRoute role={2} path='/my-jobs' component={MyJobs} />
-            <Route component={PageNotFound} />
-          </Switch>
-        </ScrollToTop>
-        <Footer />
-      </HeroWrap>
+              <Route path='/jobs' component={Jobs} />
+              <Route path='/job/:id' component={Job} />
+              <Route path='/freelancers' component={Freelancers} />
+              <PrivateRoute path='/messages' exact render={(props) => <Messages {...props} setMessagesCount={setMessagesCount} />}  />
+              <PrivateRoute path="/messages/:id" exact component={Message} />
+              <RoleRoute role={2} path='/new-offer' component={NewOffer} />
+              <RoleRoute role={2} path="/edit/job/:id" component={EditOffer} />
+              <RoleRoute role={2} path='/my-jobs' component={MyJobs} />
+              <Route component={PageNotFound} />
+            </Switch>
+          </ScrollToTop>
+          <Footer />
+        </HeroWrap>
       <ScrollToTopIcon />
     </AuthContext.Provider>
   );
