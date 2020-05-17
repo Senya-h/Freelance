@@ -24,7 +24,12 @@ const useStyles = makeStyles( theme => ({
             marginBottom: theme.spacing(3)
         },
         padding: '20px',
-        backgroundColor: '#eee'
+        backgroundColor: '#eee',
+        width: '100%',
+        margin: '0 auto',
+        [theme.breakpoints.up('md')]: {
+            width: '700px'
+        }
     }
 }))
 
