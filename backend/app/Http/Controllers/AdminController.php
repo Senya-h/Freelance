@@ -112,7 +112,7 @@ class AdminController extends Controller
             Message::create([
                 'senders_id' => auth()->user()->id,
                 'receivers_id' => $receiver->id,
-                'message' => 'Jūsų darbas('.$receiver->title.') buvo patvirtintas administratoriaus, nuo šiol jį galės matyti klientai.',
+                'message' => 'Jūsų darbas ('.$receiver->title.') buvo patvirtintas administratoriaus, nuo šiol jį galės matyti klientai.',
             ]);
             return AdminWorkApprove::create([
                 'work_id' => $id,

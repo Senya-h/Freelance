@@ -52,7 +52,7 @@ class ProjectApprovalController extends Controller
                 Message::create([
                     'senders_id' => 1,
                     'receivers_id' => $receiver->id,
-                    'message' => 'Jūsų darbo('.$receiver->title.') nuosavybę patvirtino('.$client->name.').',
+                    'message' => 'Jūsų darbo ('.$receiver->title.') nuosavybę patvirtino ('.$client->name.').',
                 ]);
 
             }
