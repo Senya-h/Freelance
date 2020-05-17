@@ -74,9 +74,10 @@ class AuthController extends Controller
         }
 
         $userId = auth()->user()->id; //Autentikuoto vartotojo id
-        $userRole = auth()->user()->role; //Autentikuoto vartotojo id
+        $userRole = auth()->user()->role; //Autentikuoto vartotojo role
+        $userName = auth()->user()->name; //Autentikuoto vartotojo vardas
 		//jei duomenys teisingi, login tokena duoda
-		return response()->json(['token' => $token, 'userID' => $userId, 'userRole' => $userRole]);
+		return response()->json(['token' => $token, 'userID' => $userId, 'userName' => $userName , 'userRole' => $userRole]);
 	}
 	public function tokenRefresh()
 	{
