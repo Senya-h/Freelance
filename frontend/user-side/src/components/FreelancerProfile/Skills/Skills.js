@@ -10,9 +10,12 @@ import { useAuth } from '../../../context/auth';
 const useStyles = makeStyles(theme => ({
     skillsList: {
         listStyle: 'none',
-        paddingLeft: '0',
+        paddingLeft: '10px',
     },
     skill: {
+        '&:hover': {
+            cursor: 'pointer'
+        },
         borderBottom: '1px solid black',
         fontSize: '19px',
         marginRight: '5px'
@@ -76,7 +79,7 @@ const Skills = ({visitingUserID, profileUserID, userSkills}) => {
             <ul className={classes.skillsList}>
                 {currSkills.map(skill => (
                     <li key={skill.id}>
-                        <span onClick={() => showSkillCommentModal(skill.id)} className={classes.skill}>{skill.skill}</span> REITINGAS
+                        <span onClick={() => showSkillCommentModal(skill.id)} className={classes.skill}>{skill.skill}</span>
                     </li>
                 ))}
             </ul>

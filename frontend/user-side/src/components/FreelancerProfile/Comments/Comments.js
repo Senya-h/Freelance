@@ -24,7 +24,7 @@ const Comments = ({visitingUserID, profileUserID, userComments}) => {
         <Grid item>
             <h3>
                 <span>Atsiliepimai</span> 
-                {visitingUserID !== profileUserID && authData && authData.userRole === 2?
+                {visitingUserID !== profileUserID && authData?
                 <AddCommentModal type="add" allComments={comments} visitingUserID={visitingUserID}>
                     <CommentForm allComments={comments} setComments={setComments} token={authData.token} profileUserID={profileUserID} />
                 </AddCommentModal>: null}

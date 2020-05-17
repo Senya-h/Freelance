@@ -86,7 +86,7 @@ const Portfolios = ({visitingUserID, profileUserID, userPortfolios, startDeleteM
             </Grid>
             )
         )}
-    </>
+        </>
     )
 };
 

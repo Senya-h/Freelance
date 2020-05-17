@@ -10,7 +10,6 @@ import {useAuth} from '../../../context/auth';
 
 const useStyles = makeStyles(theme => ({
     scrollableComments: {
-        overflowY: 'scroll',
         height: '600px',
     },
     commentContainer: {

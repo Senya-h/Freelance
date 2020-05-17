@@ -39,7 +39,6 @@ const NewOffer = (props) => {
     const classes = useStyles();
 
     const [allSkills, setAllSkills] = useState([]);
-    const [requiredSkills, setRequiredSkills] = useState([]);
     const [inputCity, setInputCity] = useState('');
 
     useEffect(() => {
@@ -60,7 +59,7 @@ const NewOffer = (props) => {
 
     const validationSchema = Yup.object({
         title: Yup.string().max(50, "Darbo pavadinimas negali viršyti 50 simbolių").required('Privalomas laukelis'),
-        description: Yup.string().max(2000, 'Darbo pobūdis negali viršyti 2000 simbolių').required("Privalomas laukelis"),
+        description: Yup.string().max(5000, 'Darbo pobūdis negali viršyti 5000 simbolių').required("Privalomas laukelis"),
         city: Yup.string().nullable().required("Privalomas laukelis"),
         salary: Yup.number().min(0, 'Atlyginimas negali būti mažesnis už 0').required("Privalomas laukelis"),
     });
@@ -103,7 +102,7 @@ const NewOffer = (props) => {
                         <ErrorMessage name='title' render={msg => <div className='text-danger'>{msg}</div>} />
                     </div>
                     <div>
-                        <TextField variant='outlined' label='Darbo pobūdis' name='description' onChange={handleChange} onBlur={handleBlur} value={values.description} fullWidth multiline rows={4}/>
+                        <TextField variant='outlined' label='Darbo pobūdis' name='description' onChange={handleChange} onBlur={handleBlur} value={values.description} fullWidth multiline rows={8}/>
                         <ErrorMessage name='description' render={msg => <div className='text-danger'>{msg}</div>} />
                     </div>
                     <div>
@@ -127,13 +126,13 @@ const NewOffer = (props) => {
                         <ErrorMessage name='city' render={msg => <div className='text-danger'>{msg}</div>} />
                     </div>
                     <div>
-                        <p>Reikalingi gebėjimai
+                        <p style={{marginBottom: 0}}>Reikalingi gebėjimai
                             <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
-                                    <SkillForm checkedSkills={requiredSkills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={setFieldValue} setSkills={setRequiredSkills}/>
+                                <SkillForm checkedSkills={values.skills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={setFieldValue}/>
                             </OpenDialogButton>
                         </p>
-                        <ul style={{listStyle: 'none'}}>
-                            {requiredSkills.map(skill => (
+                        <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
+                            {values.skills.map(skill => (
                                 <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
                             ))}
                         </ul>

@@ -6,7 +6,10 @@ import Loader from 'react-loader-spinner';
 
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
@@ -25,7 +28,10 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center'
     },
     mainGrid: {
-        marginBottom: '0px'
+        marginBottom: '0px', 
+        marginTop: '10px',
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3)
     },
     linkButton: {
         '&:hover': {
@@ -54,17 +60,21 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around'
     },
     red: {
-        backgroundColor: 'red',
+        color: 'red',
         '&:hover': {
-            backgroundColor: 'red'
+            color: 'red'
         }
     },
     salad: {
-        backgroundColor: '#66e002',
+        color: '#66e002',
         '&:hover': {
-            backgroundColor: '#66e002'
+            color: '#66e002'
         }
-    }
+    },
+    iconBg: {
+        backgroundColor: "#fff",
+        borderRadius: '50%'
+    },
 }))
 
 const MyJobs = (props) => {
@@ -138,21 +148,26 @@ const MyJobs = (props) => {
                 width={200}
             />
         </div>):(
-        <Grid container spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
+        <Grid container justify="flex-start" spacing={5} className={`${classes.mainGrid} ${jobs.length? null: classes.noResults}`}>
             {jobs.length? jobs.map(job => {
                 return (
-                    <Grid key={job.id} item xs={12} md={4}>
+                    <Grid key={job.id} item xs={12} sm={6} md={4} lg={3}>
                         <Grid container item direction='column' align="center" className="p-4 bg-white">
                             <Grid item className="text">
                                 <h2 className={classes.name}>{job.title}</h2>                                
                                 <p>{job.city}</p>
                                 <p>{job.salary} €/mėn.</p>
-                                <p>{job.description}</p>
                                 <hr className={classes.divider} />
                                 <div className={classes.buttons} >
-                                    <Button className={classes.linkButton} component={Link} to={`/job/${job.id}`} variant='contained' color='primary'>Daugiau</Button>
-                                    <Button className={classes.linkButton} classes={{containedPrimary: classes.salad}}  component={Link} to={`/edit/job/${job.id}`} variant='contained' color='primary'>Redaguoti</Button>
-                                    <Button className={classes.linkButton} classes={{containedPrimary: classes.red}} onClick={() => handleDelete(job.id)} variant='contained' color='primary'>Šalinti</Button>
+                                    <IconButton component={Link} to={`/job/${job.id}`}>
+                                        <VisibilityIcon color="primary" />
+                                    </IconButton>
+                                    <IconButton component={Link} to={`/edit/job/${job.id}`}>
+                                        <EditIcon color="primary" classes={{root: classes.iconBg, colorPrimary: classes.salad}} />
+                                    </IconButton>
+                                    <IconButton onClick={() => handleDelete(job.id)}>
+                                        <RemoveCircleIcon color="primary" classes={{root: classes.iconBg, colorPrimary: classes.red}} />
+                                    </IconButton>
                                 </div>
                             </Grid>
                         </Grid>

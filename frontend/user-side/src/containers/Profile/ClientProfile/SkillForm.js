@@ -22,7 +22,6 @@ const SkillForm = ({checkedSkills, allSkills, setFieldValue, setSkills, handleCl
                     }
                 })
             })
-            // setSkills([...newSkills]);
             setFieldValue('skills', newSkills);
             handleClose();
         }

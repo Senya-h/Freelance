@@ -11,9 +11,16 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import {useFormik} from 'formik';
 import axios, {baseURL} from '../../../axios';
 import {object as yupObject, string as yupString} from 'yup';
+import {makeStyles} from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+    button: {
+        marginTop: '5px'
+    }
+}));
 
 const PhotoModalButton = (props) => {
-
+    const classes = useStyles();
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -67,12 +74,12 @@ const PhotoModalButton = (props) => {
             <form onSubmit={formik.handleSubmit} autoComplete='off' encType='multipart/form-data'>
                 <DialogContent>
                     <FormGroup>
-                        <img style={{width: '300px'}} src={formik.values.localFile? formik.values.localFile: `${baseURL}/storage/${props.profileImage}`} alt="portfolio" />
+                        <img style={{width: '300px', display: 'block', margin: '0 auto'}} src={formik.values.localFile? formik.values.localFile: `${baseURL}/storage/${props.profileImage}`} alt="portfolio" />
                         {formik.errors.formFile ? (
                         <div className='text-danger'>{formik.errors.formFile}</div>
                         ) : null}
                     </FormGroup>
-                    <Button variant='contained' component='label' color='primary'>
+                    <Button className={classes.button} variant='contained' component='label' color='primary'>
                         Keisti nuotrauką
                         <input type='file' accept='image/*' style={{display: 'none'}} name="file" onChange={(e) => {
                             if(e.target.files[0]) {

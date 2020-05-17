@@ -200,7 +200,7 @@ const Jobs = (props) => {
                 return (
                     <Grid key={job.offers.id} item xs={12} md={4} lg={3}>
                         <Grid container item direction='column' align="center" className="p-4 bg-white">
-                            <Grid item className="img" style={{backgroundImage: job.userInfo.foto? `url('${baseURL}/storage/${job.userInfo.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '120px', height: '120px', margin: '0 auto 30px auto'}}></Grid>
+                            <Grid item className="img" style={{backgroundImage: job.userInfo.foto? `url('${baseURL}/storage/${job.userInfo.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 30px auto'}}></Grid>
                             <Grid item className="text">
                                 <h2 className={classes.name}>{job.offers.title}</h2>                                
                                 <p>{job.offers.city}</p>

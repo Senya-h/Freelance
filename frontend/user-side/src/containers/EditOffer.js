@@ -126,9 +126,6 @@ const NewOffer = (props) => {
         })
     }, [])
 
-
-
-
     return (
         <>
         {isLoading? 
@@ -179,12 +176,12 @@ const NewOffer = (props) => {
                     ) : null}
                 </div>
                 <div>
-                    <p>Reikalingi gebėjimai
+                    <p style={{marginBottom: 0}}>Reikalingi gebėjimai
                         <OpenDialogButton type="edit" form="skill" title="Reikalingi gebėjimai" >
                             <SkillForm checkedSkills={formik.values.skills.map(skill => skill.id.toString())} allSkills={allSkills} setFieldValue={formik.setFieldValue} />
                         </OpenDialogButton>
                     </p>
-                    <ul style={{listStyle: 'none'}}>
+                    <ul style={{listStyle: 'none', paddingLeft: '20px'}}>
                         {formik.values.skills.map(skill => (
                             <li key={skill.id}><span className={classes.skill}>{skill.skill}</span></li>
                         ))}

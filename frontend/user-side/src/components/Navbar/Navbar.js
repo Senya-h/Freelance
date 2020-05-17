@@ -91,7 +91,7 @@ const Navbar = () => {
     let loginArea = null;
     // if it's a freelancer
     if(authData) {
-        if(authData.userRole === 3) {
+        if(authData.userRole === 3 || authData.userRole === 1) {
             loginArea = (
                 <>
                     <li className={cx('nav-item', classes['nav-item'])}>
@@ -187,11 +187,6 @@ const Navbar = () => {
                         <li className={cx('nav-item', classes['nav-item'])}>
                             <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/freelancers' activeClassName={classes['active']}>
                                 Freelanceriai
-                            </NavLink>
-                        </li>
-                        <li className={cx('nav-item', classes['nav-item'])}>
-                            <NavLink onClick={() => setShowMenu(false)} className={cx('nav-link', classes['nav-link'])} to='/contact' activeClassName={classes['active']}>
-                                Kontaktai
                             </NavLink>
                         </li>
                         { loginArea }

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
+import ProfileJobs from '../../../components/ClientProfile/ProfileJobs';
 
 import Loader from 'react-loader-spinner';
 
@@ -61,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const FreelancerProfile = (props) => {
+const FreelancerProfile = () => {
     const classes = useStyles();
     //Get logged in user information
     const { authData } = useAuth();
@@ -77,41 +78,19 @@ const FreelancerProfile = (props) => {
     const [userInfo, setUserInfo] = useState({});
     const [isLoading, setLoading] = useState(true);
 
-    // const [deleteInfo, setDeleteInfo] = useState({
-    //     open: false,
-    //     deleteLink: '',
-    //     stateRef: {
-    //         state: null,
-    //         setState: null
-    //     }
-    // });
-    // const [confirmInfo, setConfirmInfo] = useState({
-    //     open: false,
-    //     link: '0',
-    //     data: null,
-    //     stateRef: {
-    //         state: null,
-    //         setState: null
-    //     }
-    // })
-    
-
     useEffect(() => {
         setLoading(true);
         axios.get('/user/' + profileUserID)
             .then(res => {
                 console.log("Userio duomenys: ", res);
                 const info = res.data.info;
-                const portfolio = res.data.portfolio;
                 setUserInfo({
                     name: info.name, 
                     location: info.location, 
                     photo: info.foto,
                     email: info.email,
                     ratingAverage: info.ratingAverage,
-                    services: portfolio.services,
-                    skills: portfolio.skills,
-                    portfolios: portfolio.works,
+                    jobs: res.data.job_offers.offers,
                     comments: info.comments,
                 });
                 setLoading(false);
@@ -126,26 +105,6 @@ const FreelancerProfile = (props) => {
             userComments={userInfo.comments}
         />
     )
-
-    // const startDeleteModal = (deleteLink, id, stateRef) => {
-    //     setDeleteInfo({
-    //         open: true,
-    //         deleteLink,
-    //         id,
-    //         stateRef
-    //     })
-    // }
-
-    // const startConfirmModal = (link, data, stateRef) => {
-    //     setConfirmInfo({
-    //         open: true,
-    //         link,
-    //         data,
-    //         stateRef
-    //     })
-    // }
-
-    
 
     return (
         <>
@@ -171,17 +130,21 @@ const FreelancerProfile = (props) => {
 
                             {visitingUserID !== profileUserID && authData? <SendMessage className={classes.sendMsgBtn} recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
 
+                            
                         </Grid>
                         
-                        {/* Portfolio works */}
+                        {/* Kliento darbai */}
                         <Grid container item justify="space-between">
-                            
+                            <ProfileJobs 
+                                jobs={userInfo.jobs}
+                            />
                             <div className={classes.mobile}>
                                 {comments}
                             </div>
                         </Grid>
 
                     </Grid>
+
                     {/* Profilio nuotrauka, atsiliepimai */}
                     <Grid className={classes.photoArea} container item xs={12} md={4} spacing={3} direction='column'>
                         <ProfileImage 
