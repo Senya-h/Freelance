@@ -23,27 +23,19 @@ class PortfolioWorksController extends Controller
         $newWork = [];
         foreach ($works as $work) {
             $approved = DB::table('admin_work_approves')->select('work_id')->where('work_id',$work->id)->where('approved',1)->get();
+            $approve = 0;
             if(count($approved) > 0) {
-                $newWork[] = [
+                $approve = 1;
+            }
+            $newWork[] = [
                 'id' => $work->id,
                 'title' => $work->title,
                 'description' => $work->description,
                 'filePath' => $work->filePath,
                 'name' => $work->name,
                 'user_id' => $work->user_id,
-                'approved' => 1
+                'approved' => $approve
             ];
-            } else {
-                $newWork[] = [
-                    'id' => $work->id,
-                    'title' => $work->title,
-                    'description' => $work->description,
-                    'filePath' => $work->filePath,
-                    'name' => $work->name,
-                    'user_id' => $work->user_id,
-                    'approved' => 0
-                ];
-            }
         }
         $data = $this->paginate($newWork);
         return response()->json($data, 200);
