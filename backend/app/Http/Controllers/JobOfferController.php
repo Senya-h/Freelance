@@ -89,7 +89,7 @@ class JobOfferController extends Controller
         }
         $validation = Validator::make($request->all(),[
             'title' => 'required|max:255',
-            'description' => 'required|max:255',
+            'description' => 'required|max:5000',
             'salary'  => 'required|max:9',
             'city'  => 'required|max:30'
         ]);

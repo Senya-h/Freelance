@@ -40,8 +40,8 @@ class PortfolioWorksController extends Controller
         $data = $this->paginate($newWork);
         return response()->json($data, 200);
     }
-    
-    
+
+
     public function paginate($items, $perPage = 20, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
@@ -86,6 +86,7 @@ class PortfolioWorksController extends Controller
                 $extension = $info['extension'];
                 $fileType = DB::table('file_formats')->where('format',$extension)->first();
                 $newWork = [
+                    'id' => $work->id,
                     'title' => request('title'),
                     'description' => request('description'),
                     'filePath' => $filename,
@@ -124,7 +125,7 @@ class PortfolioWorksController extends Controller
             }
             $updated = PortfolioWorks::where('id', $id)->update($request->except(['_token', 'filePath']));
             $updated = PortfolioWorks::where('id', $id)->first();
-            
+
             $info = pathinfo(storage_path().$updated->filePath);
             $extension = $info['extension'];
             $fileType = DB::table('file_formats')->where('format',$extension)->first();
