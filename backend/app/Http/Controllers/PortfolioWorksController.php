@@ -87,8 +87,13 @@ class PortfolioWorksController extends Controller
                 $fileType = DB::table('file_formats')->where('format',$extension)->first();
                 $newWork = [
                     'id' => $work->id,
+<<<<<<< HEAD
                     'title' => request('title'),
                     'description' => request('description'),
+=======
+                    'title' => $work->title,
+                    'description' => $work->description,
+>>>>>>> c13e438d00d15d0b94d68cbdf1c77870d053ca79
                     'filePath' => $filename,
                     'user_id' => auth()->user()->id,
                     'fileType' => $fileType->fileType
