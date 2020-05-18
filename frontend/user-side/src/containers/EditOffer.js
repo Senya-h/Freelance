@@ -147,7 +147,7 @@ const NewOffer = (props) => {
                     ) : null}
                 </div>
                 <div>
-                    <TextField variant='outlined' label='Darbo pobūdis' {...formik.getFieldProps('description')} fullWidth multiline rows={4}/>
+                    <TextField variant='outlined' label='Darbo pobūdis' {...formik.getFieldProps('description')} fullWidth multiline rows={8}/>
                     {formik.touched.description && formik.errors.description ? (
                     <div className='text-danger'>{formik.errors.description}</div>
                     ) : null}

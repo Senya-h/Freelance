@@ -140,7 +140,7 @@ const Jobs = (props) => {
             <form autoComplete='off' onSubmit={formik.handleSubmit} className="search-job">
                 <Grid container spacing={1}>
                     <Grid item xs={12} md={3}>
-                        <TextField autoComplete="off" value={formik.values.title} style={{width: '100%'}} label="Paslauga" variant='outlined'  {...formik.getFieldProps('title')}/>
+                        <TextField autoComplete="off" value={formik.values.title} style={{width: '100%'}} label="Pavadinimas" variant='outlined'  {...formik.getFieldProps('title')}/>
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <Autocomplete

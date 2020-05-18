@@ -196,7 +196,7 @@ const Freelancers = (props) => {
                 return (
                     <Grid key={freelancer.info.id} item xs={12}>
                         <Grid container item className="pr-4 pt-4 pl-4 bg-white">
-                            <Grid item className="img" style={{backgroundImage: freelancer.info.foto? `url('${baseURL}/storage/${freelancer.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', margin: '0 0 30px 0'}}></Grid>
+                            <Grid item className="img" style={{backgroundImage: freelancer.info.foto? `url('${baseURL}/storage/${freelancer.info.foto}')`: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Roundel_of_None.svg/600px-Roundel_of_None.svg.png')", width: '180px', height: '180px', borderRadius: '50%', objectFit: 'cover', margin: '0 0 30px 0'}}></Grid>
                             <Grid item className="text pl-4">
                                 <span className="location mb-0">{freelancer.info.location}</span>
                                 <h2 className={classes.name}>{freelancer.info.name}</h2>

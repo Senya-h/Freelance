@@ -70,7 +70,6 @@ const PortfolioForm = (props) => {
                 console.log(res);
                 if(!res.data.error) {
                     
-                    console.log("Darbas pridetas", res)
                     const newWork = res.data;
                     newWork.clientApprove = {
                         approve: 0,

@@ -36,7 +36,9 @@ const useStyles = makeStyles(theme => ({
     },
     profileImg: {
         width: '50px',
+        height: '50px',
         borderRadius: '50%',
+        objectFit: 'cover',
         marginRight: '15px',
     },
     notifi:{

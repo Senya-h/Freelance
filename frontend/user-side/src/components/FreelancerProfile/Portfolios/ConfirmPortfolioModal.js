@@ -26,6 +26,7 @@ const ConfirmDeleteModal = ({authData, modalInfo, setModalInfo}) => {
                 modalInfo.stateRef.setState(modalInfo.stateRef.state.map(portf => {
                     if(portf.id === modalInfo.data.work_id) {
                         portf.clientApprove.approve = 1;
+                        portf.clientApprove.clientName = authData.userName;
                     }
                     return portf;
                 }))

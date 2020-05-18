@@ -26,13 +26,12 @@ const ProfileJobs = ({jobs}) => {
     const classes = useStyles();
     return (
         <>
-            <Grid item xs={12}>
-            <h3>
-                Naujausi darbo pasiūlymai
-            </h3>
+            <Grid item>
+                <h3>Naujausi darbo pasiūlymai</h3>
             </Grid>
+            <Grid container item justify="space-between">
             {jobs.map(job => (
-                <Grid key={job.id} item xs={12} md={6} lg={5} className={classes.job}>
+                <Grid key={job.id} item xs={12} md={5} className={classes.job}>
                     <Grid container item direction='column' align="center" className="p-4 bg-white">
                         <Grid item className="text">
                             <h2 className={classes.name}>{job.title}</h2>                                
@@ -44,6 +43,7 @@ const ProfileJobs = ({jobs}) => {
                     </Grid>
                 </Grid>
             ))}
+            </Grid>
         </>
     )
 };

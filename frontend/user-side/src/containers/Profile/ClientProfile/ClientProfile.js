@@ -60,6 +60,9 @@ const useStyles = makeStyles(theme => ({
     sendMsgBtn: {
         marginBottom: theme.spacing(1)
     },
+    jobs: {
+        minHeight: '520px'
+    }
 }));
 
 const FreelancerProfile = () => {
@@ -127,14 +130,11 @@ const FreelancerProfile = () => {
                             <h2>{userInfo.name} {userInfo.ratingAverage >= 1 && <Rating name='read-only' precision={0.25} value={userInfo.ratingAverage} readOnly />} </h2>
                             <h5>Miestas: {userInfo.location}</h5>
                             <h5>El. paštas: {userInfo.email}</h5>
-
                             {visitingUserID !== profileUserID && authData? <SendMessage className={classes.sendMsgBtn} recipientName={userInfo.name} recipientID={profileUserID} token={authData.token}/>: null}
-
-                            
                         </Grid>
                         
                         {/* Kliento darbai */}
-                        <Grid container item justify="space-between">
+                        <Grid className={classes.jobs} container item direction="column" align="space-between">
                             <ProfileJobs 
                                 jobs={userInfo.jobs}
                             />

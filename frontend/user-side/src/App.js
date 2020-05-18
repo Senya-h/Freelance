@@ -38,7 +38,8 @@ const App = () => {
 
   const existingTokens = authCookie? JSON.parse(authCookie): undefined;
   const [authData, setAuthData] = useState(existingTokens);
-
+  console.log("Auth data: ", authData);
+  
   if(authData) {
     axios.get('/checkJWT', {
       headers: {
